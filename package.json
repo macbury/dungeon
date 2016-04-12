@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot --progress --colors",
     "play": "./node_modules/.bin/electron ./main.js",
-    "dist": "./node_modules/.bin/webpack -p"
+    "dist": "NODE_ENV=production ./node_modules/.bin/webpack "
   },
   "author": "Arkadiusz Buras (macbury@gmail.com)",
   "license": "MIT",
   "dependencies": {
+    "compression-webpack-plugin": "^0.3.1",
     "p2": "^0.7.1",
     "phaser": "^2.4.6",
     "pixi.js": "^3.0.11"
