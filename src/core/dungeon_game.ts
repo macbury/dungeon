@@ -9,8 +9,20 @@ export default class DungeonGame extends Phaser.Game {
   * Create game and insert it into container
   * @param container element to insert
   */
-  constructor(width: number, height: number, container : Element) {
-    super(width, height, Phaser.WEBGL, container, null, false, false);
+  constructor(container : Element) {
+    super('100%', '100%', Phaser.WEBGL, container, { create: () => { this.onCreate() }}, false, false);
+  }
+
+  /**
+  * Initialize all base stuff for game here!
+  */
+  public onCreate() {
+    this.renderer.renderSession.roundPixels = true;
+    this.scale.scaleMode              = Phaser.ScaleManager.RESIZE;
+    this.scale.fullScreenScaleMode    = Phaser.ScaleManager.RESIZE;
+    this.scale.pageAlignVertically    = true;
+    this.scale.pageAlignHorizontally  = true;
+    this.scale.refresh();
     this.state.add('Dungeon', DungeonState);
     this.state.start('Dungeon');
   }
