@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
 import DungeonState from './states/dungeon_state';
-
+import ResolutionCalculator from './utils/resolution';
 /**
 * Main game class that extends Phaser.Game
 */
@@ -10,16 +10,20 @@ export default class DungeonGame extends Phaser.Game {
   * @param container element to insert
   */
   constructor(container : Element) {
-    super('100%', '100%', Phaser.WEBGL, container, { create: () => { this.onCreate() }}, false, false);
+    var resolution = new ResolutionCalculator();
+    super(resolution.width, resolution.height, Phaser.WEBGL, container, { create: () => { this.onCreate() }}, false, false);
   }
 
   /**
   * Initialize all base stuff for game here!
   */
   public onCreate() {
-    this.renderer.renderSession.roundPixels = true;
-    this.scale.scaleMode              = Phaser.ScaleManager.RESIZE;
-    this.scale.fullScreenScaleMode    = Phaser.ScaleManager.RESIZE;
+    this.stage.smoothed                         = false;
+
+    this.renderer.renderSession.roundPixels     = true;
+    this.renderer.renderSession.scaleMode       = PIXI.scaleModes.NEAREST;
+    this.scale.scaleMode              = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.fullScreenScaleMode    = Phaser.ScaleManager.SHOW_ALL;
     this.scale.pageAlignVertically    = true;
     this.scale.pageAlignHorizontally  = true;
     this.scale.refresh();
