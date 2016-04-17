@@ -1,6 +1,8 @@
 import * as Phaser from 'phaser';
 import DungeonState from './states/dungeon_state';
+import BootState from './states/boot_state';
 import ResolutionCalculator from './utils/resolution';
+
 /**
 * Main game class that extends Phaser.Game
 */
@@ -27,8 +29,11 @@ export default class DungeonGame extends Phaser.Game {
     this.scale.pageAlignVertically    = true;
     this.scale.pageAlignHorizontally  = true;
     this.scale.refresh();
+
+
+    this.state.add('Boot', BootState);
     this.state.add('Dungeon', DungeonState);
-    this.state.start('Dungeon');
+    this.state.start('Boot');
   }
 }
 //http://opengameart.org/content/16x16-fantasy-tileset
