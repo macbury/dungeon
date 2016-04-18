@@ -55,7 +55,7 @@ var config = {
 }
 
 if (development) {
-  config['devtool'] = 'source-map';
+  config['devtool'] = 'eval-source-map';
   config.devServer = {
     host: '0.0.0.0'
   };

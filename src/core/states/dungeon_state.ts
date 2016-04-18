@@ -30,10 +30,14 @@ export default class DungeonState extends Phaser.State {
     this.map.setPreventRecalculate(true);
     for (var x = 0; x < 50; x++) {
       for (var y = 0; y < 50; y++) {
-
         this.map.putTile(19, x, y, this.groundLayer);
       }
     }
+    this.pathFinding.setGrid(this.map.layers[0].data, [0,1,2,3,4, 19]);
+    this.pathFinding.findPath(new Phaser.Point(0,0), new Phaser.Point(0,10)).addOnce((path : Phaser.Point[]) => {
+      console.log("Found: ", path);
+    });
+
     this.map.setPreventRecalculate(false);
     this.groundLayer.resizeWorld();
 

@@ -2,7 +2,6 @@ import * as Phaser from 'phaser';
 import DungeonState from './states/dungeon_state';
 import BootState from './states/boot_state';
 import ResolutionCalculator from './utils/resolution';
-
 /**
 * Main game class that extends Phaser.Game
 */
