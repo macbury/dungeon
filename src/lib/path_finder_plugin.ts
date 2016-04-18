@@ -1,6 +1,7 @@
 import { Plugin, Game } from 'phaser';
 var EasyStar = require("easystarjs");
 
+// https://github.com/prettymuchbryce/easystarjs
 export default class PathFinderPlugin extends Plugin {
   private _easyStar : any;
   private _grid     : number[][];

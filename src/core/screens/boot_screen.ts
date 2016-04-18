@@ -3,7 +3,7 @@ import * as Phaser from 'phaser';
 /**
 * This state is only used to load loading screen assets :P
 **/
-export default class BootState extends Phaser.State {
+export default class BootScreen extends Phaser.State {
 
   public preload() {
 

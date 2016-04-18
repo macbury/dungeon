@@ -1,6 +1,6 @@
 import * as Phaser from 'phaser';
-import DungeonState from './states/dungeon_state';
-import BootState from './states/boot_state';
+import DungeonScreen from './screens/dungeon_screen';
+import BootScreen from './screens/boot_screen';
 import ResolutionCalculator from './utils/resolution';
 /**
 * Main game class that extends Phaser.Game
@@ -12,7 +12,7 @@ export default class DungeonGame extends Phaser.Game {
   */
   constructor(container : Element) {
     var resolution = new ResolutionCalculator();
-    super(resolution.width, resolution.height, Phaser.WEBGL, container, { create: () => { this.onCreate() }}, false, false);
+    super(resolution.width, resolution.height, Phaser.AUTO, container, { create: () => { this.onCreate() }}, false, false);
   }
 
   /**
@@ -29,9 +29,9 @@ export default class DungeonGame extends Phaser.Game {
     this.scale.pageAlignHorizontally  = true;
     this.scale.refresh();
 
-
-    this.state.add('Boot', BootState);
-    this.state.add('Dungeon', DungeonState);
+    this.state.add('Boot', BootScreen);
+    this.state.add('Dungeon', DungeonScreen);
+    
     this.state.start('Boot');
   }
 }
