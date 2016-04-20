@@ -4,17 +4,18 @@ import FSM from '../fsm/fsm';
 import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
 
+import Level from '../level';
+
+import Player from '../objects/player';
+
 import PlayerChooseActionState from '../states/player_choose_action_state';
+import PlayerMoveActionState from '../states/player_move_action_state';
 
 export default class DungeonScreen extends Phaser.State {
-  /**
-  * Main world layer
-  */
-  protected worldLayer   : Phaser.Group;
-  protected map          : Phaser.Tilemap;
-  protected groundLayer  : Phaser.TilemapLayer;
-  protected playerSprite : Phaser.Sprite;
-  protected pathFinding  : PathFinderPlugin;
+  public level        : Level;
+
+  public player          : Player;
+  public pathFinding     : PathFinderPlugin;
   protected sceneFSM     : FSM<DungeonScreen>;
 
   public preload() : void {
@@ -25,57 +26,34 @@ export default class DungeonScreen extends Phaser.State {
 
   public create() : void {
     this.input.mouse.capture = true;
-
-    this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
     this.prepareStateMachine();
 
-    this.worldLayer          = this.add.group();
+    this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
 
-    this.prepareMap();
+    this.level               = new Level(this.game, 'dungeon-tileset', 10, 10);
+    this.level.generate();
 
-    this.input.onTap.add(this.onTap, this);
+
+
+    //this.input.onTap.add(this.onTap, this);
 
     var x = 1;
     var y = 1;
 
-    this.playerSprite = this.add.sprite(8 + x * 16, 8 + y * 16, 'knight');
-    this.playerSprite.anchor.set(0.5,0.5);
+    this.player = new Player(this.game, 'knight');
+    this.player.position.set(0,0);
+    //this.playerSprite = this.add.sprite(8 + x * 16, 8 + y * 16, 'knight');
+    //this.playerSprite.anchor.set(0.5,0.5);
 
-    this.camera.follow(this.playerSprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
-    this.worldLayer.add(this.playerSprite);
+    //this.camera.follow(this.playerSprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
+    //this.worldLayer.add(this.playerSprite);
   }
 
   private prepareStateMachine() : void {
     this.sceneFSM = new FSM<DungeonScreen>(this);
     this.sceneFSM.register(TurnStates.PLAYER_CHOOSE_ACTION, new PlayerChooseActionState());
+    this.sceneFSM.register(TurnStates.PLAYER_MOVE, new PlayerMoveActionState());
     this.sceneFSM.enter(TurnStates.PLAYER_CHOOSE_ACTION);
-  }
-
-  /**
-  * Prepare map
-  */
-  private prepareMap() : void {
-    this.map        = this.add.tilemap();
-    this.map.setTileSize(TILE_SIZE, TILE_SIZE);
-    this.map.addTilesetImage('dungeon-tileset');
-
-    this.groundLayer = this.map.create('ground', 10, 10, TILE_SIZE, TILE_SIZE, this.worldLayer);
-    this.map.setPreventRecalculate(true);
-
-    for (var x = 0; x < 10; x++) {
-      for (var y = 0; y < 10; y++) {
-        this.map.putTile(19, x, y, this.groundLayer);
-
-        if (x == 0 || y == 0 || x == 9 || y == 9  || (x == 3 && y < 5)) {
-          this.map.putTile(0, x, y, this.groundLayer);
-        }
-      }
-    }
-
-    this.pathFinding.setGrid(this.map.layers[0].data, [19]);
-
-    this.map.setPreventRecalculate(false);
-    this.groundLayer.resizeWorld();
   }
 
   public update() : void {
@@ -88,7 +66,7 @@ export default class DungeonScreen extends Phaser.State {
   }
 
   private onTap(pointer : Phaser.Pointer, doubleTap : boolean) : void {
-    console.log(this.groundLayer.getTileX(pointer.worldX) + "x" + this.groundLayer.getTileY(pointer.worldY));
+    /*console.log(this.groundLayer.getTileX(pointer.worldX) + "x" + this.groundLayer.getTileY(pointer.worldY));
     var targetPos : Phaser.Point = new Phaser.Point();
     this.groundLayer.getTileXY(pointer.worldX, pointer.worldY, targetPos);
     this.pathFinding.findPath(new Phaser.Point(1,1), targetPos).addOnce((path : Phaser.Point[]) => {
@@ -100,6 +78,6 @@ export default class DungeonScreen extends Phaser.State {
           y: this.groundLayer.getTileY(pointer.worldY) * this.map.tileHeight + 8
         }).start();
       }
-    });
+    });*/
   }
 }

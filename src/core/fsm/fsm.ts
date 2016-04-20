@@ -12,7 +12,7 @@ export default class FSM<T> {
   public context: T;
   private _currentStateKey: string;
   private _nextStateKey: string;
-
+  private _nextStateArgs: {};
   private states: StateTable<Base<T>> = {};
 
   constructor(context: T) {
@@ -41,9 +41,10 @@ export default class FSM<T> {
   * Switches current state
   * @param targetState key
   */
-  public enter(state: number) {
+  public enter(state: number, payload? : {}) {
     if (this._nextStateKey == null) {
-      this._nextStateKey = this.stateKey(state);
+      this._nextStateArgs = payload;
+      this._nextStateKey  = this.stateKey(state);
     } else {
       throw "There is already pending state!!!!!";
     }
@@ -60,8 +61,9 @@ export default class FSM<T> {
       }
       this._currentStateKey = this._nextStateKey;
       this.states[this._currentStateKey].setup(this);
-      this.states[this._currentStateKey].onEnter();
+      this.states[this._currentStateKey].onEnter(this._nextStateArgs);
       this._nextStateKey = null;
+      this._nextStateArgs = null;
     }
 
     if (this._currentStateKey != null) {

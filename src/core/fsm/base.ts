@@ -22,7 +22,14 @@ export default class Base<T> {
     return this.stateMachine.context;
   }
 
-  public onEnter()  : void {};
+  /**
+  * current state machine
+  */
+  protected get fsm() : FSM<T> {
+    return this.stateMachine;
+  }
+
+  public onEnter(payload : any)  : void {};
   public onUpdate(delta : number)  : void {};
   public onExit()   : void {};
 }
