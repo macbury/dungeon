@@ -1,5 +1,5 @@
 import { TILE_SIZE } from './consts';
-
+import GameObject from './objects/game_object';
 export default class Level extends Phaser.Tilemap {
   /**
   * Elements on ground
@@ -25,6 +25,17 @@ export default class Level extends Phaser.Tilemap {
     var targetPos : Phaser.Point = new Phaser.Point();
     this.groundLayer.getTileXY(pointer.worldX, pointer.worldY, targetPos);
     return targetPos;
+  }
+
+  /**
+  * Returns {GameObject} position as tile position
+  * @param gameObject
+  * @param outPoint
+  * @return outPoint with gameObject position as tile position
+  */
+  public getTilePositionForGameObject(gameObject : GameObject, outPoint : Phaser.Point) : Phaser.Point {
+    this.groundLayer.getTileXY(gameObject.position.x, gameObject.position.y, outPoint);
+    return outPoint;
   }
 
   /**

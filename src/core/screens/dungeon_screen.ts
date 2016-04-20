@@ -33,20 +33,8 @@ export default class DungeonScreen extends Phaser.State {
     this.level               = new Level(this.game, 'dungeon-tileset', 10, 10);
     this.level.generate();
 
-
-
-    //this.input.onTap.add(this.onTap, this);
-
-    var x = 1;
-    var y = 1;
-
     this.player = new Player(this.game, 'knight');
-    this.player.position.set(0,0);
-    //this.playerSprite = this.add.sprite(8 + x * 16, 8 + y * 16, 'knight');
-    //this.playerSprite.anchor.set(0.5,0.5);
-
-    //this.camera.follow(this.playerSprite, Phaser.Camera.FOLLOW_TOPDOWN_TIGHT);
-    //this.worldLayer.add(this.playerSprite);
+    this.player.position.set(16,16);
   }
 
   private prepareStateMachine() : void {
@@ -63,21 +51,5 @@ export default class DungeonScreen extends Phaser.State {
 
   public shutdown() : void {
     this.game.plugins.remove(this.pathFinding);
-  }
-
-  private onTap(pointer : Phaser.Pointer, doubleTap : boolean) : void {
-    /*console.log(this.groundLayer.getTileX(pointer.worldX) + "x" + this.groundLayer.getTileY(pointer.worldY));
-    var targetPos : Phaser.Point = new Phaser.Point();
-    this.groundLayer.getTileXY(pointer.worldX, pointer.worldY, targetPos);
-    this.pathFinding.findPath(new Phaser.Point(1,1), targetPos).addOnce((path : Phaser.Point[]) => {
-      if (path != null) {
-        console.log("Found: ", path.length);
-
-        this.add.tween(this.playerSprite).to({
-          x: this.groundLayer.getTileX(pointer.worldX) * this.map.tileWidth + 8,
-          y: this.groundLayer.getTileY(pointer.worldY) * this.map.tileHeight + 8
-        }).start();
-      }
-    });*/
   }
 }

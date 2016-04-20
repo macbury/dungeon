@@ -22,7 +22,7 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
   **/
   private onPlayerTap(pointer : Phaser.Pointer, doubleTap : boolean) : void {
     var tapTile : Phaser.Point = this.level.getTilePositionFor(pointer);
-    this.fsm.enter(TurnStates.PLAYER_MOVE, { point: tapTile });
+    this.fsm.enter(TurnStates.PLAYER_MOVE, { tilePos: tapTile });
 
     //TODO check if tap on enemy
     //TODO check if tap on item
