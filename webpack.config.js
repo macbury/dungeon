@@ -61,15 +61,23 @@ if (development) {
   };
 }
 
+config.plugins.push(new webpack.DefinePlugin({
+  GAME_PRODUCTION: !development,
+  GAME_DEVELOPMENT: development
+}));
+
 if (production) {
   config.plugins.push(
     new webpack.NoErrorsPlugin(),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
+      compress: true,
+      minimize: true,
+      mangle: true,
       compressor: { warnings: false },
       sourceMap: false
     }),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new CompressionPlugin({
       algorithm: "gzip",
       regExp: /\.js$|\.html$/,

@@ -16,3 +16,8 @@ export const TILE_SIZE       : number = 16;
 * Tile center position that equals TILE_SIZE / 2
 */
 export const TILE_CENTER     : number = TILE_SIZE / 2;
+
+/**
+* How much time it takes player to move over one tile
+*/
+export const PLAYER_MOVE_SPEED : number = 250;

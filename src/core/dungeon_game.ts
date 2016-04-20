@@ -31,7 +31,7 @@ export default class DungeonGame extends Phaser.Game {
 
     this.state.add('Boot', BootScreen);
     this.state.add('Dungeon', DungeonScreen);
-    
+
     this.state.start('Boot');
   }
 }

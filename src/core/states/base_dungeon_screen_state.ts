@@ -3,6 +3,7 @@ import DungeonScreen   from '../screens/dungeon_screen';
 import PathFinderPlugin from '../../lib/path_finder_plugin';
 import Level from '../level';
 import Player from '../objects/player';
+import MonstersManager from '../monsters_manager';
 /**
 * Base state class that exposes context {DungeonScreen methods}
 */
@@ -33,6 +34,13 @@ export default class BaseDungeonScreenState extends BaseState<DungeonScreen> {
   */
   public get player() : Player {
     return this.context.player;
+  }
+
+  /**
+  * Reference monsters manager
+  */
+  public get monsters() : MonstersManager {
+    return this.context.monsters;
   }
 
   /**

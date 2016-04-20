@@ -5,8 +5,9 @@ import TurnStates from './turn_states';
 */
 export default class PlayerChooseActionState extends BaseDungeonScreenState {
 
-  public onEnter() : void {
+  public onEnter(payload : { spottedMonster: boolean }) : void {
     this.input.onTap.add(this.onPlayerTap, this);
+    //TODO if monster was not spotted then move until path is empty
   }
 
   public onUpdate(delta: number) {

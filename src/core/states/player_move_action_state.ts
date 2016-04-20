@@ -1,6 +1,6 @@
 import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
-import { TILE_SIZE } from '../consts';
+import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 
 /**
 * In this state we animate player entity and move it to target position
@@ -19,6 +19,7 @@ export default class PlayerMoveActionState extends BaseDungeonScreenState {
     }
 
     this.level.getTilePositionForGameObject(this.player, this._tempTilePlayerPoint);
+    
     this._tempPlayerDirection
           .set(payload.tilePos.x, payload.tilePos.y)
           .subtract(this._tempTilePlayerPoint.x, this._tempTilePlayerPoint.y)
@@ -27,12 +28,11 @@ export default class PlayerMoveActionState extends BaseDungeonScreenState {
           .multiply(TILE_SIZE, TILE_SIZE)
           .add(this.player.position.x, this.player.position.y);
 
-    console.log("Works?", this._tempPlayerDirection);
 
     this.playerMoveTween = this.add.tween(this.player).to({
       x: this._tempPlayerDirection.x,
       y: this._tempPlayerDirection.y
-    }, 250);
+    }, PLAYER_MOVE_SPEED);
 
     this.playerMoveTween.onComplete.addOnce(this.onPlayerMoveComplete, this);
     this.playerMoveTween.start();
@@ -42,7 +42,7 @@ export default class PlayerMoveActionState extends BaseDungeonScreenState {
   * Triggered by playerMoveTween
   */
   private onPlayerMoveComplete() : void {
-    this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+    this.fsm.enter(TurnStates.MONSTER_ACTION);
   }
 
 }

@@ -5,3 +5,6 @@
 * With this we can require webpack modules in typescript
 */
 declare var require:(moduleId:string) => any;
+
+declare var GAME_PRODUCTION: boolean;
+declare var GAME_DEVELOPMENT: boolean;
