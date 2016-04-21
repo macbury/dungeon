@@ -13,25 +13,24 @@ export default class PlayerMoveActionState extends BaseDungeonScreenState {
   /**
   * Calculate direction in which player need to move
   */
-  public onEnter(payload : { tilePos: Phaser.Point }) : void {
-    if (payload.tilePos == null) {
+  public onEnter(payload : { destination: Phaser.Point }) : void {
+    if (payload.destination == null) {
       throw "Payload should contain target point";
     }
 
-    this.level.getTilePositionForGameObject(this.player, this._tempTilePlayerPoint);
-    
+    /*this.level.getTilePositionForGameObject(this.player, this._tempTilePlayerPoint);
+
     this._tempPlayerDirection
-          .set(payload.tilePos.x, payload.tilePos.y)
+          .set(payload.destination.x, payload.destination.y)
           .subtract(this._tempTilePlayerPoint.x, this._tempTilePlayerPoint.y)
           .normalize()
           .ceil()
           .multiply(TILE_SIZE, TILE_SIZE)
-          .add(this.player.position.x, this.player.position.y);
-
+          .add(this.player.position.x, this.player.position.y);*/
 
     this.playerMoveTween = this.add.tween(this.player).to({
-      x: this._tempPlayerDirection.x,
-      y: this._tempPlayerDirection.y
+      x: payload.destination.x * TILE_SIZE,
+      y: payload.destination.y * TILE_SIZE
     }, PLAYER_MOVE_SPEED);
 
     this.playerMoveTween.onComplete.addOnce(this.onPlayerMoveComplete, this);

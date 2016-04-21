@@ -42,6 +42,8 @@ export default class FSM<T> {
   * @param targetState key
   */
   public enter(state: number, payload? : {}) {
+    if (payload == null)
+      payload = {};
     if (this._nextStateKey == null) {
       this._nextStateArgs = payload;
       this._nextStateKey  = this.stateKey(state);
@@ -57,13 +59,25 @@ export default class FSM<T> {
   public update(delta : number) {
     if (this._nextStateKey != null) {
       if (this._currentStateKey != null) {
+        if (LOG_FSM_STATES) {
+          console.log("[FSM] exiting", { state: this.states[this._currentStateKey] });
+        }
         this.states[this._currentStateKey].onExit();
       }
+      var args = this._nextStateArgs;
+      this._nextStateArgs  = null;
       this._currentStateKey = this._nextStateKey;
+      this._nextStateKey    = null;
       this.states[this._currentStateKey].setup(this);
-      this.states[this._currentStateKey].onEnter(this._nextStateArgs);
-      this._nextStateKey = null;
-      this._nextStateArgs = null;
+      if (LOG_FSM_STATES) {
+        console.log("[FSM] enter", {
+          state: this.states[this._currentStateKey],
+          payload: this._nextStateArgs
+        });
+      }
+      this.states[this._currentStateKey].onEnter(args);
+
+
     }
 
     if (this._currentStateKey != null) {

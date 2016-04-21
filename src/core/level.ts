@@ -1,5 +1,7 @@
 import { TILE_SIZE } from './consts';
 import GameObject from './objects/game_object';
+import PathFinderPlugin from '../lib/path_finder_plugin';
+
 export default class Level extends Phaser.Tilemap {
   /**
   * Elements on ground
@@ -53,5 +55,16 @@ export default class Level extends Phaser.Tilemap {
     }
 
     this.groundLayer.resizeWorld();
+  }
+
+
+  /**
+  * Configure {PathFinderPlugin}  with data from level
+  */
+  public setupPathFinding(pathFinding : PathFinderPlugin) : void {
+    pathFinding.setGrid(
+      this.layers[0].data,
+      [19]
+    );
   }
 }

@@ -7,4 +7,4 @@
 declare var require:(moduleId:string) => any;
 
 declare var GAME_PRODUCTION: boolean;
-declare var GAME_DEVELOPMENT: boolean;
+declare var LOG_FSM_STATES: boolean;

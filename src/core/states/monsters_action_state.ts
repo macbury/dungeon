@@ -12,14 +12,14 @@ export default class MonstersActionState extends BaseDungeonScreenState {
     //TODO animate nicly all visible monsters
     //TODO go back to PLAYER_CHOOSE_ACTION
 
-    var mob : Mob = this.monsters.create('dwarf');
-    mob.position.set(32, 32);
+    //var mob : Mob = this.monsters.create('dwarf');
+    //mob.position.set(32, 32);
   }
 
   public onUpdate(delta: number) {
 
     console.log("Run action for all monsters that are visible");
-    this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+    this.fsm.enter(TurnStates.PLAYER_NAVIGATING);
   }
 
   public onExit() : void {
