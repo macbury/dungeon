@@ -44,11 +44,11 @@ export default class Level extends Phaser.Tilemap {
   * Generate whole level
   */
   public generate() : void {
-    for (var x = 0; x < 10; x++) {
-      for (var y = 0; y < 10; y++) {
+    for (var x = 0; x < 100; x++) {
+      for (var y = 0; y < 100; y++) {
         this.putTile(19, x, y, this.groundLayer);
 
-        if (x == 0 || y == 0 || x == 9 || y == 9  || (x == 3 && y < 5)) {
+        if (x == 0 || y == 0 || (x == 3 && y < 5)) {
           this.putTile(0, x, y, this.groundLayer);
         }
       }

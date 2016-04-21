@@ -21,3 +21,8 @@ export const TILE_CENTER     : number = TILE_SIZE / 2;
 * How much time it takes player to move over one tile
 */
 export const PLAYER_MOVE_SPEED : number = 250;
+
+/**
+* How much time it should take to animate showing and hiding cursor
+*/
+export const CURSOR_ANIMATION_SPEED : number = 250;

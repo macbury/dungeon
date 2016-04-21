@@ -19,6 +19,8 @@ import PlayerNavigateActionState from '../states/player_navigate_action_state';
 export default class DungeonScreen extends Phaser.State {
   public level        : Level;
 
+  public cursor          : Phaser.Sprite;
+  public uiLayer         : Phaser.Group;
   public player          : Player;
   public pathFinding     : PathFinderPlugin;
   protected sceneFSM     : FSM<DungeonScreen>;
@@ -27,23 +29,30 @@ export default class DungeonScreen extends Phaser.State {
   public preload() : void {
     this.load.image('dwarf', require('dwarf.png'));
     this.load.image('knight', require('knight2.png'));
+    this.load.image('cursor', require('cursor.png'));
     this.load.image('dungeon-tileset', require('tileset.png'));
   }
 
   public create() : void {
     this.input.mouse.capture = true;
     this.prepareStateMachine();
+    this.uiLayer             = this.add.group();
     this.monsters            = new MonstersManager(this.game);
 
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
 
-    this.level               = new Level(this.game, 'dungeon-tileset', 10, 10);
+    this.level               = new Level(this.game, 'dungeon-tileset', 100, 100);
     this.level.generate();
     this.level.setupPathFinding(this.pathFinding);
 
     this.player = new Player(this.game, 'knight');
     this.player.position.set(16,16);
     this.player.follow(this.camera);
+    this.world.bringToTop(this.uiLayer);
+
+    this.cursor = this.add.sprite(0,0, 'cursor', null, this.uiLayer);
+    this.cursor.anchor.set(0.5,0.5);
+    this.cursor.visible = false;
   }
 
   private prepareStateMachine() : void {

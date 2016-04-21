@@ -14,12 +14,13 @@ export default class MonstersActionState extends BaseDungeonScreenState {
 
     //var mob : Mob = this.monsters.create('dwarf');
     //mob.position.set(32, 32);
+    console.log("Run action for all monsters that are visible");
+    this.fsm.enter(TurnStates.PLAYER_NAVIGATING);
   }
 
   public onUpdate(delta: number) {
 
-    console.log("Run action for all monsters that are visible");
-    this.fsm.enter(TurnStates.PLAYER_NAVIGATING);
+
   }
 
   public onExit() : void {

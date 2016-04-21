@@ -47,16 +47,13 @@ export default class FSM<T> {
     if (this._nextStateKey == null) {
       this._nextStateArgs = payload;
       this._nextStateKey  = this.stateKey(state);
+      this.switchState();
     } else {
       throw "There is already pending state!!!!!";
     }
   }
 
-  /**
-  * Update state machine
-  * @param delta time
-  */
-  public update(delta : number) {
+  private switchState() {
     if (this._nextStateKey != null) {
       if (this._currentStateKey != null) {
         if (LOG_FSM_STATES) {
@@ -79,7 +76,13 @@ export default class FSM<T> {
 
 
     }
+  }
 
+  /**
+  * Update state machine
+  * @param delta time
+  */
+  public update(delta : number) {
     if (this._currentStateKey != null) {
       this.states[this._currentStateKey].onUpdate(delta);
     }

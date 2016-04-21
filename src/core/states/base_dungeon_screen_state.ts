@@ -8,6 +8,14 @@ import MonstersManager from '../monsters_manager';
 * Base state class that exposes context {DungeonScreen methods}
 */
 export default class BaseDungeonScreenState extends BaseState<DungeonScreen> {
+
+  /**
+  * Reference to cursor sprite
+  */
+  public get cursor() : Phaser.Sprite {
+    return this.context.cursor;
+  }
+
   /**
   * Reference to input manager
   */
