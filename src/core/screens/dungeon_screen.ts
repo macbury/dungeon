@@ -10,7 +10,7 @@ import Level from '../level';
 import MonstersManager from '../monsters_manager';
 
 import Player from '../objects/player';
-import Mob from '../objects/mob';
+import Slime from '../objects/monsters/slime';
 
 import PlayerChooseActionState from '../states/player_choose_action_state';
 import PlayerMoveActionState from '../states/player_move_action_state';
@@ -21,6 +21,7 @@ export default class DungeonScreen extends Phaser.State {
   public level        : Level;
 
   public cursor          : Cursor;
+  public monstersLayer   : Phaser.Group;
   public uiLayer         : Phaser.Group;
   public player          : Player;
   public pathFinding     : PathFinderPlugin;
@@ -28,7 +29,7 @@ export default class DungeonScreen extends Phaser.State {
   public monsters        : MonstersManager;
 
   public preload() : void {
-    this.load.image('dwarf', require('dwarf.png'));
+    Slime.preload(this.load);
     this.load.image('knight', require('knight2.png'));
     this.load.image('cursor', require('cursor.png'));
     this.load.image('dungeon-tileset', require('tileset.png'));
@@ -37,9 +38,6 @@ export default class DungeonScreen extends Phaser.State {
   public create() : void {
     this.input.mouse.capture = true;
     this.prepareStateMachine();
-    this.uiLayer             = this.add.group();
-    this.monsters            = new MonstersManager(this.game);
-
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
 
     this.level               = new Level(this.game, 'dungeon-tileset', 100, 100);
@@ -49,11 +47,18 @@ export default class DungeonScreen extends Phaser.State {
     this.player = new Player(this.game, 'knight');
     this.player.position.set(16,16);
     this.player.follow(this.camera);
-    this.world.bringToTop(this.uiLayer);
 
+    this.monstersLayer       = this.add.group();
+    this.monsters            = new MonstersManager(this.game, this.monstersLayer);
+
+    for (let i = 0; i < 10; i++) {
+      this.monsters.spawn(Slime, 5,2*i);
+    }
+
+
+    this.uiLayer             = this.add.group();
     this.cursor = new Cursor(this.game);
     this.uiLayer.add(this.cursor);
-
   }
 
   private prepareStateMachine() : void {

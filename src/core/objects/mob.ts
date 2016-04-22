@@ -10,6 +10,7 @@ export default class Mob extends GameObject {
     super(game, parent, "monster");
     this.sprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, spriteKey, null, this);
     this.sprite.anchor.set(0.5,0.5);
+    this.sprite.autoCull = true;
   }
 
 }

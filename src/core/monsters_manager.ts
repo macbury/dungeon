@@ -1,4 +1,3 @@
-
 import Mob from './objects/mob';
 
 /**
@@ -7,15 +6,21 @@ import Mob from './objects/mob';
 export default class MonstersManager {
   private game : Phaser.Game;
   private monsters : Array<Mob>;
+  private monstersLayer : Phaser.Group;
 
-  constructor(game : Phaser.Game) {
-    this.game = game;
+  constructor(game : Phaser.Game, monstersLayer : Phaser.Group) {
+    this.game     = game;
     this.monsters = new Array<Mob>();
+    this.monstersLayer = monstersLayer;
   }
 
-  public create(spriteName : string) : Mob {
-    var mob : Mob = new Mob(this.game, spriteName);
+  /**
+  * Spawn new monster at specified position
+  */
+  public spawn(MobKlass: new (game: Phaser.Game) => Mob, tileX : number, tileY : number) {
+    var mob : Mob = new MobKlass(this.game);
+    this.monstersLayer.add(mob);
+    mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);
-    return mob;
   }
 }

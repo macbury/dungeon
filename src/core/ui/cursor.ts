@@ -1,7 +1,6 @@
 import { Sprite } from 'phaser';
 import { CURSOR_ANIMATION_SPEED } from '../consts';
 
-
 /**
 * Simple movement cursor
 */
