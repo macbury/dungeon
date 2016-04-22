@@ -37,11 +37,7 @@ export default class PlayerNavigateActionState extends BaseDungeonScreenState {
   * Finish movement and go to {PLAYER_CHOOSE_ACTION}
   */
   private finishMovement() {
-    this.cursor.scale.set(1,1);
-    this.add.tween(this.cursor.scale).to({ x: 0, y: 0 }, CURSOR_ANIMATION_SPEED).start().onComplete.addOnce(function() {
-      this.cursor.visible = false;
-    }, this);
-
+    this.cursor.hide();
     this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     this.path = null;
   }

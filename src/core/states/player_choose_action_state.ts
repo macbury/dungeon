@@ -25,12 +25,9 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
   private onPlayerTap(pointer : Phaser.Pointer, doubleTap : boolean) : void {
     var tapTile : Phaser.Point    = this.level.getTilePositionFor(pointer);
 
-    this.cursor.visible = true;
-    //this.cursor.alpha   = 0.0;
     this.cursor.position.set(tapTile.x * TILE_SIZE + TILE_CENTER, tapTile.y * TILE_SIZE + TILE_CENTER);
+    this.cursor.show();
 
-    this.cursor.scale.set(2,2);
-    this.add.tween(this.cursor.scale).to({ x: 1, y: 1 }, CURSOR_ANIMATION_SPEED).start();
     this.fsm.enter(TurnStates.PLAYER_NAVIGATING, { destination: tapTile });
 
     //TODO check if tap on enemy

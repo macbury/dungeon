@@ -4,6 +4,7 @@ import FSM from '../fsm/fsm';
 import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
 
+import Cursor from '../ui/cursor';
 import Level from '../level';
 
 import MonstersManager from '../monsters_manager';
@@ -19,7 +20,7 @@ import PlayerNavigateActionState from '../states/player_navigate_action_state';
 export default class DungeonScreen extends Phaser.State {
   public level        : Level;
 
-  public cursor          : Phaser.Sprite;
+  public cursor          : Cursor;
   public uiLayer         : Phaser.Group;
   public player          : Player;
   public pathFinding     : PathFinderPlugin;
@@ -50,9 +51,9 @@ export default class DungeonScreen extends Phaser.State {
     this.player.follow(this.camera);
     this.world.bringToTop(this.uiLayer);
 
-    this.cursor = this.add.sprite(0,0, 'cursor', null, this.uiLayer);
-    this.cursor.anchor.set(0.5,0.5);
-    this.cursor.visible = false;
+    this.cursor = new Cursor(this.game);
+    this.uiLayer.add(this.cursor);
+
   }
 
   private prepareStateMachine() : void {
