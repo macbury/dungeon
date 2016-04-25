@@ -30,7 +30,7 @@ export default class DungeonScreen extends Phaser.State {
 
   public preload() : void {
     Slime.preload(this.load);
-    this.load.image('knight', require('knight2.png'));
+    Player.preload(this.load);
     this.load.image('cursor', require('cursor.png'));
     this.load.image('dungeon-tileset', require('tileset.png'));
   }
@@ -44,7 +44,7 @@ export default class DungeonScreen extends Phaser.State {
     this.level.generate();
     this.level.setupPathFinding(this.pathFinding);
 
-    this.player = new Player(this.game, 'knight');
+    this.player = new Player(this.game);
     this.player.position.set(16,16);
     this.player.follow(this.camera);
 
