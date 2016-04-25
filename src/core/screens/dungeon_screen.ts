@@ -49,8 +49,8 @@ export default class DungeonScreen extends Phaser.State {
     this.monstersLayer       = this.add.group();
     this.monsters            = new MonstersManager(this, this.monstersLayer);
 
-    for (let i = 0; i < 10; i++) {
-      this.monsters.spawn(Slime, 5,2*i);
+    for (let i = 0; i < 40; i++) {
+      this.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));
     }
 
 

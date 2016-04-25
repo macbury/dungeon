@@ -1,6 +1,7 @@
 import GameObject from './game_object';
 import { TILE_CENTER, GAME_OBJECT_FRAME_RATE } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
+import { TurnAction } from '../states/turn_actions';
 /**
 * Monster object
 */
@@ -21,7 +22,7 @@ export default class Mob extends GameObject {
   /**
   * Monster logic goes here.
   */
-  public takeTurn() : Phaser.Tween {
+  public takeTurn() : TurnAction {
     return null;
   }
 }

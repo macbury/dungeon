@@ -1,7 +1,7 @@
 import Mob from '../mob';
 import { TILE_SIZE } from '../../consts';
 import DungeonScreen from '../../screens/dungeon_screen';
-
+import { TurnAction } from '../../states/turn_actions';
 export default class Slime extends Mob {
   constructor(screen : DungeonScreen) {
     super(screen, 'slime');
@@ -11,7 +11,7 @@ export default class Slime extends Mob {
     load.spritesheet('slime', require('slime.png'), TILE_SIZE, TILE_SIZE);
   }
 
-  public takeTurn() : Phaser.Tween {
+  public takeTurn() : TurnAction{
     return this.wander();
   }
 }

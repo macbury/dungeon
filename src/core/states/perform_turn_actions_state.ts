@@ -3,19 +3,14 @@ import TurnStates from './turn_states';
 import GameObject from '../objects/game_object';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
+import { TurnAction, TurnActions } from './turn_actions';
 
-class TurnAction extends Array<Phaser.Tween> {
-
-  public get onComplete() : Phaser.Signal {
-    return this[this.length - 1].onComplete;
-  }
-}
 
 /**
 * Calculate all turn actions and then perform each one after one
 */
 export default class PerformTurnActionsState extends BaseDungeonScreenState {
-  private actionsToPerform : Array<TurnAction>;
+  private actionsToPerform : Array<TurnActions>;
   /**
   * Checks what action did player choosed to perform
   */
@@ -54,14 +49,14 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
       for (let i = 1; i < path.length; i++) {
-        var turnAction       : TurnAction       = new TurnAction();
+        var turnAction       : TurnActions      = new TurnActions();
         var nextTilePosition : Phaser.Point     = path[i];
-        var playerMoveTween  : Phaser.Tween     = this.player.move(nextTilePosition);
+        var playerMoveTween  : TurnAction       = this.player.move(nextTilePosition);
 
         turnAction.push(playerMoveTween);
 
         for (let j = 0; j < this.monsters.length; j++) {
-          var mobTurnTween : Phaser.Tween = this.monsters.get(j).takeTurn();
+          var mobTurnTween : TurnAction        = this.monsters.get(j).takeTurn();
           if (mobTurnTween != null) {
             turnAction.push(mobTurnTween);
           }
@@ -77,13 +72,8 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     if (this.actionsToPerform.length == 0) {
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
-      var nextTurnAction : TurnAction = this.actionsToPerform.splice(0,1)[0];
-      nextTurnAction.onComplete.addOnce(this.runTurnActions, this);
-
-      for (let i = 0; i < nextTurnAction.length; i++) {
-        var tween : Phaser.Tween = nextTurnAction[i];
-        tween.start();
-      }
+      var nextTurnAction : TurnActions = this.actionsToPerform.splice(0,1)[0];
+      nextTurnAction.run().addOnce(this.runTurnActions, this);
     }
   }
 

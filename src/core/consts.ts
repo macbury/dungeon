@@ -25,7 +25,7 @@ export const PLAYER_MOVE_SPEED : number = 150;
 /**
 * How much time it should take to animate showing and hiding cursor
 */
-export const CURSOR_ANIMATION_SPEED : number = 250;
+export const CURSOR_ANIMATION_SPEED : number = 150;
 
 /**
 * Speed of player and monster objects
