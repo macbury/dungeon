@@ -1,8 +1,14 @@
-import { TILE_SIZE } from '../consts';
+import { TILE_SIZE, PLAYER_MOVE_SPEED, MOVE_ARRAY } from '../consts';
+
 /**
 * Base class for all game objects in the game
 */
-export  default class GameObject extends Phaser.Group {
+export default class GameObject extends Phaser.Group {
+  /**
+  * Position used for calculating attacks, movement and other stuff that dont require to update {GameObject#position}
+  */
+  public virtualPosition : Phaser.Point = new Phaser.Point();
+
   /**
   * Preload assets here
   */
@@ -13,5 +19,31 @@ export  default class GameObject extends Phaser.Group {
   */
   public setTilePosition(x : number, y : number) {
     this.position.set(TILE_SIZE * x, TILE_SIZE * y);
+    this.virtualPosition.set(x, y);
+  }
+
+  /**
+  * Creates move tween for {GameObject}
+  * @param target - place to go on map in tile position
+  */
+  public move(target : Phaser.Point) : Phaser.Tween {
+    var moveTween : Phaser.Tween = this.game.make.tween(this);
+    moveTween.to({
+      x: target.x * TILE_SIZE,
+      y: target.y * TILE_SIZE
+    }, PLAYER_MOVE_SPEED);
+    this.virtualPosition.set(target.x, target.y);
+    return moveTween;
+  }
+
+  /**
+  * Move in random position
+  */
+  public wander() : Phaser.Tween {
+    var tempPoint : Phaser.Point = new Phaser.Point();
+    tempPoint.set(this.virtualPosition.x, this.virtualPosition.y);
+    var dir : Phaser.Point       = Phaser.ArrayUtils.getRandomItem(MOVE_ARRAY, 0, MOVE_ARRAY.length);
+    tempPoint.add(dir.x, dir.y);
+    return this.move(tempPoint);
   }
 }

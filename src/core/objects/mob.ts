@@ -6,6 +6,7 @@ import { TILE_CENTER, GAME_OBJECT_FRAME_RATE } from '../consts';
 export default class Mob extends GameObject {
   private sprite : Phaser.Sprite;
   private idleAnimation : Phaser.Animation;
+
   constructor(game : Phaser.Game, spriteKey: string, parent? : PIXI.DisplayObjectContainer) {
     super(game, parent, "monster");
     this.sprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, spriteKey, null, this);
@@ -16,4 +17,10 @@ export default class Mob extends GameObject {
     this.idleAnimation.play();
   }
 
+  /**
+  * Monster logic goes here.
+  */
+  public takeTurn() : Phaser.Tween {
+    return this.wander();
+  }
 }

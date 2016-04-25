@@ -23,4 +23,15 @@ export default class MonstersManager {
     mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);
   }
+
+  /**
+  * Return number of monsters
+  */
+  public get length() {
+    return this.monsters.length;
+  }
+
+  public get(index : number) {
+    return this.monsters[index];
+  }
 }

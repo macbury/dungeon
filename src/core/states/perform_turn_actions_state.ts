@@ -2,40 +2,12 @@ import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
 import GameObject from '../objects/game_object';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
-import {IPlayerActionType} from './iplayer_action_type';
+import { IPlayerActionType } from './iplayer_action_type';
 
-class TurnAction {
-  public onCompleteSignal : Phaser.Signal;
-  protected game          : Phaser.Game;
-  constructor(game : Phaser.Game) {
-    this.game             = game;
-    this.onCompleteSignal = new Phaser.Signal();
-  }
+class TurnAction extends Array<Phaser.Tween> {
 
-  run() {
-
-  }
-}
-
-class MoveTurnAction extends TurnAction {
-  private destination : Phaser.Point;
-  private gameObject  : GameObject;
-  private tween       : Phaser.Tween;
-
-  constructor(game : Phaser.Game, gameObject : GameObject, destination: Phaser.Point) {
-    super(game);
-    this.gameObject  = gameObject;
-    this.destination = destination;
-  }
-
-  run() {
-    this.tween = this.game.add.tween(this.gameObject).to({
-      x: this.destination.x * TILE_SIZE,
-      y: this.destination.y * TILE_SIZE
-    }, PLAYER_MOVE_SPEED);
-
-    this.tween.onComplete = this.onCompleteSignal;
-    this.tween.start();
+  public get onComplete() : Phaser.Signal {
+    return this[this.length - 1].onComplete;
   }
 }
 
@@ -52,8 +24,8 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       var playerPositionTile : Phaser.Point = new Phaser.Point();
       this.level.getTilePositionForGameObject(this.player, playerPositionTile);
       this.pathFinding.findPath(playerPositionTile, action.destination).addOnce(this.calculateActionsByPath, this);
+      this.cursor.show();
     }
-
   }
 
   /** If player did trigger movement
@@ -81,9 +53,20 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     if (path == null) {// Cannot find path
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
-      for (let i = 0; i < path.length; i++) {
+      for (let i = 1; i < path.length; i++) {
+        var turnAction       : TurnAction       = new TurnAction();
         var nextTilePosition : Phaser.Point     = path[i];
-        var turnAction       : MoveTurnAction   = new MoveTurnAction(this.context.game, this.player, nextTilePosition);
+        var playerMoveTween  : Phaser.Tween     = this.player.move(nextTilePosition);
+
+        turnAction.push(playerMoveTween);
+
+        for (let j = 0; j < this.monsters.length; j++) {
+          var mobTurnTween : Phaser.Tween = this.monsters.get(j).takeTurn();
+          if (mobTurnTween != null) {
+            turnAction.push(mobTurnTween);
+          }
+        }
+
         this.actionsToPerform.push(turnAction);
       }
       this.runTurnActions();
@@ -95,8 +78,16 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
       var nextTurnAction : TurnAction = this.actionsToPerform.splice(0,1)[0];
-      nextTurnAction.run();
-      nextTurnAction.onCompleteSignal.addOnce(this.runTurnActions, this);
+      nextTurnAction.onComplete.addOnce(this.runTurnActions, this);
+
+      for (let i = 0; i < nextTurnAction.length; i++) {
+        var tween : Phaser.Tween = nextTurnAction[i];
+        tween.start();
+      }
+
+      //
+      //nextTurnAction.run();
+      //nextTurnAction.onCompleteSignal.addOnce(this.runTurnActions, this);
     }
     // Iterate over each turnObject and perform its action. If all TurnObject did run then go to {PlayerChooseActionState}
   }
@@ -104,5 +95,6 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   public onExit() {
     // clear cache
     this.actionsToPerform = [];
+    this.cursor.hide();
   }
 }

@@ -31,3 +31,10 @@ export const CURSOR_ANIMATION_SPEED : number = 250;
 * Speed of player and monster objects
 */
 export const GAME_OBJECT_FRAME_RATE : number = 4;
+
+export const UP : Phaser.Point    = new Phaser.Point(0, -1);
+export const DOWN : Phaser.Point  = new Phaser.Point(0, 1);
+export const LEFT : Phaser.Point  = new Phaser.Point(1, 0);
+export const RIGHT : Phaser.Point = new Phaser.Point(-1, 0);
+
+export const MOVE_ARRAY : Array<Phaser.Point> = [UP, DOWN, LEFT, RIGHT];

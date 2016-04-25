@@ -27,8 +27,6 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
     var tapTile : Phaser.Point    = this.level.getTilePositionFor(pointer);
 
     this.cursor.position.set(tapTile.x * TILE_SIZE + TILE_CENTER, tapTile.y * TILE_SIZE + TILE_CENTER);
-    this.cursor.show();
-
     this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, IPlayerActionType.performMoveTo(tapTile));
 
     //TODO check if tap on enemy
