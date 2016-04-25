@@ -66,13 +66,13 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
             turnAction.push(mobTurnTween);
           }
         }
-
         this.actionsToPerform.push(turnAction);
       }
       this.runTurnActions();
     }
   }
 
+  // Iterate over each turnObject and perform its action. If all TurnObject did run then go to {PlayerChooseActionState}
   public runTurnActions() {
     if (this.actionsToPerform.length == 0) {
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
@@ -84,12 +84,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
         var tween : Phaser.Tween = nextTurnAction[i];
         tween.start();
       }
-
-      //
-      //nextTurnAction.run();
-      //nextTurnAction.onCompleteSignal.addOnce(this.runTurnActions, this);
     }
-    // Iterate over each turnObject and perform its action. If all TurnObject did run then go to {PlayerChooseActionState}
   }
 
   public onExit() {

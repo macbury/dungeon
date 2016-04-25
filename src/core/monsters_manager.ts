@@ -1,5 +1,5 @@
 import Mob from './objects/mob';
-
+import DungeonScreen from './screens/dungeon_screen';
 /**
 * Manage all monsters in system
 */
@@ -7,9 +7,11 @@ export default class MonstersManager {
   private game : Phaser.Game;
   private monsters : Array<Mob>;
   private monstersLayer : Phaser.Group;
+  private dungeonScreen : DungeonScreen;
 
-  constructor(game : Phaser.Game, monstersLayer : Phaser.Group) {
-    this.game     = game;
+  constructor(screen : DungeonScreen, monstersLayer : Phaser.Group) {
+    this.game     = screen.game;
+    this.dungeonScreen = screen;
     this.monsters = new Array<Mob>();
     this.monstersLayer = monstersLayer;
   }
@@ -17,8 +19,8 @@ export default class MonstersManager {
   /**
   * Spawn new monster at specified position
   */
-  public spawn(MobKlass: new (game: Phaser.Game) => Mob, tileX : number, tileY : number) {
-    var mob : Mob = new MobKlass(this.game);
+  public spawn(MobKlass: new (game: DungeonScreen) => Mob, tileX : number, tileY : number) {
+    var mob : Mob = new MobKlass(this.dungeonScreen);
     this.monstersLayer.add(mob);
     mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);

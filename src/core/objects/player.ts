@@ -1,6 +1,6 @@
 import Character from './character';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE } from '../consts';
-
+import DungeonScreen from '../screens/dungeon_screen';
 const PLAYER_SPRITE_NAME = 'player';
 
 /**
@@ -10,8 +10,8 @@ export default class Player extends Character {
   private sprite : Phaser.Sprite;
   private idleAnimation : Phaser.Animation;
 
-  constructor(game : Phaser.Game, parent? : PIXI.DisplayObjectContainer) {
-    super(game, parent, "player");
+  constructor(screen : DungeonScreen, parent? : PIXI.DisplayObjectContainer) {
+    super(screen, parent);
     this.sprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, PLAYER_SPRITE_NAME, null, this);
     this.sprite.anchor.set(0.5,0.5);
 

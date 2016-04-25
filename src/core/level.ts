@@ -1,6 +1,9 @@
 import { TILE_SIZE } from './consts';
 import GameObject from './objects/game_object';
 import PathFinderPlugin from '../lib/path_finder_plugin';
+import DungeonScreen from './screens/dungeon_screen';
+
+const PASSABLE_TILES = [8];
 
 export default class Level extends Phaser.Tilemap {
   /**
@@ -12,8 +15,8 @@ export default class Level extends Phaser.Tilemap {
   */
   public wallLayer    : Phaser.TilemapLayer;
 
-  constructor(game : Phaser.Game, tilesetKey : string, columns : number, rows : number) {
-    super(game, null, TILE_SIZE, TILE_SIZE, columns, rows);
+  constructor(screen : DungeonScreen, tilesetKey : string, columns : number, rows : number) {
+    super(screen.game, null, TILE_SIZE, TILE_SIZE, columns, rows);
     this.setPreventRecalculate(true);
     this.addTilesetImage(tilesetKey);
     this.groundLayer = this.create('ground', columns, rows, TILE_SIZE, TILE_SIZE);
@@ -57,6 +60,13 @@ export default class Level extends Phaser.Tilemap {
     this.groundLayer.resizeWorld();
   }
 
+  /**
+  * Return true if passed tilePos is passable
+  */
+  public isPassable(tilePos : Phaser.Point) : boolean {
+    var tile : Phaser.Tile = this.getTile(tilePos.x, tilePos.y);
+    return tile != null && PASSABLE_TILES.indexOf(tile.index) != -1;
+  }
 
   /**
   * Configure {PathFinderPlugin}  with data from level
@@ -64,7 +74,7 @@ export default class Level extends Phaser.Tilemap {
   public setupPathFinding(pathFinding : PathFinderPlugin) : void {
     pathFinding.setGrid(
       this.layers[0].data,
-      [8]
+      PASSABLE_TILES
     );
   }
 }

@@ -38,16 +38,16 @@ export default class DungeonScreen extends Phaser.State {
     this.prepareStateMachine();
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
 
-    this.level               = new Level(this.game, 'tileset', 100, 100);
+    this.level               = new Level(this, 'tileset', 100, 100);
     this.level.generate();
     this.level.setupPathFinding(this.pathFinding);
 
-    this.player = new Player(this.game);
+    this.player = new Player(this);
     this.player.position.set(16,16);
     this.player.follow(this.camera);
 
     this.monstersLayer       = this.add.group();
-    this.monsters            = new MonstersManager(this.game, this.monstersLayer);
+    this.monsters            = new MonstersManager(this, this.monstersLayer);
 
     for (let i = 0; i < 10; i++) {
       this.monsters.spawn(Slime, 5,2*i);

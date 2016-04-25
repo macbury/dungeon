@@ -1,5 +1,7 @@
 import { TILE_SIZE, PLAYER_MOVE_SPEED, MOVE_ARRAY } from '../consts';
-
+import DungeonScreen from '../screens/dungeon_screen';
+import Level from '../level';
+import Player from './player';
 /**
 * Base class for all game objects in the game
 */
@@ -8,6 +10,26 @@ export default class GameObject extends Phaser.Group {
   * Position used for calculating attacks, movement and other stuff that dont require to update {GameObject#position}
   */
   public virtualPosition : Phaser.Point = new Phaser.Point();
+  private dungeonScreen : DungeonScreen;
+
+  constructor(dungeonScreen : DungeonScreen, parent? : PIXI.DisplayObjectContainer) {
+    super(dungeonScreen.game, parent);
+    this.dungeonScreen = dungeonScreen;
+  }
+
+  /**
+  * Reference to current level
+  */
+  protected get level() : Level {
+    return this.dungeonScreen.level;
+  }
+
+  /**
+  * Reference to current Player
+  */
+  protected get player() : Player {
+    return this.dungeonScreen.player;
+  }
 
   /**
   * Preload assets here
@@ -44,6 +66,10 @@ export default class GameObject extends Phaser.Group {
     tempPoint.set(this.virtualPosition.x, this.virtualPosition.y);
     var dir : Phaser.Point       = Phaser.ArrayUtils.getRandomItem(MOVE_ARRAY, 0, MOVE_ARRAY.length);
     tempPoint.add(dir.x, dir.y);
-    return this.move(tempPoint);
+    if (this.level.isPassable(tempPoint)) {
+      return this.move(tempPoint);
+    } else {
+      return null;
+    }
   }
 }
