@@ -13,9 +13,7 @@ import Player from '../objects/player';
 import Slime from '../objects/monsters/slime';
 
 import PlayerChooseActionState from '../states/player_choose_action_state';
-import PlayerMoveActionState from '../states/player_move_action_state';
-import MonstersActionState from '../states/monsters_action_state';
-import PlayerNavigateActionState from '../states/player_navigate_action_state';
+import PerformTurnActionsState from '../states/perform_turn_actions_state';
 
 export default class DungeonScreen extends Phaser.State {
   public level        : Level;
@@ -64,9 +62,7 @@ export default class DungeonScreen extends Phaser.State {
   private prepareStateMachine() : void {
     this.sceneFSM = new FSM<DungeonScreen>(this);
     this.sceneFSM.register(TurnStates.PLAYER_CHOOSE_ACTION, new PlayerChooseActionState());
-    this.sceneFSM.register(TurnStates.PLAYER_NAVIGATING, new PlayerNavigateActionState());
-    this.sceneFSM.register(TurnStates.PLAYER_MOVE, new PlayerMoveActionState());
-    this.sceneFSM.register(TurnStates.MONSTER_ACTION, new MonstersActionState());
+    this.sceneFSM.register(TurnStates.PERFORM_TURN_ACTIONS, new PerformTurnActionsState());
 
     this.sceneFSM.enter(TurnStates.PLAYER_CHOOSE_ACTION);
   }

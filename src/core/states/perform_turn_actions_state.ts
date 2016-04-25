@@ -1,12 +1,15 @@
 import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
+import IPlayerActionType from './iplayer_action_type';
 
 /**
-* In this state every monster on map runs it turn
+* Calculate all turn actions and then perform each one after one
 */
 export default class PerformTurnActionsState extends BaseDungeonScreenState {
-
-  public onEnter(payload: any) {
+  /**
+  * Checks what action did player choosed to perform
+  */
+  public onEnter(action : IPlayerActionType) {
     // If player did trigger movement
       // Calculate path for {Player}
       // For each position in patch for {Player} do
