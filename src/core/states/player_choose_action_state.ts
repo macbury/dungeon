@@ -1,7 +1,7 @@
 import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
 import { TILE_SIZE, CURSOR_ANIMATION_SPEED, TILE_CENTER } from '../consts';
-import IPlayerActionType from './iplayer_action_type';
+import { IPlayerActionType } from './iplayer_action_type';
 /**
 * In this state player can select its action like attack, defense, sleep or interaction with any object on map
 */

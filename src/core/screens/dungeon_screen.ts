@@ -30,7 +30,7 @@ export default class DungeonScreen extends Phaser.State {
     Slime.preload(this.load);
     Player.preload(this.load);
     this.load.image('cursor', require('cursor.png'));
-    this.load.image('dungeon-tileset', require('tileset.png'));
+    this.load.image('tileset', require('tileset.png'));
   }
 
   public create() : void {
@@ -38,7 +38,7 @@ export default class DungeonScreen extends Phaser.State {
     this.prepareStateMachine();
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
 
-    this.level               = new Level(this.game, 'dungeon-tileset', 100, 100);
+    this.level               = new Level(this.game, 'tileset', 100, 100);
     this.level.generate();
     this.level.setupPathFinding(this.pathFinding);
 

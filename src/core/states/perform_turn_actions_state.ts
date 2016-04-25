@@ -1,6 +1,6 @@
 import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
-import IPlayerActionType from './iplayer_action_type';
+import {IPlayerActionType} from './iplayer_action_type';
 
 /**
 * Calculate all turn actions and then perform each one after one
