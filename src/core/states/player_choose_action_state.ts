@@ -29,7 +29,7 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
     this.cursor.position.set(tapTile.x * TILE_SIZE + TILE_CENTER, tapTile.y * TILE_SIZE + TILE_CENTER);
     this.cursor.show();
 
-    this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, <IPlayerActionType>{ destination: tapTile });
+    this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, IPlayerActionType.performMoveTo(tapTile));
 
     //TODO check if tap on enemy
     //TODO check if tap on item

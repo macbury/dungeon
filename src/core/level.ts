@@ -64,7 +64,7 @@ export default class Level extends Phaser.Tilemap {
   public setupPathFinding(pathFinding : PathFinderPlugin) : void {
     pathFinding.setGrid(
       this.layers[0].data,
-      [19]
+      [8]
     );
   }
 }

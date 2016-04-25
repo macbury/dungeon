@@ -51,7 +51,7 @@ export default class PlayerNavigateActionState extends BaseDungeonScreenState {
     } else {
       // Pop next tile and move
       var nextTileToVisit : Phaser.Point = this.path.splice(0,1)[0];
-      this.fsm.enter(TurnStates.PLAYER_MOVE, { destination: nextTileToVisit });
+      //this.fsm.enter(TurnStates.PLAYER_MOVE, { destination: nextTileToVisit });
     }
   }
 }
