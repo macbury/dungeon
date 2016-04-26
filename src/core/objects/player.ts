@@ -1,7 +1,7 @@
 import Character from './character';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
-import { PendingMoveAction } from '../states/turn_actions';
+import { PendingPlayerMoveAction } from './pending_actions/pending_move_action';
 
 const PLAYER_SPRITE_NAME = 'player_character';
 const PLAYER_MOVE_SOUND  = 'player_move';
@@ -9,9 +9,8 @@ const PLAYER_MOVE_SOUND  = 'player_move';
 * Main player class.
 */
 export default class Player extends Character {
-  private sprite : Phaser.Sprite;
   private idleAnimation : Phaser.Animation;
-  private stepSound     : Phaser.Sound;
+  public stepSound       : Phaser.Sound;
 
   constructor(screen : DungeonScreen, parent? : PIXI.DisplayObjectContainer) {
     super(screen, parent);
@@ -28,23 +27,9 @@ export default class Player extends Character {
   * Creates move action for {Player}
   * @param target - place to go on map in tile position
   */
-  public move(target : Phaser.Point) : PendingMoveAction {
+  public move(target : Phaser.Point) : PendingPlayerMoveAction {
     this.virtualPosition.set(target.x, target.y);
-    return new PendingMoveAction(this.game, this, target);
-    /*return this.makeTurnAction(() : Phaser.Signal => {
-      var moveTween : Phaser.Tween = this.game.make.tween(this);
-      moveTween.to({
-        x: target.x * TILE_SIZE,
-        y: target.y * TILE_SIZE
-      }, PLAYER_MOVE_SPEED);
-
-      moveTween.onStart.addOnce(() => {
-        this.stepSound.play();
-      }, this)
-
-      moveTween.start();
-      return moveTween.onComplete;
-    });*/
+    return new PendingPlayerMoveAction(this.game, this, target);
   }
 
   /**

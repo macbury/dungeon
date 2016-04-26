@@ -1,9 +1,8 @@
-import GameObject from '../objects/game_object';
-import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../consts';
+import GameObject from '../game_object';
 /**
 * Simple wrapper around array that contains {TurnAction}
 */
-export class TurnActions extends Array<PendingTurnAction<GameObject>> {
+export class PendingTurnActions extends Array<PendingTurnAction<GameObject>> {
   public onComplete : Phaser.Signal;
   private runningActionCount : number;
   constructor() {
@@ -56,7 +55,7 @@ export abstract class PendingTurnAction<T extends GameObject> {
   }
 
   /**
-  * Place animation logic for turn. It needs to trigger onCompleteSignal after evrything is done
+  * Place animation logic for turn. It needs to trigger onCompleteSignal after everything is done
   */
   protected abstract performTurn() : void;
 
@@ -66,27 +65,5 @@ export abstract class PendingTurnAction<T extends GameObject> {
   public run() : Phaser.Signal {
     this.performTurn();
     return this.onCompleteSignal;
-  }
-}
-
-/**
-* This action will move game object
-*/
-export class PendingMoveAction extends PendingTurnAction<GameObject> {
-  protected targetTile : Phaser.Point;
-
-  constructor(game: Phaser.Game, owner : GameObject, targetTile : Phaser.Point) {
-    super(game, owner);
-    this.targetTile = targetTile;
-  }
-
-  protected performTurn() {
-    var moveTween : Phaser.Tween = this.game.make.tween(this.owner);
-    moveTween.to({
-      x: this.targetTile.x * TILE_SIZE,
-      y: this.targetTile.y * TILE_SIZE
-    }, PLAYER_MOVE_SPEED);
-    moveTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() }, this);
-    moveTween.start();
   }
 }

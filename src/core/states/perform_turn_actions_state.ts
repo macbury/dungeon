@@ -4,14 +4,14 @@ import GameObject from '../objects/game_object';
 import Mob from '../objects/mob';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
-import { PendingTurnAction, TurnActions } from './turn_actions';
-
+import { PendingTurnAction, PendingTurnActions } from '../objects/pending_actions/pending_turn_actions';
+import PendingMeleeAttackAction from '../objects/pending_actions/pending_melee_attack_action';
 
 /**
 * Calculate all turn actions and then perform each one after one
 */
 export default class PerformTurnActionsState extends BaseDungeonScreenState {
-  private actionsToPerform : Array<TurnActions>;
+  private actionsToPerform : Array<PendingTurnActions>;
   /**
   * Checks what action did player choosed to perform
   */
@@ -38,12 +38,14 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
 
     console.log(mob);
 
-    var playerAttackAction : TurnActions      = new TurnActions();
-    //this.actionsToPerform.push(playerAttackAction);
+    var playerTurn : PendingTurnActions         = new PendingTurnActions();
+    var playerAttack : PendingMeleeAttackAction = new PendingMeleeAttackAction(this.game, this.player, mob);
+    playerTurn.push(playerAttack);
+    this.actionsToPerform.push(playerTurn);
 
-    var mobActions         : TurnActions      = new TurnActions();
-    this.calculateMobsActions(mobActions);
-    this.actionsToPerform.push(mobActions);
+    var mobTurn         : PendingTurnActions      = new PendingTurnActions();
+    this.calculateMobsActions(mobTurn);
+    this.actionsToPerform.push(mobTurn);
     this.runTurnActions();
   }
 
@@ -72,13 +74,13 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
       for (let i = 1; i < path.length; i++) {
-        var turnAction       : TurnActions      = new TurnActions();
-        var nextTilePosition : Phaser.Point     = path[i];
+        var turnAction       : PendingTurnActions      = new PendingTurnActions();
+        var nextTilePosition : Phaser.Point            = path[i];
 
         /**
         * Move only if there is no monsters on next tile to move
         */
-        if (this.monsters.isOnTile(nextTilePosition)) {
+        if (!this.player.isPassable(nextTilePosition)) {
           break;
         } else {
           var playerMoveTween  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
@@ -92,7 +94,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     }
   }
 
-  private calculateMobsActions(turnAction : TurnActions) {
+  private calculateMobsActions(turnAction : PendingTurnActions) {
     for (let j = 0; j < this.monsters.length; j++) {
       var mobTurnTween : PendingTurnAction<GameObject>        = this.monsters.get(j).takeTurn();
       if (mobTurnTween != null) {
@@ -106,7 +108,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     if (this.actionsToPerform.length == 0) {
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
-      var nextTurnAction : TurnActions = this.actionsToPerform.splice(0,1)[0];
+      var nextTurnAction : PendingTurnActions = this.actionsToPerform.splice(0,1)[0];
       nextTurnAction.run().addOnce(this.runTurnActions, this);
     }
   }

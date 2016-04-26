@@ -1,7 +1,7 @@
 import Mob from '../mob';
 import { TILE_SIZE } from '../../consts';
 import DungeonScreen from '../../screens/dungeon_screen';
-import { PendingTurnAction } from '../../states/turn_actions';
+import { PendingTurnAction } from '../pending_actions/pending_turn_actions';
 import GameObject from '../game_object';
 
 export default class Slime extends Mob {

@@ -53,6 +53,13 @@ export default class BaseDungeonScreenState extends BaseState<DungeonScreen> {
   }
 
   /**
+  * Reference to game
+  */
+  public get game() : Phaser.Game {
+    return this.context.game;
+  }
+
+  /**
   * A reference to the GameObjectFactory which can be used to add new objects to the World.
   */
   public get add() : Phaser.GameObjectFactory {
