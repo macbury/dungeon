@@ -33,6 +33,13 @@ export default class Level extends Phaser.Tilemap {
   }
 
   /**
+  * Recalculate field of view
+  */
+  public updateFov() : void {
+
+  }
+
+  /**
   * Returns {GameObject} position as tile position
   * @param gameObject
   * @param outPoint

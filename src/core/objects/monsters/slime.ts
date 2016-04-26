@@ -3,6 +3,7 @@ import { TILE_SIZE } from '../../consts';
 import DungeonScreen from '../../screens/dungeon_screen';
 import { PendingTurnAction } from '../../states/turn_actions';
 import GameObject from '../game_object';
+
 export default class Slime extends Mob {
   constructor(screen : DungeonScreen) {
     super(screen, 'slime');

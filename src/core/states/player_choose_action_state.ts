@@ -9,11 +9,6 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
 
   public onEnter(payload : { spottedMonster: boolean }) : void {
     this.input.onTap.add(this.onPlayerTap, this);
-    //TODO if monster was not spotted then move until path is empty
-  }
-
-  public onUpdate(delta: number) {
-    //console.log(" on update ", delta);
   }
 
   public onExit() : void {
@@ -27,7 +22,7 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
     var tapTile : Phaser.Point    = this.level.getTilePositionFor(pointer);
 
     if (this.monsters.isOnTile(tapTile)) {// is monster
-      console.log("Selected monster!");
+      this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, IPlayerActionType.performMeleeAttack(tapTile));
     } else if (false) { // is item or other thing you can interact with
 
     } else if (this.level.isPassable(tapTile)) {

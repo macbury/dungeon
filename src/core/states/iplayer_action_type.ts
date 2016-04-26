@@ -9,8 +9,14 @@ export class IPlayerActionType {
   */
   destination : Point;
 
+  attackTarget: Point;
+
   public static isMovement(action : IPlayerActionType) : boolean {
     return action != null && action.destination != null;
+  }
+
+  public static isAttack(action : IPlayerActionType) : boolean {
+    return action != null && action.attackTarget != null;
   }
 
   /**
@@ -18,5 +24,12 @@ export class IPlayerActionType {
   */
   public static performMoveTo(target : Point) : IPlayerActionType {
     return <IPlayerActionType>{ destination: target };
+  }
+
+  /**
+  * Creates action to attack at tile
+  */
+  public static performMeleeAttack(target : Point) : IPlayerActionType {
+    return <IPlayerActionType>{ attackTarget: target };
   }
 }

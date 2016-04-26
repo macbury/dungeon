@@ -32,7 +32,6 @@ export default class Mob extends GameObject {
   */
   public move(target : Phaser.Point) : PendingMoveAction {
     this.virtualPosition.set(target.x, target.y);
-
     return new PendingMoveAction(this.game, this, target);
   }
 
@@ -44,7 +43,7 @@ export default class Mob extends GameObject {
     nextTilePos.set(this.virtualPosition.x, this.virtualPosition.y);
     var dir : Phaser.Point       = Phaser.ArrayUtils.getRandomItem(MOVE_ARRAY, 0, MOVE_ARRAY.length);
     nextTilePos.add(dir.x, dir.y);
-    if (this.level.isPassable(nextTilePos) && !this.monsters.isOnTile(nextTilePos)) {
+    if (this.level.isPassable(nextTilePos) && !this.monsters.isOnTile(nextTilePos) && !this.player.tilePosition.equals(nextTilePos)) {
       return this.move(nextTilePos);
     } else {
       return null;

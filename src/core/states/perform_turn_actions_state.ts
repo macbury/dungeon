@@ -1,6 +1,7 @@
 import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
 import GameObject from '../objects/game_object';
+import Mob from '../objects/mob';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
 import { PendingTurnAction, TurnActions } from './turn_actions';
@@ -20,7 +21,30 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.level.getTilePositionForGameObject(this.player, playerPositionTile);
       this.pathFinding.findPath(playerPositionTile, action.destination).addOnce(this.calculateActionsByPath, this);
       this.cursor.show();
+    } else if (IPlayerActionType.isAttack(action)) {
+      console.log("Going to attack!");
+      this.playerAttackMonsterAt(action.attackTarget);
+    } else {
+      throw "This is should not happen";
     }
+  }
+
+  private playerAttackMonsterAt(point : Phaser.Point) {
+    this.actionsToPerform = [];
+    var mob : Mob = this.monsters.getMonsterForTilePosition(point);
+    if (mob == null) {
+      throw "Could not find monster to attack";
+    }
+
+    console.log(mob);
+
+    var playerAttackAction : TurnActions      = new TurnActions();
+    //this.actionsToPerform.push(playerAttackAction);
+
+    var mobActions         : TurnActions      = new TurnActions();
+    this.calculateMobsActions(mobActions);
+    this.actionsToPerform.push(mobActions);
+    this.runTurnActions();
   }
 
   /** If player did trigger movement
@@ -33,7 +57,6 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       // check field of view
       // if new monster appeared then stop loop
       // if monster did not move and can attack then attack and stop loop
-
   // If player wants to attack entity
     // Create TurnObject
       // perform attack on monster
@@ -61,16 +84,20 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
           var playerMoveTween  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
           turnAction.push(playerMoveTween);
 
-          for (let j = 0; j < this.monsters.length; j++) {
-            var mobTurnTween : PendingTurnAction<GameObject>        = this.monsters.get(j).takeTurn();
-            if (mobTurnTween != null) {
-              turnAction.push(mobTurnTween);
-            }
-          }
+          this.calculateMobsActions(turnAction);
           this.actionsToPerform.push(turnAction);
         }
       }
       this.runTurnActions();
+    }
+  }
+
+  private calculateMobsActions(turnAction : TurnActions) {
+    for (let j = 0; j < this.monsters.length; j++) {
+      var mobTurnTween : PendingTurnAction<GameObject>        = this.monsters.get(j).takeTurn();
+      if (mobTurnTween != null) {
+        turnAction.push(mobTurnTween);
+      }
     }
   }
 
