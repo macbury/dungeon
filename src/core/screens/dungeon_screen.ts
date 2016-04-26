@@ -29,8 +29,9 @@ export default class DungeonScreen extends Phaser.State {
   public preload() : void {
     Slime.preload(this.load);
     Player.preload(this.load);
-    this.load.image('cursor', require('cursor.png'));
+    this.load.image('cursor',  require('cursor.png'));
     this.load.image('tileset', require('tileset.png'));
+    this.load.audio('hit',     require('audio/snd_hit.mp3'));
   }
 
   public create() : void {
