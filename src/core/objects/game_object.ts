@@ -1,8 +1,8 @@
-import { TILE_SIZE, PLAYER_MOVE_SPEED, MOVE_ARRAY } from '../consts';
+import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
 import Level from '../level';
 import Player from './player';
-import { TurnAction } from '../states/turn_actions';
+import MonstersManager from '../monsters_manager';
 /**
 * Base class for all game objects in the game
 */
@@ -26,6 +26,14 @@ export default class GameObject extends Phaser.Group {
   }
 
   /**
+  * Reference to monster managers
+  */
+  protected get monsters() : MonstersManager {
+    return this.dungeonScreen.monsters;
+  }
+
+
+  /**
   * Reference to current Player
   */
   protected get player() : Player {
@@ -45,43 +53,12 @@ export default class GameObject extends Phaser.Group {
     this.virtualPosition.set(x, y);
   }
 
-  /**
-  * Small helper that helps creating turn actions
-  */
-  protected makeTurnAction(action : () => Phaser.Signal) : TurnAction {
-    return new TurnAction(action);
+  public set tilePosition(tilePos : Phaser.Point) {
+    this.setTilePosition(tilePos.x,tilePos.y);
   }
 
-  /**
-  * Creates move action for {GameObject}
-  * @param target - place to go on map in tile position
-  */
-  public move(target : Phaser.Point) : TurnAction {
-    this.virtualPosition.set(target.x, target.y);
-
-    return this.makeTurnAction(() : Phaser.Signal => {
-      var moveTween : Phaser.Tween = this.game.make.tween(this);
-      moveTween.to({
-        x: target.x * TILE_SIZE,
-        y: target.y * TILE_SIZE
-      }, PLAYER_MOVE_SPEED);
-      moveTween.start();
-      return moveTween.onComplete;
-    });
+  public get tilePosition() : Phaser.Point {
+    return this.virtualPosition;
   }
 
-  /**
-  * Move in random position
-  */
-  public wander() : TurnAction {
-    var tempPoint : Phaser.Point = new Phaser.Point();
-    tempPoint.set(this.virtualPosition.x, this.virtualPosition.y);
-    var dir : Phaser.Point       = Phaser.ArrayUtils.getRandomItem(MOVE_ARRAY, 0, MOVE_ARRAY.length);
-    tempPoint.add(dir.x, dir.y);
-    if (this.level.isPassable(tempPoint)) {
-      return this.move(tempPoint);
-    } else {
-      return null;
-    }
-  }
 }

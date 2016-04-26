@@ -9,11 +9,11 @@ export default class MonstersManager {
   private monstersLayer : Phaser.Group;
   private dungeonScreen : DungeonScreen;
 
-  constructor(screen : DungeonScreen, monstersLayer : Phaser.Group) {
-    this.game     = screen.game;
-    this.dungeonScreen = screen;
-    this.monsters = new Array<Mob>();
-    this.monstersLayer = monstersLayer;
+  constructor(screen : DungeonScreen) {
+    this.game           = screen.game;
+    this.dungeonScreen  = screen;
+    this.monsters       = new Array<Mob>();
+    this.monstersLayer  = screen.monstersLayer;
   }
 
   /**
@@ -24,6 +24,25 @@ export default class MonstersManager {
     this.monstersLayer.add(mob);
     mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);
+  }
+
+  /**
+  * Return true if there is monster on this tile
+  */
+  public isOnTile(tilePos : Phaser.Point) : boolean {
+    return this.getMonsterForTilePosition(tilePos) != null;
+  }
+
+  /**
+  * Finds monster at tile position
+  */
+  public getMonsterForTilePosition(tilePos : Phaser.Point) : Mob {
+    for (let i = 0; i < this.monsters.length; i++) {
+      if (this.monsters[i].tilePosition.equals(tilePos)) {
+        return this.monsters[i];
+      }
+    }
+    return null;
   }
 
   /**

@@ -47,7 +47,7 @@ export default class DungeonScreen extends Phaser.State {
     this.player.follow(this.camera);
 
     this.monstersLayer       = this.add.group();
-    this.monsters            = new MonstersManager(this, this.monstersLayer);
+    this.monsters            = new MonstersManager(this);
 
     for (let i = 0; i < 40; i++) {
       this.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));

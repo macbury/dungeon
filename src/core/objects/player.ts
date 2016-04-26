@@ -1,7 +1,7 @@
 import Character from './character';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
-import { TurnAction } from '../states/turn_actions';
+import { PendingMoveAction } from '../states/turn_actions';
 
 const PLAYER_SPRITE_NAME = 'player_character';
 const PLAYER_MOVE_SOUND  = 'player_move';
@@ -28,10 +28,10 @@ export default class Player extends Character {
   * Creates move action for {Player}
   * @param target - place to go on map in tile position
   */
-  public move(target : Phaser.Point) : TurnAction {
+  public move(target : Phaser.Point) : PendingMoveAction {
     this.virtualPosition.set(target.x, target.y);
-
-    return this.makeTurnAction(() : Phaser.Signal => {
+    return new PendingMoveAction(this.game, this, target);
+    /*return this.makeTurnAction(() : Phaser.Signal => {
       var moveTween : Phaser.Tween = this.game.make.tween(this);
       moveTween.to({
         x: target.x * TILE_SIZE,
@@ -44,7 +44,7 @@ export default class Player extends Character {
 
       moveTween.start();
       return moveTween.onComplete;
-    });
+    });*/
   }
 
   /**

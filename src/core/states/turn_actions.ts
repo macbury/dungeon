@@ -1,7 +1,9 @@
+import GameObject from '../objects/game_object';
+import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../consts';
 /**
 * Simple wrapper around array that contains {TurnAction}
 */
-export class TurnActions extends Array<TurnAction> {
+export class TurnActions extends Array<PendingTurnAction<GameObject>> {
   public onComplete : Phaser.Signal;
   private runningActionCount : number;
   constructor() {
@@ -22,7 +24,7 @@ export class TurnActions extends Array<TurnAction> {
   public run() : Phaser.Signal {
     this.runningActionCount = this.length;
     for (let i = 0; i < this.length; i++) {
-      var action : TurnAction = this[i];
+      var action : PendingTurnAction<GameObject> = this[i];
       action.run().addOnce(this.onActionComplete, this);
     }
 
@@ -31,16 +33,60 @@ export class TurnActions extends Array<TurnAction> {
 }
 
 /**
-* Simple wrapper around action. This can be runned in parell with other actions!
+* This class contains pending turn action with all animations and effects that will be runned
 */
-export class TurnAction {
-  private _callback: () => Phaser.Signal;
+export abstract class PendingTurnAction<T extends GameObject> {
+  /**
+  * Reference to game instance
+  */
+  protected game : Phaser.Game;
+  /**
+  * Object that owns action
+  */
+  protected owner : T;
+  /**
+  * This signal should be triggered after all action in run is done
+  */
+  protected onCompleteSignal : Phaser.Signal;
 
-  constructor(action: () => Phaser.Signal) {
-    this._callback = action;
+  constructor(game: Phaser.Game, owner : T) {
+    this.game             = game;
+    this.owner            = owner;
+    this.onCompleteSignal = new Phaser.Signal();
   }
 
-  run() : Phaser.Signal {
-    return this._callback();
+  /**
+  * Place animation logic for turn. It needs to trigger onCompleteSignal after evrything is done
+  */
+  protected abstract performTurn() : void;
+
+  /**
+  * Run action
+  */
+  public run() : Phaser.Signal {
+    this.performTurn();
+    return this.onCompleteSignal;
+  }
+}
+
+/**
+* This action will move game object
+*/
+export class PendingMoveAction extends PendingTurnAction<GameObject> {
+  protected targetTile : Phaser.Point;
+
+  constructor(game: Phaser.Game, owner : GameObject, targetTile : Phaser.Point) {
+    super(game, owner);
+    this.targetTile = targetTile;
+  }
+
+  protected performTurn() {
+    var moveTween : Phaser.Tween = this.game.make.tween(this.owner);
+    moveTween.to({
+      x: this.targetTile.x * TILE_SIZE,
+      y: this.targetTile.y * TILE_SIZE
+    }, PLAYER_MOVE_SPEED);
+    moveTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() }, this);
+    moveTween.start();
   }
 }

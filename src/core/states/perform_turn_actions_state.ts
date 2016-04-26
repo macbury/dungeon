@@ -3,7 +3,7 @@ import TurnStates from './turn_states';
 import GameObject from '../objects/game_object';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
-import { TurnAction, TurnActions } from './turn_actions';
+import { PendingTurnAction, TurnActions } from './turn_actions';
 
 
 /**
@@ -51,17 +51,24 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       for (let i = 1; i < path.length; i++) {
         var turnAction       : TurnActions      = new TurnActions();
         var nextTilePosition : Phaser.Point     = path[i];
-        var playerMoveTween  : TurnAction       = this.player.move(nextTilePosition);
 
-        turnAction.push(playerMoveTween);
+        /**
+        * Move only if there is no monsters on next tile to move
+        */
+        if (this.monsters.isOnTile(nextTilePosition)) {
+          break;
+        } else {
+          var playerMoveTween  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
+          turnAction.push(playerMoveTween);
 
-        for (let j = 0; j < this.monsters.length; j++) {
-          var mobTurnTween : TurnAction        = this.monsters.get(j).takeTurn();
-          if (mobTurnTween != null) {
-            turnAction.push(mobTurnTween);
+          for (let j = 0; j < this.monsters.length; j++) {
+            var mobTurnTween : PendingTurnAction<GameObject>        = this.monsters.get(j).takeTurn();
+            if (mobTurnTween != null) {
+              turnAction.push(mobTurnTween);
+            }
           }
+          this.actionsToPerform.push(turnAction);
         }
-        this.actionsToPerform.push(turnAction);
       }
       this.runTurnActions();
     }
