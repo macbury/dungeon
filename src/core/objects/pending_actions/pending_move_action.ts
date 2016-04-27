@@ -48,3 +48,14 @@ export class PendingPlayerMoveAction extends PendingMoveAction {
     return moveTween;
   }
 }
+
+/**
+* This action plays animation with player movement being blocked by something
+*/
+export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject> {
+  protected performTurn() {
+    //var moveTween : Phaser.Tween = this.buildMoveTween();
+    //moveTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() }, this);
+    //moveTween.start();
+  }
+}

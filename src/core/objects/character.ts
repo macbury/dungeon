@@ -1,5 +1,8 @@
 import GameObject from './game_object';
 
+/**
+* Base class for {Player} or {Mob} characters
+*/
 export default class Character extends GameObject {
   public sprite : Phaser.Sprite;
 

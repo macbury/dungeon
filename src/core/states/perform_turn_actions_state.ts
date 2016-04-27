@@ -2,6 +2,7 @@ import BaseDungeonScreenState from './base_dungeon_screen_state';
 import TurnStates from './turn_states';
 import GameObject from '../objects/game_object';
 import Mob from '../objects/mob';
+import Character from '../objects/character';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
 import { PendingTurnAction, PendingTurnActions } from '../objects/pending_actions/pending_turn_actions';
@@ -36,17 +37,22 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       throw "Could not find monster to attack";
     }
 
-    console.log(mob);
-
     var playerTurn : PendingTurnActions         = new PendingTurnActions();
-    var playerAttack : PendingMeleeAttackAction = new PendingMeleeAttackAction(this.game, this.player, mob);
-    playerTurn.push(playerAttack);
-    this.actionsToPerform.push(playerTurn);
 
-    var mobTurn         : PendingTurnActions      = new PendingTurnActions();
-    this.calculateMobsActions(mobTurn);
-    this.actionsToPerform.push(mobTurn);
-    this.runTurnActions();
+    var playerAttack : PendingTurnAction<Mob | Character> = this.player.attack(mob);
+    if (playerAttack == null) { // Mob out of range
+      this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+    } else { // Mob in range and attacked
+      playerTurn.push(playerAttack);
+      this.actionsToPerform.push(playerTurn);
+
+      var mobTurn : PendingTurnActions = new PendingTurnActions();
+      this.calculateMobsActions(mobTurn);
+      this.actionsToPerform.push(mobTurn);
+      this.runTurnActions();
+    }
+
+
   }
 
   /** If player did trigger movement

@@ -1,7 +1,11 @@
 import Character from './character';
+import Mob from './mob';
+import Weapon from '../items/weapons/weapon';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
 import { PendingPlayerMoveAction } from './pending_actions/pending_move_action';
+import { PendingTurnAction } from './pending_actions/pending_turn_actions';
+import Fist from '../items/weapons/fist';
 
 const PLAYER_SPRITE_NAME = 'player_character';
 const PLAYER_MOVE_SOUND  = 'player_move';
@@ -10,7 +14,16 @@ const PLAYER_MOVE_SOUND  = 'player_move';
 */
 export default class Player extends Character {
   private idleAnimation : Phaser.Animation;
-  public stepSound       : Phaser.Sound;
+  public stepSound      : Phaser.Sound;
+  /**
+  * Main weapon used by player
+  */
+  public mainWeapon     : Weapon;
+  /**
+  * This weapon is used if there is no mainWeapon setted
+  */
+  public fistWeapon     : Fist;
+
 
   constructor(screen : DungeonScreen, parent? : PIXI.DisplayObjectContainer) {
     super(screen, parent);
@@ -21,6 +34,7 @@ export default class Player extends Character {
     this.idleAnimation.play();
 
     this.stepSound     = this.game.add.audio(PLAYER_MOVE_SOUND);
+    this.fistWeapon    = new Fist(screen.game);
   }
 
   /**
@@ -33,6 +47,25 @@ export default class Player extends Character {
   }
 
   /**
+  * Performs attack on target using main weapon. If mainWeapon is null then attack with fist. If Mob is out of range then returns null
+  */
+  public attack(target: Mob) : PendingTurnAction<Character | Mob> {
+    if (this.mainWeapon != null) {
+      if (this.mainWeapon.canAttack(target)) {
+        return this.mainWeapon.performAttack(target);
+      } else {
+        return null;
+      }
+    } else {
+      if (this.fistWeapon.canAttack(target)) {
+        return this.fistWeapon.performAttack(target);
+      } else {
+        return null;
+      }
+    }
+  }
+
+  /**
   * Enable follow camera
   */
   public follow(camera : Phaser.Camera) {
@@ -42,5 +75,6 @@ export default class Player extends Character {
   public static preload(load : Phaser.Loader) : void {
     load.spritesheet(PLAYER_SPRITE_NAME, require('player.png'), TILE_SIZE, TILE_SIZE);
     load.audio(PLAYER_MOVE_SOUND, require('audio/snd_step.mp3'));
+    Fist.preload(load);
   }
 }

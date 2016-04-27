@@ -21,5 +21,39 @@
   "awesomeTypescriptLoaderOptions": {
     "noEmit": false
   },
-  "compileOnSave": false
+  "compileOnSave": false,
+  "files": [
+    "./src/boot.ts",
+    "./src/core/consts.ts",
+    "./src/core/dungeon_game.ts",
+    "./src/core/fsm/base.ts",
+    "./src/core/fsm/fsm.ts",
+    "./src/core/items/item.ts",
+    "./src/core/items/weapons/fist.ts",
+    "./src/core/items/weapons/weapon.ts",
+    "./src/core/level.ts",
+    "./src/core/monsters_manager.ts",
+    "./src/core/objects/character.ts",
+    "./src/core/objects/game_object.ts",
+    "./src/core/objects/mob.ts",
+    "./src/core/objects/monsters/slime.ts",
+    "./src/core/objects/pending_actions/pending_melee_attack_action.ts",
+    "./src/core/objects/pending_actions/pending_move_action.ts",
+    "./src/core/objects/pending_actions/pending_turn_actions.ts",
+    "./src/core/objects/player.ts",
+    "./src/core/screens/boot_screen.ts",
+    "./src/core/screens/dungeon_screen.ts",
+    "./src/core/states/base_dungeon_screen_state.ts",
+    "./src/core/states/iplayer_action_type.ts",
+    "./src/core/states/perform_turn_actions_state.ts",
+    "./src/core/states/player_choose_action_state.ts",
+    "./src/core/states/turn_states.ts",
+    "./src/core/ui/cursor.ts",
+    "./src/core/utils/resolution.ts",
+    "./src/defs/definitions.d.ts",
+    "./src/lib/path_finder_plugin.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": true
+  }
 }
