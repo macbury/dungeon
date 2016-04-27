@@ -23,7 +23,6 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.pathFinding.findPath(playerPositionTile, action.destination).addOnce(this.calculateActionsByPath, this);
       this.cursor.show();
     } else if (IPlayerActionType.isAttack(action)) {
-      console.log("Going to attack!");
       this.playerAttackMonsterAt(action.attackTarget);
     } else {
       throw "This is should not happen";
@@ -51,7 +50,6 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.actionsToPerform.push(mobTurn);
       this.runTurnActions();
     }
-
 
   }
 

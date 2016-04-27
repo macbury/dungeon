@@ -5,6 +5,7 @@ import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } fro
 import DungeonScreen from '../screens/dungeon_screen';
 import { PendingPlayerMoveAction } from './pending_actions/pending_move_action';
 import { PendingTurnAction } from './pending_actions/pending_turn_actions';
+import Env from '../env';
 import Fist from '../items/weapons/fist';
 
 const PLAYER_SPRITE_NAME = 'player_character';
@@ -25,8 +26,8 @@ export default class Player extends Character {
   public fistWeapon     : Fist;
 
 
-  constructor(screen : DungeonScreen, parent? : PIXI.DisplayObjectContainer) {
-    super(screen, parent);
+  constructor(env : Env, parent? : PIXI.DisplayObjectContainer) {
+    super(env, parent);
     this.sprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, PLAYER_SPRITE_NAME, null, this);
     this.sprite.anchor.set(0.5,0.5);
 
@@ -34,7 +35,7 @@ export default class Player extends Character {
     this.idleAnimation.play();
 
     this.stepSound     = this.game.add.audio(PLAYER_MOVE_SOUND);
-    this.fistWeapon    = new Fist(screen.game);
+    this.fistWeapon    = new Fist(env.game, this);
   }
 
   /**

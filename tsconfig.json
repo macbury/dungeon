@@ -26,6 +26,7 @@
     "./src/boot.ts",
     "./src/core/consts.ts",
     "./src/core/dungeon_game.ts",
+    "./src/core/env.ts",
     "./src/core/fsm/base.ts",
     "./src/core/fsm/fsm.ts",
     "./src/core/items/item.ts",

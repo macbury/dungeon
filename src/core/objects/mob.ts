@@ -4,14 +4,15 @@ import { TILE_CENTER, GAME_OBJECT_FRAME_RATE, TILE_SIZE, PLAYER_MOVE_SPEED, MOVE
 import DungeonScreen from '../screens/dungeon_screen';
 import { PendingTurnAction } from './pending_actions/pending_turn_actions';
 import { PendingMoveAction } from './pending_actions/pending_move_action';
+import Env from '../env';
 /**
 * Monster object
 */
 export default class Mob extends Character {
   private idleAnimation : Phaser.Animation;
 
-  constructor(screen : DungeonScreen, spriteKey: string, parent? : PIXI.DisplayObjectContainer) {
-    super(screen, parent);
+  constructor(env : Env, spriteKey: string, parent? : PIXI.DisplayObjectContainer) {
+    super(env, parent);
     this.sprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, spriteKey, null, this);
     this.sprite.anchor.set(0.5,0.5);
     this.sprite.autoCull = true;

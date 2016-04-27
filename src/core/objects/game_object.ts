@@ -3,6 +3,7 @@ import DungeonScreen from '../screens/dungeon_screen';
 import Level from '../level';
 import Player from './player';
 import MonstersManager from '../monsters_manager';
+import Env from '../env';
 /**
 * Base class for all game objects in the game
 */
@@ -11,33 +12,35 @@ export default class GameObject extends Phaser.Group {
   * Position used for calculating attacks, movement and other stuff that dont require to update {GameObject#position}
   */
   public virtualPosition : Phaser.Point = new Phaser.Point();
-  private dungeonScreen : DungeonScreen;
+  /**
+  * Current level env
+  */
+  protected env : Env;
 
-  constructor(dungeonScreen : DungeonScreen, parent? : PIXI.DisplayObjectContainer) {
-    super(dungeonScreen.game, parent);
-    this.dungeonScreen = dungeonScreen;
+  constructor(env : Env, parent? : PIXI.DisplayObjectContainer) {
+    super(env.game, parent);
+    this.env = env;
   }
 
   /**
   * Reference to current level
   */
   protected get level() : Level {
-    return this.dungeonScreen.level;
+    return this.env.level;
   }
 
   /**
   * Reference to monster managers
   */
   protected get monsters() : MonstersManager {
-    return this.dungeonScreen.monsters;
+    return this.env.monsters;
   }
-
 
   /**
   * Reference to current Player
   */
   protected get player() : Player {
-    return this.dungeonScreen.player;
+    return this.env.player;
   }
 
   /**
@@ -60,5 +63,4 @@ export default class GameObject extends Phaser.Group {
   public get tilePosition() : Phaser.Point {
     return this.virtualPosition;
   }
-
 }

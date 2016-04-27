@@ -15,16 +15,16 @@ import Slime from '../objects/monsters/slime';
 import PlayerChooseActionState from '../states/player_choose_action_state';
 import PerformTurnActionsState from '../states/perform_turn_actions_state';
 
-export default class DungeonScreen extends Phaser.State {
-  public level        : Level;
+import Env from '../env';
 
+export default class DungeonScreen extends Phaser.State {
   public cursor          : Cursor;
   public monstersLayer   : Phaser.Group;
   public uiLayer         : Phaser.Group;
-  public player          : Player;
   public pathFinding     : PathFinderPlugin;
   protected sceneFSM     : FSM<DungeonScreen>;
-  public monsters        : MonstersManager;
+
+  public env : Env;
 
   public preload() : void {
     Slime.preload(this.load);
@@ -35,23 +35,25 @@ export default class DungeonScreen extends Phaser.State {
   }
 
   public create() : void {
+    this.env                 = new Env();
+    this.env.screen          = this;
     this.input.mouse.capture = true;
     this.prepareStateMachine();
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
 
-    this.level               = new Level(this, 'tileset', 100, 100);
-    this.level.generate();
-    this.level.setupPathFinding(this.pathFinding);
+    this.env.level           = new Level(this, 'tileset', 100, 100);
+    this.env.level.generate();
+    this.env.level.setupPathFinding(this.pathFinding);
 
-    this.player = new Player(this);
-    this.player.position.set(16,16);
-    this.player.follow(this.camera);
+    this.env.player = new Player(this.env);
+    this.env.player.position.set(16,16);
+    this.env.player.follow(this.camera);
 
     this.monstersLayer       = this.add.group();
-    this.monsters            = new MonstersManager(this);
+    this.env.monsters        = new MonstersManager(this.env);
 
     for (let i = 0; i < 40; i++) {
-      this.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));
+      this.env.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));
     }
 
 

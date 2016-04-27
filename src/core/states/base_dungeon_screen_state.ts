@@ -5,10 +5,18 @@ import Level from '../level';
 import Cursor from '../ui/cursor';
 import Player from '../objects/player';
 import MonstersManager from '../monsters_manager';
+import Env from '../env';
 /**
 * Base state class that exposes context {DungeonScreen methods}
 */
 export default class BaseDungeonScreenState extends BaseState<DungeonScreen> {
+
+  /**
+  * Reference to Env
+  */
+  public get env() : Env {
+    return this.context.env;
+  }
 
   /**
   * Reference to cursor sprite
@@ -35,21 +43,21 @@ export default class BaseDungeonScreenState extends BaseState<DungeonScreen> {
   * Reference to Level
   */
   public get level() : Level {
-    return this.context.level;
+    return this.context.env.level;
   }
 
   /**
   * Reference to player class
   */
   public get player() : Player {
-    return this.context.player;
+    return this.context.env.player;
   }
 
   /**
   * Reference monsters manager
   */
   public get monsters() : MonstersManager {
-    return this.context.monsters;
+    return this.context.env.monsters;
   }
 
   /**

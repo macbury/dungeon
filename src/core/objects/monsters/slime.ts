@@ -3,10 +3,10 @@ import { TILE_SIZE } from '../../consts';
 import DungeonScreen from '../../screens/dungeon_screen';
 import { PendingTurnAction } from '../pending_actions/pending_turn_actions';
 import GameObject from '../game_object';
-
+import Env from '../../env';
 export default class Slime extends Mob {
-  constructor(screen : DungeonScreen) {
-    super(screen, 'slime');
+  constructor(env : Env) {
+    super(env, 'slime');
   }
 
   public static preload(load : Phaser.Loader) {
