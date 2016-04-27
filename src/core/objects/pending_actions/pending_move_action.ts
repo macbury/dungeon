@@ -53,9 +53,32 @@ export class PendingPlayerMoveAction extends PendingMoveAction {
 * This action plays animation with player movement being blocked by something
 */
 export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject> {
+  protected targetTile : Phaser.Point;
+  private tempPoint : Phaser.Point;
+  constructor(game: Phaser.Game, owner : Player, targetTile : Phaser.Point) {
+    super(game, owner);
+    this.targetTile = targetTile;
+    this.tempPoint  = new Phaser.Point();
+  }
+
   protected performTurn() {
-    //var moveTween : Phaser.Tween = this.buildMoveTween();
-    //moveTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() }, this);
-    //moveTween.start();
+    // TODO calculate direction of movement and
+    this.tempPoint.set(this.targetTile.x, this.targetTile.y)
+                  .subtract(this.owner.tilePosition.x, this.owner.tilePosition.y)
+                  .normalize()
+                  .multiply(TILE_CENTER, TILE_CENTER);
+
+    console.log(this.tempPoint);
+    var moveTween : Phaser.Tween = this.game.make.tween(this.owner);
+    moveTween.to({
+      x: this.owner.position.x + this.tempPoint.x,
+      y: this.owner.position.y + this.tempPoint.y
+    }, PLAYER_MOVE_SPEED);
+    moveTween.yoyo(true);
+    moveTween.onComplete.addOnce(() => {
+      this.onCompleteSignal.dispatch();
+    });
+
+    moveTween.start();
   }
 }

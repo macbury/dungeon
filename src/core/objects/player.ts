@@ -50,16 +50,16 @@ export default class Player extends Character {
   /**
   * Performs attack on target using main weapon. If mainWeapon is null then attack with fist. If Mob is out of range then returns null
   */
-  public attack(target: Mob) : PendingTurnAction<Character | Mob> {
+  public attack(target: Mob, env : Env) : PendingTurnAction<Character | Mob> {
     if (this.mainWeapon != null) {
-      if (this.mainWeapon.canAttack(target)) {
-        return this.mainWeapon.performAttack(target);
+      if (this.mainWeapon.canAttack(target, env)) {
+        return this.mainWeapon.performAttack(target, env);
       } else {
         return null;
       }
     } else {
-      if (this.fistWeapon.canAttack(target)) {
-        return this.fistWeapon.performAttack(target);
+      if (this.fistWeapon.canAttack(target, env)) {
+        return this.fistWeapon.performAttack(target, env);
       } else {
         return null;
       }

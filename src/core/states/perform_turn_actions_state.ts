@@ -6,7 +6,7 @@ import Character from '../objects/character';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
 import { PendingTurnAction, PendingTurnActions } from '../objects/pending_actions/pending_turn_actions';
-import PendingMeleeAttackAction from '../objects/pending_actions/pending_melee_attack_action';
+import { PendingPlayerMoveBlockedAction } from '../objects/pending_actions/pending_move_action';
 
 /**
 * Calculate all turn actions and then perform each one after one
@@ -38,7 +38,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
 
     var playerTurn : PendingTurnActions         = new PendingTurnActions();
 
-    var playerAttack : PendingTurnAction<Mob | Character> = this.player.attack(mob);
+    var playerAttack : PendingTurnAction<Mob | Character> = this.player.attack(mob, this.env);
     if (playerAttack == null) { // Mob out of range
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else { // Mob in range and attacked
@@ -77,6 +77,9 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     if (path == null) {// Cannot find path
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
+      /**
+      * Build pending actions for each calculated path
+      */
       for (let i = 1; i < path.length; i++) {
         var turnAction       : PendingTurnActions      = new PendingTurnActions();
         var nextTilePosition : Phaser.Point            = path[i];
@@ -85,6 +88,10 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
         * Move only if there is no monsters on next tile to move
         */
         if (!this.player.isPassable(nextTilePosition)) {
+          // Something blocked our path so make pending action for it
+          var playerBlockedAction : PendingPlayerMoveBlockedAction = new PendingPlayerMoveBlockedAction(this.game, this.player, nextTilePosition);
+          turnAction.push(playerBlockedAction);
+          this.actionsToPerform.push(turnAction);
           break;
         } else {
           var playerMoveTween  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
