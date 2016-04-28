@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { DESKTOP_SCALE, MOBILE_SCALE, TILE_SIZE } from '../consts';
+import { DESKTOP_SCALE, MOBILE_SCALE, TILE_SIZE, LAYERS } from '../consts';
 import FSM from '../fsm/fsm';
 import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
@@ -18,15 +18,16 @@ import PerformTurnActionsState from '../states/perform_turn_actions_state';
 import Env from '../env';
 
 export default class DungeonScreen extends Phaser.State {
-  public cursor          : Cursor;
-  public monstersLayer   : Phaser.Group;
-  public uiLayer         : Phaser.Group;
-  public pathFinding     : PathFinderPlugin;
-  protected sceneFSM     : FSM<DungeonScreen>;
+  public cursor           : Cursor;
+  public gameObjectsLayer : Phaser.Group;
+  public uiLayer          : Phaser.Group;
+  public pathFinding      : PathFinderPlugin;
+  protected sceneFSM      : FSM<DungeonScreen>;
 
   public env : Env;
 
   public preload() : void {
+    Env.preload(this.load);
     Slime.preload(this.load);
     Player.preload(this.load);
     this.load.image('cursor',  require('cursor.png'));
@@ -35,31 +36,26 @@ export default class DungeonScreen extends Phaser.State {
   }
 
   public create() : void {
-    this.env                 = new Env();
-    this.env.screen          = this;
-    this.input.mouse.capture = true;
     this.prepareStateMachine();
+    this.input.mouse.capture = true;
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
+    this.env                 = new Env(this);
+    this.gameObjectsLayer    = this.add.group();
 
-    this.env.level           = new Level(this, 'tileset', 100, 100);
-    this.env.level.generate();
-    this.env.level.setupPathFinding(this.pathFinding);
-
-    this.env.player = new Player(this.env);
-    this.env.player.position.set(16,16);
-    this.env.player.follow(this.camera);
-
-    this.monstersLayer       = this.add.group();
-    this.env.monsters        = new MonstersManager(this.env);
 
     for (let i = 0; i < 40; i++) {
       this.env.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));
     }
 
+    this.env.spawnPlayer();
 
-    this.uiLayer             = this.add.group();
-    this.cursor = new Cursor(this.game);
+
+    this.uiLayer  = this.add.group();
+    this.cursor   = new Cursor(this.game);
     this.uiLayer.add(this.cursor);
+
+    this.uiLayer.z          = LAYERS.UI;
+    this.gameObjectsLayer.z = LAYERS.GAME_OBJECTS;
   }
 
   private prepareStateMachine() : void {

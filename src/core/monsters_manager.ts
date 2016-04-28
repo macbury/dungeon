@@ -6,14 +6,12 @@ import Env from './env';
 export default class MonstersManager {
   private game : Phaser.Game;
   private monsters : Array<Mob>;
-  private monstersLayer : Phaser.Group;
   private env : Env;
 
   constructor(env : Env) {
     this.game           = env.game;
     this.env            = env;
     this.monsters       = new Array<Mob>();
-    this.monstersLayer  = env.screen.monstersLayer;
   }
 
   /**
@@ -21,7 +19,7 @@ export default class MonstersManager {
   */
   public spawn(MobKlass: new (env: Env) => Mob, tileX : number, tileY : number) {
     var mob : Mob = new MobKlass(this.env);
-    this.monstersLayer.add(mob);
+    this.env.screen.gameObjectsLayer.add(mob);
     mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);
   }

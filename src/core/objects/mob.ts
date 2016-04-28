@@ -34,7 +34,7 @@ export default class Mob extends Character {
   */
   public move(target : Phaser.Point) : PendingMoveAction {
     this.virtualPosition.set(target.x, target.y);
-    return new PendingMoveAction(this.game, this, target);
+    return new PendingMoveAction(this.env, this, target);
   }
 
   /**

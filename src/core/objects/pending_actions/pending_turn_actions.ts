@@ -1,4 +1,5 @@
 import GameObject from '../game_object';
+import Env from '../../env';
 /**
 * Simple wrapper around array that contains {TurnAction}
 */
@@ -38,7 +39,7 @@ export abstract class PendingTurnAction<T extends GameObject> {
   /**
   * Reference to game instance
   */
-  protected game : Phaser.Game;
+  protected env : Env;
   /**
   * Object that owns action
   */
@@ -48,8 +49,8 @@ export abstract class PendingTurnAction<T extends GameObject> {
   */
   protected onCompleteSignal : Phaser.Signal;
 
-  constructor(game: Phaser.Game, owner : T) {
-    this.game             = game;
+  constructor(env: Env, owner : T) {
+    this.env             = env;
     this.owner            = owner;
     this.onCompleteSignal = new Phaser.Signal();
   }

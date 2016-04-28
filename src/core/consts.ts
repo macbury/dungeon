@@ -38,3 +38,13 @@ export const LEFT : Phaser.Point  = new Phaser.Point(1, 0);
 export const RIGHT : Phaser.Point = new Phaser.Point(-1, 0);
 
 export const MOVE_ARRAY : Array<Phaser.Point> = [UP, DOWN, LEFT, RIGHT];
+
+/**
+* Z index values for each layer
+*/
+export const LAYERS = {
+  LEVEL: 1,
+  GAME_OBJECTS: 2,
+  ANIMATIONS_EFFECTS: 3,
+  UI: 4
+}

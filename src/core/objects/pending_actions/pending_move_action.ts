@@ -1,6 +1,7 @@
 import { PendingTurnAction } from './pending_turn_actions';
 import GameObject from '../game_object';
 import Player from '../player';
+import Env from '../../env';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../../consts';
 /**
 * This action will move game object
@@ -8,13 +9,13 @@ import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } fro
 export class PendingMoveAction extends PendingTurnAction<GameObject> {
   protected targetTile : Phaser.Point;
 
-  constructor(game: Phaser.Game, owner : GameObject, targetTile : Phaser.Point) {
-    super(game, owner);
+  constructor(env: Env, owner : GameObject, targetTile : Phaser.Point) {
+    super(env, owner);
     this.targetTile = targetTile;
   }
 
   protected buildMoveTween() : Phaser.Tween {
-    var moveTween : Phaser.Tween = this.game.make.tween(this.owner);
+    var moveTween : Phaser.Tween = this.env.game.make.tween(this.owner);
     moveTween.to({
       x: this.targetTile.x * TILE_SIZE,
       y: this.targetTile.y * TILE_SIZE
@@ -33,17 +34,15 @@ export class PendingMoveAction extends PendingTurnAction<GameObject> {
 * The same as {PendingMoveAction} excepts it play step sound on move start
 */
 export class PendingPlayerMoveAction extends PendingMoveAction {
-  private stepSound : Phaser.Sound;
 
-  constructor(game: Phaser.Game, owner : Player, targetTile : Phaser.Point) {
-    super(game, owner, targetTile);
-    this.stepSound = owner.stepSound;
+  constructor(env : Env, owner : Player, targetTile : Phaser.Point) {
+    super(env, owner, targetTile);
   }
 
   protected buildMoveTween() : Phaser.Tween {
     var moveTween : Phaser.Tween = super.buildMoveTween();
     moveTween.onStart.addOnce(() => {
-      this.stepSound.play();
+      this.env.sounds.step.play();
     }, this)
     return moveTween;
   }
@@ -55,21 +54,21 @@ export class PendingPlayerMoveAction extends PendingMoveAction {
 export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject> {
   protected targetTile : Phaser.Point;
   private tempPoint : Phaser.Point;
-  constructor(game: Phaser.Game, owner : Player, targetTile : Phaser.Point) {
-    super(game, owner);
+  constructor(env: Env, owner : Player, targetTile : Phaser.Point) {
+    super(env, owner);
     this.targetTile = targetTile;
     this.tempPoint  = new Phaser.Point();
   }
 
   protected performTurn() {
-    // TODO calculate direction of movement and
+    // calculate direction of movement
     this.tempPoint.set(this.targetTile.x, this.targetTile.y)
                   .subtract(this.owner.tilePosition.x, this.owner.tilePosition.y)
                   .normalize()
                   .multiply(TILE_CENTER, TILE_CENTER);
 
-    console.log(this.tempPoint);
-    var moveTween : Phaser.Tween = this.game.make.tween(this.owner);
+    //console.log(this.tempPoint);
+    var moveTween : Phaser.Tween = this.env.game.make.tween(this.owner);
     moveTween.to({
       x: this.owner.position.x + this.tempPoint.x,
       y: this.owner.position.y + this.tempPoint.y

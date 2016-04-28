@@ -4,6 +4,10 @@ import DungeonScreen from '../../screens/dungeon_screen';
 import { PendingTurnAction } from '../pending_actions/pending_turn_actions';
 import GameObject from '../game_object';
 import Env from '../../env';
+
+/**
+* First simple monster. It ai is just wandering
+*/
 export default class Slime extends Mob {
   constructor(env : Env) {
     super(env, 'slime');

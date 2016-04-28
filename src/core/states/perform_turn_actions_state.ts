@@ -89,7 +89,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
         */
         if (!this.player.isPassable(nextTilePosition)) {
           // Something blocked our path so make pending action for it
-          var playerBlockedAction : PendingPlayerMoveBlockedAction = new PendingPlayerMoveBlockedAction(this.game, this.player, nextTilePosition);
+          var playerBlockedAction : PendingPlayerMoveBlockedAction = new PendingPlayerMoveBlockedAction(this.env, this.player, nextTilePosition);
           turnAction.push(playerBlockedAction);
           this.actionsToPerform.push(turnAction);
           break;

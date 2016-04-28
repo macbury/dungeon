@@ -9,13 +9,12 @@ import Env from '../env';
 import Fist from '../items/weapons/fist';
 
 const PLAYER_SPRITE_NAME = 'player_character';
-const PLAYER_MOVE_SOUND  = 'player_move';
+
 /**
 * Main player class.
 */
 export default class Player extends Character {
   private idleAnimation : Phaser.Animation;
-  public stepSound      : Phaser.Sound;
   /**
   * Main weapon used by player
   */
@@ -34,7 +33,6 @@ export default class Player extends Character {
     this.idleAnimation = this.sprite.animations.add('idle', [0, 1], GAME_OBJECT_FRAME_RATE, true);
     this.idleAnimation.play();
 
-    this.stepSound     = this.game.add.audio(PLAYER_MOVE_SOUND);
     this.fistWeapon    = new Fist(env.game, this);
   }
 
@@ -44,11 +42,12 @@ export default class Player extends Character {
   */
   public move(target : Phaser.Point) : PendingPlayerMoveAction {
     this.virtualPosition.set(target.x, target.y);
-    return new PendingPlayerMoveAction(this.game, this, target);
+    return new PendingPlayerMoveAction(this.env, this, target);
   }
 
   /**
-  * Performs attack on target using main weapon. If mainWeapon is null then attack with fist. If Mob is out of range then returns null
+  * Performs attack on target using main weapon. If mainWeapon is null then attack with fist. If Mob is out of range then returns null.
+  *
   */
   public attack(target: Mob, env : Env) : PendingTurnAction<Character | Mob> {
     if (this.mainWeapon != null) {
@@ -75,7 +74,6 @@ export default class Player extends Character {
 
   public static preload(load : Phaser.Loader) : void {
     load.spritesheet(PLAYER_SPRITE_NAME, require('player.png'), TILE_SIZE, TILE_SIZE);
-    load.audio(PLAYER_MOVE_SOUND, require('audio/snd_step.mp3'));
     Fist.preload(load);
   }
 }

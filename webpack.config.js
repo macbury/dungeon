@@ -63,7 +63,7 @@ if (development) {
 
 config.plugins.push(new webpack.DefinePlugin({
   GAME_PRODUCTION: !development,
-  LOG_FSM_STATES: development
+  LOG_FSM_STATES: false
 }));
 
 if (production) {
