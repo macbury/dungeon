@@ -2,6 +2,7 @@
 /**
 * Load modules for Phaser
 */
+import 'index.html';
 import 'p2';
 import 'pixi.js';
 import * as Phaser from 'phaser';

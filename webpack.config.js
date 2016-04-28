@@ -1,10 +1,10 @@
-var debug   = process.env.NODE_ENV !== "production";
-var webpack = require("webpack");
-var failPlugin = require('webpack-fail-plugin');
-var path = require("path");
+var debug             = process.env.NODE_ENV !== "production";
+var webpack           = require("webpack");
+var failPlugin        = require('webpack-fail-plugin');
+var path              = require("path");
 var CompressionPlugin = require("compression-webpack-plugin");
 var ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
-
+var CordovaPlugin     = require('webpack-cordova-plugin');
 
 var phaserModule = path.join(__dirname, '/node_modules/phaser/');
 var phaser       = path.join(phaserModule, 'build/custom/phaser-split.js'),
@@ -45,7 +45,8 @@ var config = {
 			{ test: /\.json$/i, loader: "json-loader" },
       { test: /\.(jpe?g|png|gif)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
 			{ test: /\.(mp3|ac3|ogg|m4a)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
-			{ test: /\.(ttf|woff|eot)$/i, loader: "file?name=[path][name].[ext]?[hash]" }
+			{ test: /\.(ttf|woff|eot)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
+      { test: /index\.html$/,       loader: "file-loader?name=[path][name].[ext]" }
     ]
   },
 
@@ -60,6 +61,15 @@ if (development) {
     host: '0.0.0.0'
   };
 }
+
+//config.devServer.contentBase = 'platforms/browser/www';
+
+/*config.plugins.push(new CordovaPlugin({
+  config: 'config.xml',  // Location of Cordova' config.xml (will be created if not found)
+  src: 'src/index.html',     // Set entry-point of cordova in config.xml
+  platform: 'browser', // Set `webpack-dev-server` to correct `contentBase` to use Cordova plugins.
+  version: true,         // Set config.xml' version. (true = use version from package.json)
+}));*/
 
 config.plugins.push(new webpack.DefinePlugin({
   GAME_PRODUCTION: !development,

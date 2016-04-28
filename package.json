@@ -21,9 +21,11 @@
     "awesome-typescript-loader": "^0.16.2",
     "expose-loader": "^0.7.1",
     "file-loader": "^0.8.5",
+    "html-loader": "^0.4.3",
     "script-loader": "^0.6.1",
     "typescript": "^1.8.9",
     "webpack": "^1.12.15",
+    "webpack-cordova-plugin": "^0.1.6",
     "webpack-dev-server": "^1.14.1",
     "webpack-fail-plugin": "^1.0.4"
   }

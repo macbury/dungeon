@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="macbury.dungeon" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Pocket Dungeon</name>
+    <description>
+      Webpack generated Cordova App
+    </description>
+    <author email="macbury@gmail.com" href="macbury.ninja">
+        Arkadiusz Buras
+    </author>
+    <content src="src/index.html"/>
+    <access origin="*" />
+</widget>
