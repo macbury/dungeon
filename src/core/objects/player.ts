@@ -50,6 +50,7 @@ export default class Player extends Character {
   *
   */
   public attack(target: Mob, env : Env) : PendingTurnAction<Character | Mob> {
+    this.face(target.tilePosition);
     if (this.mainWeapon != null) {
       if (this.mainWeapon.canAttack(target, env)) {
         return this.mainWeapon.performAttack(target, env);

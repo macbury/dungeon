@@ -21,6 +21,10 @@ export const TILE_CENTER     : number = TILE_SIZE / 2;
 * How much time it takes player to move over one tile
 */
 export const PLAYER_MOVE_SPEED : number = 150;
+/**
+* How much time it takes to animate quick attack
+*/
+export const QUICK_ATTACK_SPEED : number = 100;
 
 /**
 * How much time it should take to animate showing and hiding cursor

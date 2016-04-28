@@ -1,17 +1,22 @@
 import { PendingTurnAction } from './pending_turn_actions';
 import GameObject from '../game_object';
 import Player from '../player';
+import Character from '../character';
 import Env from '../../env';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../../consts';
 /**
 * This action will move game object
 */
-export class PendingMoveAction extends PendingTurnAction<GameObject> {
+export class PendingMoveAction extends PendingTurnAction<Character> {
   protected targetTile : Phaser.Point;
-
-  constructor(env: Env, owner : GameObject, targetTile : Phaser.Point) {
+  /**
+  * Used to update sprite facing while tweening 
+  */
+  protected direction  : Phaser.Point;
+  constructor(env: Env, owner : Character, targetTile : Phaser.Point) {
     super(env, owner);
     this.targetTile = targetTile;
+    this.direction  = new Phaser.Point(owner.direction.x, owner.direction.y);
   }
 
   protected buildMoveTween() : Phaser.Tween {
@@ -26,6 +31,9 @@ export class PendingMoveAction extends PendingTurnAction<GameObject> {
   protected performTurn() {
     var moveTween : Phaser.Tween = this.buildMoveTween();
     moveTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() }, this);
+    moveTween.onStart.addOnce(() => {
+      this.owner.updateSpriteFacingByDirection(this.direction);
+    });
     moveTween.start();
   }
 }

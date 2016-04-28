@@ -27,30 +27,32 @@ export default class Character extends GameObject {
   }
 
   /**
-  * Updates player tilePosition to specified in parameter and updates direction sprite is facing using direction
+  * Updates player tilePosition to specified in parameter and updates sprite facing on {PendingMoveAction}
   * @param target - place to go on map in tile position
   */
   public move(target : Phaser.Point) : PendingMoveAction {
-    this.direction.set(target.x, target.y)
-                  .subtract(this.tilePosition.x, this.tilePosition.y)
-                  .normalize();
+    this.face(target);
     this.virtualPosition.set(target.x, target.y);
     return null;
   }
 
   /**
+  * Updates character direction
+  */
+  public face(target : Phaser.Point) : Phaser.Point {
+    return this.direction.set(target.x, target.y)
+                  .subtract(this.tilePosition.x, this.tilePosition.y)
+                  .normalize();
+  }
+
+  /**
   * Flips sprite to make it look that is facing { direction }. Run automatically in update method
   */
-  protected updateSpriteFacingByDirection() {
-    if (this.direction.x == 1 || this.direction.y == 1) {
+  public updateSpriteFacingByDirection(direction : Phaser.Point) {
+    if (direction.x == 1 || direction.y == -1) {
       this.sprite.scale.set(-1, 1);
     } else {
       this.sprite.scale.set(1, 1);
     }
-  }
-
-  public update() {
-    this.updateSpriteFacingByDirection();
-    super.update();
   }
 }
