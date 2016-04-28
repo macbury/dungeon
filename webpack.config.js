@@ -61,13 +61,11 @@ if (development) {
     host: '0.0.0.0'
   };
 }
-
-//config.devServer.contentBase = 'platforms/browser/www';
-
-/*config.plugins.push(new CordovaPlugin({
+/*
+config.devServer.contentBase = 'src/';
+config.plugins.push(new CordovaPlugin({
   config: 'config.xml',  // Location of Cordova' config.xml (will be created if not found)
   src: 'src/index.html',     // Set entry-point of cordova in config.xml
-  platform: 'browser', // Set `webpack-dev-server` to correct `contentBase` to use Cordova plugins.
   version: true,         // Set config.xml' version. (true = use version from package.json)
 }));*/
 
