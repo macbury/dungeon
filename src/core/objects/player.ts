@@ -41,7 +41,7 @@ export default class Player extends Character {
   * @param target - place to go on map in tile position
   */
   public move(target : Phaser.Point) : PendingPlayerMoveAction {
-    this.virtualPosition.set(target.x, target.y);
+    super.move(target);
     return new PendingPlayerMoveAction(this.env, this, target);
   }
 

@@ -33,7 +33,7 @@ export default class Mob extends Character {
   * @param target - place to go on map in tile position
   */
   public move(target : Phaser.Point) : PendingMoveAction {
-    this.virtualPosition.set(target.x, target.y);
+    super.move(target);
     return new PendingMoveAction(this.env, this, target);
   }
 

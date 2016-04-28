@@ -3,8 +3,9 @@ import DungeonScreen from './screens/dungeon_screen';
 import MonstersManager from './monsters_manager';
 import Player from './objects/player';
 
-const PLAYER_MOVE_SOUND  = 'player_move';
-
+const MOVE_SOUND  = 'MOVE_SOUND';
+const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
+const HIT_SOUND   = 'HIT_SOUND';
 /**
 * This class contains all objects with information about current level env like Level, Monsters, Player etc
 */
@@ -13,7 +14,9 @@ export default class Env {
   * List of global sounds in game
   */
   public sounds       : {
-    step : Phaser.Sound
+    step :     Phaser.Sound,
+    hit:       Phaser.Sound,
+    stepBlock: Phaser.Sound
   }
   /**
   * Current map
@@ -41,7 +44,9 @@ export default class Env {
   constructor(screen : DungeonScreen) {
     this.screen         = screen;
     this.sounds         = {
-      step: this.game.add.audio(PLAYER_MOVE_SOUND)
+      step: this.game.add.audio(MOVE_SOUND),
+      hit: this.game.add.audio(HIT_SOUND),
+      stepBlock: this.game.add.audio(MOVE_BLOCKED_SOUND)
     }
 
     this.level           = new Level(this.screen, 'tileset', 100, 100);
@@ -65,6 +70,8 @@ export default class Env {
   }
 
   public static preload(load : Phaser.Loader) {
-    load.audio(PLAYER_MOVE_SOUND, require('audio/snd_step.mp3'));
+    load.audio(HIT_SOUND,  require('audio/snd_hit.mp3'));
+    load.audio(MOVE_SOUND, require('audio/snd_step.mp3'));
+    load.audio(MOVE_BLOCKED_SOUND, require('audio/snd_step_block.mp3'));
   }
 }

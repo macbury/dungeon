@@ -16,6 +16,9 @@ export default class PendingMeleeAttackAction extends PendingTurnAction<Characte
     var attackTween : Phaser.Tween = this.env.game.add.tween(this.target.sprite).to({
       tint: 0xFF0000
     }, 150, Phaser.Easing.Power0, false, 0, 0, true);
+    attackTween.onStart.addOnce(() => {
+      this.env.sounds.hit.play();
+    });
     attackTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() });
     attackTween.start();
   }

@@ -32,7 +32,6 @@ export default class DungeonScreen extends Phaser.State {
     Player.preload(this.load);
     this.load.image('cursor',  require('cursor.png'));
     this.load.image('tileset', require('tileset.png'));
-    this.load.audio('hit',     require('audio/snd_hit.mp3'));
   }
 
   public create() : void {
@@ -69,6 +68,7 @@ export default class DungeonScreen extends Phaser.State {
   public update() : void {
     if (this.sceneFSM != null)
       this.sceneFSM.update(this.time.elapsedMS);
+    this.gameObjectsLayer.sort('y', Phaser.Group.SORT_ASCENDING);
   }
 
   public shutdown() : void {

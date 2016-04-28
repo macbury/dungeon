@@ -74,6 +74,9 @@ export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject
       y: this.owner.position.y + this.tempPoint.y
     }, PLAYER_MOVE_SPEED);
     moveTween.yoyo(true);
+    moveTween.onStart.addOnce(() => {
+      this.env.sounds.stepBlock.play();
+    });
     moveTween.onComplete.addOnce(() => {
       this.onCompleteSignal.dispatch();
     });

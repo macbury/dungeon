@@ -53,25 +53,9 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
 
   }
 
-  /** If player did trigger movement
-    // Calculate path for {Player}
-    // For each position in patch for {Player} do
-      // if position is unreachable
-      // create TurnObject for each position
-      // move player to position
-      // update monster movement
-      // check field of view
-      // if new monster appeared then stop loop
-      // if monster did not move and can attack then attack and stop loop
-  // If player wants to attack entity
-    // Create TurnObject
-      // perform attack on monster
-    // For each monster that can attack
-      // create TurnObject
-      // if can attack then perform attack
-      // if wants to go to player then perform movement
-      // if wants to escape then escape
-  **/
+  /**
+  * Runs action for each visited tile in path of player
+  */
   private calculateActionsByPath(path : Array<Phaser.Point>) {
     this.actionsToPerform = [];
     if (path == null) {// Cannot find path
@@ -97,6 +81,10 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
           var playerMoveTween  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
           turnAction.push(playerMoveTween);
 
+          // agregate mob actions by type.
+          // First find all actions for movement and add to current turn.
+          // Recalculate fog of war. If new monster is stop path moving of player
+          // Other actions like attack, healing should get separate actions and stop player movement.
           this.calculateMobsActions(turnAction);
           this.actionsToPerform.push(turnAction);
         }
