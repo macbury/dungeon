@@ -59,6 +59,8 @@ export default class DungeonScreen extends Phaser.State {
 
     this.uiLayer.z          = LAYERS.UI;
     this.gameObjectsLayer.z = LAYERS.GAME_OBJECTS;
+
+    this.add.text(2,2, "Hello world", { font: "10px MainFont", fill: '#fff', stroke: '#000', strokeThickness: 2 });
   }
 
   private prepareStateMachine() : void {

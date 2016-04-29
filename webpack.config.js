@@ -32,6 +32,7 @@ var config = {
     root: [
       path.resolve('./src/'),
       path.resolve('./assets/'),
+      path.resolve('./assets/fonts'),
     ]
   },
 
@@ -46,7 +47,11 @@ var config = {
       { test: /\.(jpe?g|png|gif)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
 			{ test: /\.(mp3|ac3|ogg|m4a)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
 			{ test: /\.(ttf|woff|eot)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
-      { test: /index\.html$/,       loader: "file-loader?name=[path][name].[ext]" }
+      { test: /index\.html$/,       loader: "file-loader?name=[path][name].[ext]" },
+      {
+        test: /\.scss|css$/,
+        loaders: ["style", "css", "sass"]
+      }
     ]
   },
 

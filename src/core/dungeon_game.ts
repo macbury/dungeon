@@ -2,6 +2,8 @@ import * as Phaser from 'phaser';
 import DungeonScreen from './screens/dungeon_screen';
 import BootScreen from './screens/boot_screen';
 import ResolutionCalculator from './utils/resolution';
+
+
 /**
 * Main game class that extends Phaser.Game
 */

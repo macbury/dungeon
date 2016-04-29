@@ -72,7 +72,7 @@ export default class Env {
       throw "Player is already on map!!!";
     }
     this.player = new Player(this);
-    this.player.position.set(16,16);
+    this.player.setTilePosition(1,1);
     this.player.follow(this.screen.camera);
     this.screen.gameObjectsLayer.add(this.player);
   }
