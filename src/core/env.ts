@@ -2,6 +2,7 @@ import Level from './level';
 import DungeonScreen from './screens/dungeon_screen';
 import MonstersManager from './monsters_manager';
 import Player from './objects/player';
+import NarrationManager from './narration_manager';
 
 const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
@@ -10,6 +11,12 @@ const HIT_SOUND   = 'HIT_SOUND';
 * This class contains all objects with information about current level env like Level, Monsters, Player etc
 */
 export default class Env {
+
+  /**
+  * Reference to narration engine
+  */
+  public narration : NarrationManager;
+
   /**
   * List of global sounds in game
   */
@@ -43,6 +50,7 @@ export default class Env {
 
   constructor(screen : DungeonScreen) {
     this.screen         = screen;
+    this.narration      = new NarrationManager();
     this.sounds         = {
       step: this.game.add.audio(MOVE_SOUND),
       hit: this.game.add.audio(HIT_SOUND),

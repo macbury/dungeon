@@ -1,25 +1,29 @@
-import { PendingTurnAction } from './pending_turn_actions';
 import Character from '../character';
 import Env from '../../env';
 import { TILE_CENTER, QUICK_ATTACK_SPEED } from '../../consts';
-
+import NarrationManager from '../../narration_manager';
+import PendingAttackAction from './pending_attack_action';
 /**
 * Plays simple attack effect
 */
-export default class PendingMeleeAttackAction extends PendingTurnAction<Character> {
+export default class PendingMeleeAttackAction extends PendingAttackAction {
   protected target : Character;
   protected direction : Phaser.Point;
   protected currentOwnerPosition : Phaser.Point;
   protected currentTargetPosition : Phaser.Point;
+
   constructor(env: Env, attacker : Character, target: Character) {
     super(env, attacker);
-    this.target = target;
-    this.currentOwnerPosition = new Phaser.Point(attacker.tilePosition.x, attacker.tilePosition.y);
+    this.target                = target;
+    this.currentOwnerPosition  = new Phaser.Point(attacker.tilePosition.x, attacker.tilePosition.y);
     this.currentTargetPosition = new Phaser.Point(target.tilePosition.x, target.tilePosition.y);
-    this.direction            = new Phaser.Point(attacker.direction.x, attacker.direction.y);
+    this.direction             = new Phaser.Point(attacker.direction.x, attacker.direction.y);
   }
 
   protected performTurn() {
+    /**
+    * Animate hurt effect
+    */
     var attackTween : Phaser.Tween = this.env.game.add.tween(this.target.sprite).to({
       tint: 0xFF0000
     }, 150, Phaser.Easing.Power0, false, 0, 0, true);
@@ -28,6 +32,9 @@ export default class PendingMeleeAttackAction extends PendingTurnAction<Characte
     });
     attackTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() });
 
+    /**
+    * Animate attack movement
+    */
     var tempDir : Phaser.Point = new Phaser.Point(this.currentTargetPosition.x, this.currentTargetPosition.y);
     tempDir.subtract(this.currentOwnerPosition.x, this.currentOwnerPosition.y)
            .normalize()
@@ -44,5 +51,10 @@ export default class PendingMeleeAttackAction extends PendingTurnAction<Characte
       attackTween.start();
     });
     moveTween.start();
+  }
+
+  public turnDescription(narration : NarrationManager) : void {
+    //TODO: make this more dynamic
+    narration.danger("Player attacked monster!");
   }
 }

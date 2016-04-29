@@ -22,12 +22,12 @@ abstract class Weapon extends Item {
   /**
   * Return true if attacker can atack target using this weapon
   */
-  abstract canAttack(target : Character | Mob | GameObject, env : Env) : boolean;
+  abstract canAttack(target : Player | Character | Mob | GameObject, env : Env) : boolean;
 
   /**
   * Pefrorm attack and create {PendingTurnAction}
   */
-  abstract performAttack(target : Character | Mob, env : Env) : PendingTurnAction<Character>;
+  abstract performAttack(target : Player | Character | Mob, env : Env) : PendingTurnAction<Character>;
 }
 
 export default Weapon;

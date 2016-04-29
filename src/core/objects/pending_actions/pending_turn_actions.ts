@@ -1,5 +1,6 @@
 import GameObject from '../game_object';
 import Env from '../../env';
+import NarrationManager from '../../narration_manager';
 /**
 * Simple wrapper around array that contains {TurnAction}
 */
@@ -8,7 +9,7 @@ export class PendingTurnActions extends Array<PendingTurnAction<GameObject>> {
   private runningActionCount : number;
   constructor() {
     super();
-    this.onComplete = new Phaser.Signal();
+    this.onComplete  = new Phaser.Signal();
   }
 
   private onActionComplete() {
@@ -18,6 +19,12 @@ export class PendingTurnActions extends Array<PendingTurnAction<GameObject>> {
     }
     if (this.runningActionCount == 0) {
       this.onComplete.dispatch();
+    }
+  }
+
+  public joinWith(otherAction : PendingTurnActions) {
+    for (let i = 0; i < otherAction.length; i++) {
+      this.push(otherAction[i]);
     }
   }
 
@@ -61,9 +68,15 @@ export abstract class PendingTurnAction<T extends GameObject> {
   protected abstract performTurn() : void;
 
   /**
+  * Description of current action using narration engine
+  */
+  public abstract turnDescription(narration : NarrationManager) : void;
+
+  /**
   * Run action
   */
   public run() : Phaser.Signal {
+    this.turnDescription(this.env.narration);
     this.performTurn();
     return this.onCompleteSignal;
   }

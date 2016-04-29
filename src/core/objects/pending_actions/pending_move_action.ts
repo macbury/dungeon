@@ -3,6 +3,7 @@ import GameObject from '../game_object';
 import Player from '../player';
 import Character from '../character';
 import Env from '../../env';
+import NarrationManager from '../../narration_manager';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../../consts';
 /**
 * This action will move game object
@@ -10,7 +11,7 @@ import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } fro
 export class PendingMoveAction extends PendingTurnAction<Character> {
   protected targetTile : Phaser.Point;
   /**
-  * Used to update sprite facing while tweening 
+  * Used to update sprite facing while tweening
   */
   protected direction  : Phaser.Point;
   constructor(env: Env, owner : Character, targetTile : Phaser.Point) {
@@ -36,6 +37,8 @@ export class PendingMoveAction extends PendingTurnAction<Character> {
     });
     moveTween.start();
   }
+
+  public turnDescription(narration : NarrationManager) : void {}
 }
 
 /**
@@ -54,6 +57,8 @@ export class PendingPlayerMoveAction extends PendingMoveAction {
     }, this)
     return moveTween;
   }
+
+  public turnDescription(narration : NarrationManager) : void {}
 }
 
 /**
@@ -90,5 +95,10 @@ export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject
     });
 
     moveTween.start();
+  }
+
+  public turnDescription(narration : NarrationManager) : void {
+    //TODO: make this more dynamic
+    narration.danger("Player ran into monster!");
   }
 }

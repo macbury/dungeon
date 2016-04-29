@@ -6,8 +6,8 @@ import Character from '../objects/character';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
 import { PendingTurnAction, PendingTurnActions } from '../objects/pending_actions/pending_turn_actions';
-import { PendingPlayerMoveBlockedAction } from '../objects/pending_actions/pending_move_action';
-
+import { PendingPlayerMoveBlockedAction, PendingPlayerMoveAction } from '../objects/pending_actions/pending_move_action';
+import PendingAttackAction from '../objects/pending_actions/pending_attack_action';
 /**
 * Calculate all turn actions and then perform each one after one
 */
@@ -36,21 +36,40 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       throw "Could not find monster to attack";
     }
 
-    var playerTurn : PendingTurnActions         = new PendingTurnActions();
-
     var playerAttack : PendingTurnAction<Mob | Character> = this.player.attack(mob, this.env);
     if (playerAttack == null) { // Mob out of range
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else { // Mob in range and attacked
-      playerTurn.push(playerAttack);
-      this.actionsToPerform.push(playerTurn);
-
-      var mobTurn : PendingTurnActions = new PendingTurnActions();
-      this.calculateMobsActions(mobTurn);
-      this.actionsToPerform.push(mobTurn);
+      this.playerTurnAction(playerAttack)
       this.runTurnActions();
     }
+  }
 
+  /**
+  * Run action by player and then run actions by mobs
+  * @return true if should stop next actions
+  */
+  private playerTurnAction(playerAction : PendingTurnAction<Mob | Character | GameObject>) : boolean {
+    var moveTurnActions  : PendingTurnActions  = new PendingTurnActions();
+    moveTurnActions.push(playerAction);
+    this.actionsToPerform.push(moveTurnActions);
+
+    // agregate mob actions by type.
+    // First find all actions for movement and add to current turn.
+    // Recalculate fog of war. If new monster is stop path moving of player
+    // Other actions like attack, healing should get separate actions and stop player movement.
+    var blockNextActions = false;
+    this.calculateMobsActions((parellAction : PendingTurnAction<GameObject>, singleAction : PendingTurnAction<GameObject>) => {
+      if (parellAction != null) {
+        moveTurnActions.push(parellAction);
+      } else {
+        var singleMobAction : PendingTurnActions  = new PendingTurnActions();
+        singleMobAction.push(singleAction);
+        this.actionsToPerform.push(singleMobAction);
+        blockNextActions = true;
+      }
+    });
+    return blockNextActions;
   }
 
   /**
@@ -65,39 +84,43 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       * Build pending actions for each calculated path
       */
       for (let i = 1; i < path.length; i++) {
-        var turnAction       : PendingTurnActions      = new PendingTurnActions();
-        var nextTilePosition : Phaser.Point            = path[i];
+
+        var nextTilePosition : Phaser.Point        = path[i];
 
         /**
         * Move only if there is no monsters on next tile to move
         */
         if (!this.player.isPassable(nextTilePosition)) {
           // Something blocked our path so make pending action for it
+          var moveTurnActions  : PendingTurnActions  = new PendingTurnActions();
           var playerBlockedAction : PendingPlayerMoveBlockedAction = new PendingPlayerMoveBlockedAction(this.env, this.player, nextTilePosition);
-          turnAction.push(playerBlockedAction);
-          this.actionsToPerform.push(turnAction);
+          moveTurnActions.push(playerBlockedAction);
+          this.actionsToPerform.push(moveTurnActions);
           break;
         } else {
-          var playerMoveTween  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
-          turnAction.push(playerMoveTween);
-
-          // agregate mob actions by type.
-          // First find all actions for movement and add to current turn.
-          // Recalculate fog of war. If new monster is stop path moving of player
-          // Other actions like attack, healing should get separate actions and stop player movement.
-          this.calculateMobsActions(turnAction);
-          this.actionsToPerform.push(turnAction);
+          var playerMoveAction  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
+          if (this.playerTurnAction(playerMoveAction)) {
+            break; // There was some type of attack or action that should stop next movement along the path
+          }
         }
       }
       this.runTurnActions();
     }
   }
 
-  private calculateMobsActions(turnAction : PendingTurnActions) {
+  /**
+  * Calculates next mob actions and separate them into two groups. moveTurnActions where only movoement actions are triggered, and attackTurnActions that are
+  * runned in separate action after movement!
+  */
+  private calculateMobsActions(each: (parellAction : PendingTurnAction<GameObject>, singleAction : PendingTurnAction<GameObject>) => void) {
     for (let j = 0; j < this.monsters.length; j++) {
-      var mobTurnTween : PendingTurnAction<GameObject>        = this.monsters.get(j).takeTurn();
-      if (mobTurnTween != null) {
-        turnAction.push(mobTurnTween);
+      var mobTurn : PendingTurnAction<GameObject> = this.monsters.get(j).takeTurn();
+      if (mobTurn != null) { // Mob did something in this action
+        if (mobTurn instanceof PendingAttackAction) {
+          each(null, mobTurn);
+        } else {
+          each(mobTurn, null);
+        }
       }
     }
   }

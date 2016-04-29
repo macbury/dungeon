@@ -4,13 +4,16 @@ import DungeonScreen from '../../screens/dungeon_screen';
 import { PendingTurnAction } from '../pending_actions/pending_turn_actions';
 import GameObject from '../game_object';
 import Env from '../../env';
-
+import Fist from '../../items/weapons/fist';
 /**
 * First simple monster. It ai is just wandering
 */
 export default class Slime extends Mob {
+  protected fistWeapon : Fist;
   constructor(env : Env) {
     super(env, 'slime');
+
+    this.fistWeapon = new Fist(this.game, this);
   }
 
   public static preload(load : Phaser.Loader) {
@@ -18,6 +21,10 @@ export default class Slime extends Mob {
   }
 
   public takeTurn() : PendingTurnAction<GameObject> {
-    return this.wander();
+    if (this.fistWeapon.canAttack(this.env.player, this.env)) {
+      return this.fistWeapon.performAttack(this.env.player, this.env);
+    } else {
+      return this.wander();
+    }
   }
 }
