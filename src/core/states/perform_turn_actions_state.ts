@@ -24,6 +24,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.cursor.show();
     } else if (IPlayerActionType.isAttack(action)) {
       this.playerAttackMonsterAt(action.attackTarget);
+      this.cursor.show();
     } else {
       throw "This is should not happen";
     }
