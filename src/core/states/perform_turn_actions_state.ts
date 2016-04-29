@@ -116,7 +116,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     for (let j = 0; j < this.monsters.length; j++) {
       var mobTurn : PendingTurnAction<GameObject> = this.monsters.get(j).takeTurn();
       if (mobTurn != null) { // Mob did something in this action
-        if (mobTurn instanceof PendingAttackAction) {
+        if (mobTurn instanceof PendingAttackAction) { // Attacks should be done in separate turns
           each(null, mobTurn);
         } else {
           each(mobTurn, null);

@@ -10,7 +10,9 @@ import Level from '../level';
 import MonstersManager from '../monsters_manager';
 
 import Player from '../objects/player';
+
 import Slime from '../objects/monsters/slime';
+import Ant from '../objects/monsters/ant';
 
 import PlayerChooseActionState from '../states/player_choose_action_state';
 import PerformTurnActionsState from '../states/perform_turn_actions_state';
@@ -30,6 +32,7 @@ export default class DungeonScreen extends Phaser.State {
     Env.preload(this.load);
     Slime.preload(this.load);
     Player.preload(this.load);
+    Ant.preload(this.load);
     this.load.image('cursor',  require('cursor.png'));
     this.load.image('tileset', require('tileset.png'));
   }
@@ -42,8 +45,9 @@ export default class DungeonScreen extends Phaser.State {
     this.gameObjectsLayer    = this.add.group();
 
 
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 20; i++) {
       this.env.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));
+      this.env.monsters.spawn(Ant, this.rnd.between(0, 20), this.rnd.between(0, 20));
     }
 
     this.env.spawnPlayer();

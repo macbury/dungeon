@@ -38,6 +38,7 @@
     "./src/core/objects/character.ts",
     "./src/core/objects/game_object.ts",
     "./src/core/objects/mob.ts",
+    "./src/core/objects/monsters/ant.ts",
     "./src/core/objects/monsters/slime.ts",
     "./src/core/objects/pending_actions/pending_attack_action.ts",
     "./src/core/objects/pending_actions/pending_melee_attack_action.ts",

@@ -17,6 +17,8 @@ export default class PathFinderPlugin extends Plugin {
     super(game, parent);
     this._easyStar = new EasyStar.js();
     this._easyStar.setIterationsPerCalculation(1000);
+    //this._easyStar.enableDiagonals();
+    //this._easyStar.disableCornerCutting();
 
     this._grid      = null;
     this._walkables = [0];
