@@ -7,7 +7,8 @@
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot --progress --colors",
     "play": "./node_modules/.bin/electron ./main.js",
     "dist": "NODE_ENV=production ./node_modules/.bin/webpack ",
-    "test": "./node_modules/.bin/karma start"
+    "test": "./node_modules/.bin/karma start",
+    "ci": "./node_modules/.bin/karma start --single-run --browsers PhantomJS"
   },
   "author": "Arkadiusz Buras (macbury@gmail.com)",
   "license": "MIT",
