@@ -12,11 +12,14 @@
   },
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "typings/*.d.ts",
+    "*.d.ts"
   ],
   "filesGlob": [
     "./src/**/*.ts",
-    "!./node_modules/**/*.ts"
+    "!./node_modules/**/*.ts",
+    "./test/*.spec.ts"
   ],
   "awesomeTypescriptLoaderOptions": {
     "noEmit": false
@@ -55,7 +58,8 @@
     "./src/core/ui/cursor.ts",
     "./src/core/utils/resolution.ts",
     "./src/defs/definitions.d.ts",
-    "./src/lib/path_finder_plugin.ts"
+    "./src/lib/path_finder_plugin.ts",
+    "./test/hello.spec.ts"
   ],
   "atom": {
     "rewriteTsconfig": true
