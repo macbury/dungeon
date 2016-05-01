@@ -4,7 +4,13 @@
     <meta name="viewport" content="initial-scale=1,user-scalable=no">
   </head>
   <body>
-    <div id="game-container">Loading...</div>
+    <div id="loader">Loading...</div>
     <script type="text/javascript" src="bundle.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+      document.body.onload = function() {
+        document.getElementById('loader').remove();
+        var game           = new DungeonGame(document.body);
+      }
+    </script>
   </body>
 </html>
