@@ -4,7 +4,7 @@
   "description": "Simple phaser.io game prototype",
   "main": "main.js",
   "scripts": {
-    "typings": "./node_modules/.bin/typings i",
+    "bootstrap": "./node_modules/.bin/typings i",
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot --progress --colors",
     "play": "./node_modules/.bin/electron ./main.js",
     "dist": "NODE_ENV=production ./node_modules/.bin/webpack ",
