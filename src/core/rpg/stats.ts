@@ -54,6 +54,21 @@ export class StatsManager {
     return this.computeStatsValue(ATTACK_KEY);
   }
 
+  /**
+  * Defense power. Determines the power of physical defense.
+  */
+  public get defense() : number {
+    const DEFENSE_KEY = 'defense';
+    return this.computeStatsValue(DEFENSE_KEY);
+  }
+
+  /**
+  * Accuracy. Determines the accuracy of attacks, whether it’s physical or magical.
+  */
+  public get accuracy() : number {
+    const ACCURACY_KEY = 'accuracy';
+    return this.computeStatsValue(ACCURACY_KEY);
+  }
 
   /**
   * Registers stats provider
@@ -128,4 +143,13 @@ export class Stats {
     this.resistance = 0;
     this.luck = 0;
   }
+}
+
+/**
+* This class not only contains information about base stat, but also min and max value that helps calculation for ex. attack power
+*/
+export class MinMaxStat {
+  public minValue  : number;
+  public baseValue : number;
+  public maxValue  : number;
 }
