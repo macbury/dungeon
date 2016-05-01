@@ -8,6 +8,7 @@ export interface StatsProvider {
 
 /**
 * This class consumes information about each {Stats} object and gives final stats from them.
+* Monsters and player characters will have the same stats, only differs in the value.
 */
 export class StatsManager {
   /**
@@ -16,15 +17,19 @@ export class StatsManager {
   private statsProviders : Array<StatsProvider>;
   private _stats : Array<Stats>;
 
+  private _cacheAttack : MinMaxStat;
+  private _cacheDefense : MinMaxStat;
   constructor() {
     this.statsProviders = [];
     this._stats         = [];
+    this._cacheAttack   = new MinMaxStat();
+    this._cacheDefense   = new MinMaxStat();
   }
 
   /**
   * Recalculate all stats
   */
-  private computeStatsValue(paramName : string) : number {
+  private computeStatsNumberValue(paramName : string) : number {
     this._stats         = []
     for (let i = 0; i < this.statsProviders.length; i++) {
       this.statsProviders[i].provideStats(this._stats);
@@ -38,28 +43,44 @@ export class StatsManager {
     return output;
   }
 
+  private computeStatsMinMaxValue(paramName : string, output : MinMaxStat) : MinMaxStat {
+    this._stats         = []
+    for (let i = 0; i < this.statsProviders.length; i++) {
+      this.statsProviders[i].provideStats(this._stats);
+    }
+
+    output.setZero();
+    for (let i = 0; i < this._stats.length; i++) {
+      var stats : Stats = this._stats[i];
+      output.add(<MinMaxStat>stats[paramName]);
+    }
+    return output;
+  }
+
   /**
   * Health Points, the maximum health of the character/enemy, if the health is healed, it may not exceed this points
   */
   public get health() : number {
     const HEALTH_KEY = 'health';
-    return this.computeStatsValue(HEALTH_KEY);
+    return this.computeStatsNumberValue(HEALTH_KEY);
   }
 
   /**
   * Attack power. Determines the power of physical attack
   */
-  public get attack() : number {
+  public get attack() : MinMaxStat {
     const ATTACK_KEY = 'attack';
-    return this.computeStatsValue(ATTACK_KEY);
+    this.computeStatsMinMaxValue(ATTACK_KEY, this._cacheAttack);
+    return this._cacheAttack;
   }
 
   /**
   * Defense power. Determines the power of physical defense.
   */
-  public get defense() : number {
+  public get defense() : MinMaxStat {
     const DEFENSE_KEY = 'defense';
-    return this.computeStatsValue(DEFENSE_KEY);
+    this.computeStatsMinMaxValue(DEFENSE_KEY, this._cacheDefense);
+    return this._cacheDefense;
   }
 
   /**
@@ -67,7 +88,7 @@ export class StatsManager {
   */
   public get accuracy() : number {
     const ACCURACY_KEY = 'accuracy';
-    return this.computeStatsValue(ACCURACY_KEY);
+    return this.computeStatsNumberValue(ACCURACY_KEY);
   }
 
   /**
@@ -103,11 +124,11 @@ export class Stats {
   /**
   * Attack power. Determines the power of physical attack
   */
-  public attack : number;
+  public attack : MinMaxStat;
   /**
   * Defense power. Determines the power of physical defense.
   */
-  public defense : number;
+  public defense : MinMaxStat;
   /**
   * Accuracy. Determines the accuracy of attacks, whether it’s physical or magical.
   */
@@ -130,13 +151,15 @@ export class Stats {
   public luck : number;
 
   constructor() {
+    this.attack = new MinMaxStat();
+    this.defense = new MinMaxStat();
     this.reset();
   }
 
   public reset() {
-    this.attack = 0;
+    this.attack.setZero();
     this.health = 0;
-    this.defense = 0;
+    this.defense.setZero();
     this.accuracy = 0;
     this.evasion = 0;
     this.intelligence = 0;
@@ -149,7 +172,37 @@ export class Stats {
 * This class not only contains information about base stat, but also min and max value that helps calculation for ex. attack power
 */
 export class MinMaxStat {
-  public minValue  : number;
-  public baseValue : number;
-  public maxValue  : number;
+  public min  : number;
+  public max  : number;
+
+  constructor() {
+    this.setZero();
+  }
+
+  public get base() : number {
+    return this.min;
+  }
+
+  /**
+  * Set 0 for all values
+  */
+  public setZero() : MinMaxStat {
+    this.min = this.max = 0;
+    return this;
+  }
+
+  /**
+  * Add other MinMaxStat to current
+  */
+  public add(otherMinMaxStat : MinMaxStat) : MinMaxStat {
+    this.min += otherMinMaxStat.min;
+    this.max += otherMinMaxStat.max;
+    return this;
+  }
+
+  public set(min : number, max : number) : MinMaxStat {
+    this.min  = min;
+    this.max  = max;
+    return this;
+  }
 }
