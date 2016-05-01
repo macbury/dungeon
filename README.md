@@ -1,5 +1,5 @@
-# Budget Ninja
-
+# Pocket Dungeon
+[![Build Status](https://travis-ci.org/macbury/dungeon.svg?branch=master)](https://travis-ci.org/macbury/dungeon)
 npm install
 npm run dev
 
