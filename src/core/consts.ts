@@ -5,13 +5,13 @@
 export const DESKTOP_SCALE   : number = 2;
 export const MOBILE_SCALE   :  number = 2;
 
-export const GAME_WIDTH     : number  = 160;
-export const GAME_HEIGHT    : number  = 240;
+export const GAME_WIDTH     : number  = 320;
+export const GAME_HEIGHT    : number  = 480;
 
 /**
 * Size in pixels how big is each tile on screen
 */
-export const TILE_SIZE       : number = 16;
+export const TILE_SIZE       : number = 32;
 /**
 * Tile center position that equals TILE_SIZE / 2
 */
@@ -52,3 +52,6 @@ export const LAYERS = {
   ANIMATIONS_EFFECTS: 3,
   UI: 4
 }
+
+export const NARRATOR_BOX_HEIGHT      = 60;
+export const NARRATOR_TEXT_STYLE_INFO = { font: "10px MainFont", fill: '#fff', stroke: '#000', strokeThickness: 2 };

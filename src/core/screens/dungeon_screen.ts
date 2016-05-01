@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { DESKTOP_SCALE, MOBILE_SCALE, TILE_SIZE, LAYERS } from '../consts';
+import { DESKTOP_SCALE, MOBILE_SCALE, TILE_SIZE, LAYERS, NARRATOR_BOX_HEIGHT } from '../consts';
 import FSM from '../fsm/fsm';
 import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
@@ -23,6 +23,10 @@ export default class DungeonScreen extends Phaser.State {
   public cursor           : Cursor;
   public gameObjectsLayer : Phaser.Group;
   public uiLayer          : Phaser.Group;
+  /**
+  * This layer is at bottom of the screen and its fixed to camera
+  */
+  public narratorLayer    : Phaser.Group;
   public pathFinding      : PathFinderPlugin;
   protected sceneFSM      : FSM<DungeonScreen>;
 
@@ -41,9 +45,10 @@ export default class DungeonScreen extends Phaser.State {
     this.prepareStateMachine();
     this.input.mouse.capture = true;
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
-    this.env                 = new Env(this);
-    this.gameObjectsLayer    = this.add.group();
 
+    this.env                 = new Env(this);
+
+    this.gameObjectsLayer    = this.add.group();
 
     for (let i = 0; i < 20; i++) {
       this.env.monsters.spawn(Slime, this.rnd.between(0, 20), this.rnd.between(0, 20));
@@ -57,10 +62,13 @@ export default class DungeonScreen extends Phaser.State {
     this.cursor   = new Cursor(this.game);
     this.uiLayer.add(this.cursor);
 
+    this.narratorLayer               = this.add.group(this.uiLayer);
+
     this.uiLayer.z          = LAYERS.UI;
     this.gameObjectsLayer.z = LAYERS.GAME_OBJECTS;
 
-    this.add.text(2,2, "Hello world", { font: "10px MainFont", fill: '#fff', stroke: '#000', strokeThickness: 2 }, this.uiLayer).fixedToCamera = true;
+    this.env.narration.info("Welcome in my custom dungeon!");
+    this.env.narration.info("You dare to fight! Then we shall fight");
   }
 
   private prepareStateMachine() : void {
@@ -75,6 +83,12 @@ export default class DungeonScreen extends Phaser.State {
     if (this.sceneFSM != null)
       this.sceneFSM.update(this.time.elapsedMS);
     this.gameObjectsLayer.sort('y', Phaser.Group.SORT_ASCENDING);
+    this.env.update();
+  }
+
+  public preRender() : void {
+    // update here narration layer removes jitter on moving
+    this.env.narration.render();
   }
 
   public shutdown() : void {

@@ -50,7 +50,7 @@ export default class Env {
 
   constructor(screen : DungeonScreen) {
     this.screen         = screen;
-    this.narration      = new NarrationManager();
+    this.narration      = new NarrationManager(this);
     this.sounds         = {
       step: this.game.add.audio(MOVE_SOUND),
       hit: this.game.add.audio(HIT_SOUND),
@@ -75,6 +75,10 @@ export default class Env {
     this.player.setTilePosition(1,1);
     this.player.follow(this.screen.camera);
     this.screen.gameObjectsLayer.add(this.player);
+  }
+
+  public update() {
+
   }
 
   public static preload(load : Phaser.Loader) {
