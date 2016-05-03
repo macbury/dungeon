@@ -1,6 +1,78 @@
 import GameObject from '../game_object';
 import Env from '../../env';
 import NarrationManager from '../../narration_manager';
+
+/**
+* This class helps creating all turn actions and iterate them
+*/
+export class TurnDirector {
+  private actionsToPerform : Array<PendingTurnActions>;
+  private singleActionsToPerform : Array<PendingTurnActions>;
+  private parellActionsToPerform : PendingTurnActions;
+
+  constructor() {
+    this.clear();
+  }
+
+  /**
+  * Reset pending actions arrays
+  */
+  private clear() {
+    this.actionsToPerform       = [];
+    this.singleActionsToPerform = [];
+    this.parellActionsToPerform = new PendingTurnActions();
+  }
+
+  /**
+  * Begin turn batch
+  */
+  public begin() : void {
+    this.clear();
+  }
+
+  /**
+  * Finish batch and compute turn actions
+  */
+  public end() : void {
+    this.actionsToPerform       = [];
+    this.actionsToPerform.push(this.parellActionsToPerform);
+    for (let i = 0; i < this.singleActionsToPerform.length; i++) {
+      this.actionsToPerform.push(this.singleActionsToPerform[i]);
+    }
+  }
+
+  /**
+  * Return true if has next action to perform
+  */
+  public hasNext() : boolean {
+    return this.actionsToPerform.length > 0;
+  }
+
+  /**
+  * Pops next turn action and returns on complete callback
+  */
+  public runNext() : Phaser.Signal {
+    var nextTurnAction : PendingTurnActions = this.actionsToPerform.splice(0,1)[0];
+    return nextTurnAction.run();
+  }
+
+  /**
+  * Creates single {PendingTurnActions} with pendingAction. It will be runned after parell actions
+  */
+  public addSingle(pendingAction : PendingTurnAction<GameObject>) : void {
+    var pendingTurnActions = new PendingTurnActions();
+    pendingTurnActions.push(pendingAction);
+    this.singleActionsToPerform.push(pendingTurnActions);
+  }
+
+  /**
+  * This actions will be runned in parell at beginning of turn
+  */
+  public addParell(pendingAction : PendingTurnAction<GameObject>) : void {
+    this.parellActionsToPerform.push(pendingAction);
+  }
+}
+
 /**
 * Simple wrapper around array that contains {TurnAction}
 */

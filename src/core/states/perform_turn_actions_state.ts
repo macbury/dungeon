@@ -5,7 +5,7 @@ import Mob from '../objects/mob';
 import Character from '../objects/character';
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import { IPlayerActionType } from './iplayer_action_type';
-import { PendingTurnAction, PendingTurnActions } from '../objects/pending_actions/pending_turn_actions';
+import { PendingTurnAction, PendingTurnActions, TurnDirector } from '../objects/pending_actions/pending_turn_actions';
 import { PendingPlayerMoveBlockedAction, PendingPlayerMoveAction } from '../objects/pending_actions/pending_move_action';
 import PendingAttackAction from '../objects/pending_actions/pending_attack_action';
 /**

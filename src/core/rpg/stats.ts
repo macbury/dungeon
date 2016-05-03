@@ -183,6 +183,10 @@ export class MinMaxStat {
     return this.min;
   }
 
+  public set base(newBase : number) {
+    this.min = newBase;
+  }
+
   /**
   * Set 0 for all values
   */
