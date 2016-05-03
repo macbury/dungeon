@@ -12,7 +12,13 @@ import PendingAttackAction from '../objects/pending_actions/pending_attack_actio
 * Calculate all turn actions and then perform each one after one
 */
 export default class PerformTurnActionsState extends BaseDungeonScreenState {
-  private actionsToPerform : Array<PendingTurnActions>;
+  private turnDirector : TurnDirector;
+
+  constructor() {
+    super();
+    this.turnDirector = new TurnDirector();
+  }
+
   /**
   * Checks what action did player choosed to perform
   */
@@ -23,15 +29,14 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.pathFinding.findPath(playerPositionTile, action.destination).addOnce(this.calculateActionsByPath, this);
       this.cursor.show();
     } else if (IPlayerActionType.isAttack(action)) {
-      this.playerAttackMonsterAt(action.attackTarget);
-      this.cursor.show();
+      //this.playerAttackMonsterAt(action.attackTarget);
+      //this.cursor.show();
     } else {
       throw "This is should not happen";
     }
   }
 
   private playerAttackMonsterAt(point : Phaser.Point) {
-    this.actionsToPerform = [];
     var mob : Mob = this.monsters.getMonsterForTilePosition(point);
     if (mob == null) {
       throw "Could not find monster to attack";
@@ -41,7 +46,10 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     if (playerAttack == null) { // Mob out of range
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else { // Mob in range and attacked
-      this.playerTurnAction(playerAttack)
+      this.turnDirector.begin();
+        this.playerTurnAction(playerAttack)
+      this.turnDirector.end();
+
       this.runTurnActions();
     }
   }
@@ -53,7 +61,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   private playerTurnAction(playerAction : PendingTurnAction<Mob | Character | GameObject>) : boolean {
     var moveTurnActions  : PendingTurnActions  = new PendingTurnActions();
     moveTurnActions.push(playerAction);
-    this.actionsToPerform.push(moveTurnActions);
+    this.turnDirector.addParell(playerAction);
 
     // agregate mob actions by type.
     // First find all actions for movement and add to current turn.
@@ -66,7 +74,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       } else {
         var singleMobAction : PendingTurnActions  = new PendingTurnActions();
         singleMobAction.push(singleAction);
-        this.actionsToPerform.push(singleMobAction);
+        //this.actionsToPerform.push(singleMobAction);
         blockNextActions = true;
       }
     });
@@ -77,7 +85,6 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   * Runs action for each visited tile in path of player
   */
   private calculateActionsByPath(path : Array<Phaser.Point>) {
-    this.actionsToPerform = [];
     if (path == null) {// Cannot find path
       this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
     } else {
@@ -85,7 +92,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       * Build pending actions for each calculated path
       */
       for (let i = 1; i < path.length; i++) {
-
+        this.turnDirector.begin();
         var nextTilePosition : Phaser.Point        = path[i];
 
         /**
@@ -93,18 +100,20 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
         */
         if (!this.player.isPassable(nextTilePosition)) {
           // Something blocked our path so make pending action for it
-          var moveTurnActions  : PendingTurnActions  = new PendingTurnActions();
           var playerBlockedAction : PendingPlayerMoveBlockedAction = new PendingPlayerMoveBlockedAction(this.env, this.player, nextTilePosition);
-          moveTurnActions.push(playerBlockedAction);
-          this.actionsToPerform.push(moveTurnActions);
+          this.turnDirector.addParell(playerBlockedAction);
+          this.turnDirector.end();
           break;
         } else {
           var playerMoveAction  : PendingTurnAction<GameObject>  = this.player.move(nextTilePosition);
-          if (this.playerTurnAction(playerMoveAction)) {
-            break; // There was some type of attack or action that should stop next movement along the path
-          }
+          this.turnDirector.addParell(playerMoveAction);
+          //if (this.playerTurnAction(playerMoveAction)) {
+          //  break; // There was some type of attack or action that should stop next movement along the path
+          //}
         }
+        this.turnDirector.end();
       }
+
       this.runTurnActions();
     }
   }
@@ -128,17 +137,17 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
 
   // Iterate over each turnObject and perform its action. If all TurnObject did run then go to {PlayerChooseActionState}
   public runTurnActions() {
-    if (this.actionsToPerform.length == 0) {
-      this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+    if (this.turnDirector.hasNext()) {
+      this.turnDirector.runNext().addOnce(this.runTurnActions, this);
     } else {
-      var nextTurnAction : PendingTurnActions = this.actionsToPerform.splice(0,1)[0];
-      nextTurnAction.run().addOnce(this.runTurnActions, this);
+      this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+
     }
   }
 
   public onExit() {
     // clear cache
-    this.actionsToPerform = [];
+    this.turnDirector.clear();
     this.cursor.hide();
   }
 }

@@ -76,7 +76,7 @@ config.plugins.push(new CordovaPlugin({
 
 config.plugins.push(new webpack.DefinePlugin({
   GAME_PRODUCTION: !development,
-  LOG_FSM_STATES: false
+  LOG_FSM_STATES: true
 }));
 
 if (production) {
