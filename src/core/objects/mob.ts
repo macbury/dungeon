@@ -2,7 +2,7 @@ import Character from './character';
 import GameObject from './game_object';
 import { TILE_CENTER, GAME_OBJECT_FRAME_RATE, TILE_SIZE, PLAYER_MOVE_SPEED, MOVE_ARRAY } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
-import { PendingTurnAction } from './pending_actions/pending_turn_actions';
+import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_actions';
 import { PendingMoveAction } from './pending_actions/pending_move_action';
 import Env from '../env';
 /**
@@ -23,32 +23,33 @@ export default class Mob extends Character {
 
   /**
   * Monster logic goes here.
+  * @return true if did perform action that requires to stop building few turns at once
   */
-  public takeTurn() : PendingTurnAction<GameObject> {
-    return null;
+  public takeTurn(turnDirector : TurnDirector) : boolean {
+    return false;
   }
 
   /**
   * Creates move action for {GameObject}
   * @param target - place to go on map in tile position
   */
-  public move(target : Phaser.Point) : PendingMoveAction {
-    super.move(target);
-    return new PendingMoveAction(this.env, this, target);
+  public move(target : Phaser.Point, turnDirector : TurnDirector) : boolean {
+    if (super.move(target, turnDirector)) {
+      turnDirector.addParell(new PendingMoveAction(this.env, this, target));
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
   * Move Mob in random position that is passable and not occupied by another monster
   */
-  public wander() : PendingMoveAction {
+  public wander(turnDirector : TurnDirector) : void {
     var nextTilePos : Phaser.Point = new Phaser.Point();
     nextTilePos.set(this.virtualPosition.x, this.virtualPosition.y);
     var dir : Phaser.Point       = Phaser.ArrayUtils.getRandomItem(MOVE_ARRAY, 0, MOVE_ARRAY.length);
     nextTilePos.add(dir.x, dir.y);
-    if (this.isPassable(nextTilePos)) {
-      return this.move(nextTilePos);
-    } else {
-      return null;
-    }
+    this.move(nextTilePos, turnDirector);
   }
 }

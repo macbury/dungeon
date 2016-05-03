@@ -9,7 +9,7 @@ export class TurnDirector {
   private actionsToPerform : Array<PendingTurnActions>;
   private singleActionsToPerform : Array<PendingTurnActions>;
   private parellActionsToPerform : PendingTurnActions;
-  private computingBatch : boolean;
+
   constructor() {
     this.clear();
     this.actionsToPerform = [];
@@ -24,25 +24,29 @@ export class TurnDirector {
   }
 
   /**
-  * Begin turn batch
+  * Create new turn and pops old actions to to turn queueu
   */
-  public begin() : void {
-    if (this.computingBatch) {
-      throw "Already started batch!";
-    }
-    this.computingBatch = true;
-    this.clear();
+  public newTurn() : void {
+    this.flush();
   }
 
   /**
-  * Finish batch and compute turn actions
+  * Flush all staged actions
   */
-  public end() : void {
-    this.computingBatch         = false;
-    this.actionsToPerform.push(this.parellActionsToPerform);
+  public finishTurn() : void {
+    this.flush();
+  }
+
+  /**
+  * Create new turn and pops old actions to to action queueu
+  */
+  public flush() : void {
+    if (this.parellActionsToPerform.length > 0)
+      this.actionsToPerform.push(this.parellActionsToPerform);
     for (let i = 0; i < this.singleActionsToPerform.length; i++) {
       this.actionsToPerform.push(this.singleActionsToPerform[i]);
     }
+    this.clear();
   }
 
   /**

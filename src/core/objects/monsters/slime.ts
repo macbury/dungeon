@@ -1,7 +1,7 @@
 import Mob from '../mob';
 import { TILE_SIZE } from '../../consts';
 import DungeonScreen from '../../screens/dungeon_screen';
-import { PendingTurnAction } from '../pending_actions/pending_turn_actions';
+import { PendingTurnAction, TurnDirector } from '../pending_actions/pending_turn_actions';
 import GameObject from '../game_object';
 import Env from '../../env';
 import Fist from '../../items/weapons/fist';
@@ -20,11 +20,13 @@ export default class Slime extends Mob {
     load.spritesheet('slime', require('slime.png'), TILE_SIZE, TILE_SIZE);
   }
 
-  public takeTurn() : PendingTurnAction<GameObject> {
+  public takeTurn(turnDirector : TurnDirector) : boolean {
     if (this.fistWeapon.canAttack(this.env.player, this.env)) {
-      return this.fistWeapon.performAttack(this.env.player, this.env);
+      turnDirector.addSingle(this.fistWeapon.performAttack(this.env.player, this.env));
+      return true;
     } else {
-      return this.wander();
+      this.wander(turnDirector);
+      return false;
     }
   }
 }

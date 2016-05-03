@@ -1,5 +1,6 @@
 import GameObject from './game_object';
 import { PendingMoveAction } from './pending_actions/pending_move_action';
+import { TurnDirector } from './pending_actions/pending_turn_actions';
 import Env from '../env';
 /**
 * Base class for {Player} or {Mob} characters. Character can move, has animated sprite, and can be killed.
@@ -29,11 +30,16 @@ export default class Character extends GameObject {
   /**
   * Updates player tilePosition to specified in parameter and updates sprite facing on {PendingMoveAction}
   * @param target - place to go on map in tile position
+  * @return true if move had been performed
   */
-  public move(target : Phaser.Point) : PendingMoveAction {
+  public move(target : Phaser.Point, turnDirector : TurnDirector) : boolean {
     this.face(target);
-    this.virtualPosition.set(target.x, target.y);
-    return null;
+    if (this.isPassable(target)) {
+      this.virtualPosition.set(target.x, target.y);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
