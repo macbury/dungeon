@@ -2,7 +2,7 @@ import Weapon from './weapon';
 import Character from '../../objects/character';
 import Mob from '../../objects/mob';
 import GameObject from '../../objects/game_object';
-import { PendingTurnAction } from '../../objects/pending_actions/pending_turn_actions';
+import { PendingTurnAction, TurnDirector } from '../../objects/pending_actions/pending_turn_actions';
 import Env from '../../env';
 import Player from '../../objects/player';
 import PendingMeleeAttackAction from '../../objects/pending_actions/pending_melee_attack_action';
@@ -21,8 +21,9 @@ export default class Fist extends Weapon {
   /**
   * Pefrorm attack and create {PendingTurnAction}
   */
-  public performAttack(target : Player | Character | Mob, env : Env) : PendingTurnAction<Character> {
-    return new PendingMeleeAttackAction(env, this.owner, target);
+  public performAttack(target : Player | Character | Mob, env : Env, turnDirector : TurnDirector) : void {
+    target.health.sub(10);
+    turnDirector.addSingle(new PendingMeleeAttackAction(env, this.owner, target));
   }
 
   public static preload(load : Phaser.Loader) : void {

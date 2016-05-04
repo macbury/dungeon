@@ -21,7 +21,7 @@ export default class Ant extends Mob {
 
   public takeTurn(turnDirector : TurnDirector) : boolean {
     if (this.fistWeapon.canAttack(this.env.player, this.env)) {
-      turnDirector.addSingle(this.fistWeapon.performAttack(this.env.player, this.env));
+      this.fistWeapon.performAttack(this.env.player, this.env, turnDirector);
       return true;
     } else {
       this.wander(turnDirector);

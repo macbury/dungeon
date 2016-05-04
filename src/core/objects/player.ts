@@ -59,13 +59,13 @@ export default class Player extends Character {
     this.face(target.tilePosition);
     if (this.mainWeapon != null) {
       if (this.mainWeapon.canAttack(target, env)) {
-        turnDirector.addSingle(this.mainWeapon.performAttack(target, env));
+        this.mainWeapon.performAttack(target, env, turnDirector);
       } else {
         return null;
       }
     } else {
       if (this.fistWeapon.canAttack(target, env)) {
-        turnDirector.addSingle(this.fistWeapon.performAttack(target, env));
+        this.fistWeapon.performAttack(target, env, turnDirector);
       } else {
         return null;
       }
