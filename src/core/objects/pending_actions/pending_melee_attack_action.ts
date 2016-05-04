@@ -1,4 +1,5 @@
 import Character from '../character';
+import Player from '../player';
 import Env from '../../env';
 import { TILE_CENTER, QUICK_ATTACK_SPEED } from '../../consts';
 import NarrationManager from '../../narration_manager';
@@ -12,8 +13,8 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
   protected currentOwnerPosition : Phaser.Point;
   protected currentTargetPosition : Phaser.Point;
 
-  constructor(env: Env, attacker : Character, target: Character) {
-    super(env, attacker);
+  constructor(env: Env, attacker : Character, target: Character, damage : number) {
+    super(env, attacker, damage);
     this.target                = target;
     this.currentOwnerPosition  = new Phaser.Point(attacker.tilePosition.x, attacker.tilePosition.y);
     this.currentTargetPosition = new Phaser.Point(target.tilePosition.x, target.tilePosition.y);
@@ -54,7 +55,10 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
   }
 
   public turnDescription(narration : NarrationManager) : void {
-    //TODO: make this more dynamic
-    narration.danger("Player attacked monster!");
+    if (this.attacker instanceof Player) {
+      narration.danger("Player attacked monster with: " + this.damage);
+    } else {
+      narration.danger("Monster attacked player with: " + this.damage);
+    }
   }
 }
