@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 import DungeonScreen from './screens/dungeon_screen';
 import BootScreen from './screens/boot_screen';
 import ResolutionCalculator from './utils/resolution';
-
+import { GAME_WIDTH, GAME_HEIGHT } from './consts';
 
 /**
 * Main game class that extends Phaser.Game
@@ -13,8 +13,7 @@ export default class DungeonGame extends Phaser.Game {
   * @param container element to insert
   */
   constructor(container : Element) {
-    var resolution = new ResolutionCalculator();
-    super(resolution.width, resolution.height, Phaser.AUTO, container, { create: () => { this.onCreate() }}, false, false);
+    super(GAME_WIDTH, GAME_HEIGHT, Phaser.AUTO, container, { create: () => { this.onCreate() }}, false, false);
   }
 
   /**
@@ -25,8 +24,8 @@ export default class DungeonGame extends Phaser.Game {
 
     this.renderer.renderSession.roundPixels     = true;
     this.renderer.renderSession.scaleMode       = PIXI.scaleModes.NEAREST;
-    this.scale.scaleMode              = Phaser.ScaleManager.SHOW_ALL;
-    this.scale.fullScreenScaleMode    = Phaser.ScaleManager.SHOW_ALL;
+    this.scale.scaleMode              = Phaser.ScaleManager.USER_SCALE;
+    this.scale.fullScreenScaleMode    = Phaser.ScaleManager.USER_SCALE;
     this.scale.pageAlignVertically    = true;
     this.scale.pageAlignHorizontally  = true;
     this.scale.refresh();
@@ -35,6 +34,21 @@ export default class DungeonGame extends Phaser.Game {
     this.state.add('Dungeon', DungeonScreen);
 
     this.state.start('Boot');
+    this.scale.setResizeCallback(this.onResize, this);
+  }
+
+  onResize(scale : Phaser.ScaleManager, parent : Phaser.Rectangle) {
+    var width : number  = GAME_WIDTH;
+    var height : number = GAME_HEIGHT;
+
+    if (this.scale.isPortrait) {
+      width  = GAME_HEIGHT;
+      height = GAME_WIDTH;
+    }
+
+    var multiplier : number = Math.max((window.innerHeight / height), (window.innerWidth / width));
+    scale.setGameSize(width, height);
+    scale.setUserScale(multiplier, multiplier, 0, 0);
+    // div parent size by game width and this is our scale
   }
 }
-//http://opengameart.org/content/16x16-fantasy-tileset

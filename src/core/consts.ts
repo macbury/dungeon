@@ -5,8 +5,8 @@
 export const DESKTOP_SCALE   : number = 2;
 export const MOBILE_SCALE   :  number = 2;
 
-export const GAME_WIDTH     : number  = 320;
-export const GAME_HEIGHT    : number  = 480;
+export const GAME_WIDTH     : number  = 640;
+export const GAME_HEIGHT    : number  = 360;
 
 /**
 * Size in pixels how big is each tile on screen
