@@ -44,10 +44,11 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   private playerMoveAction(nextTilePosition : Phaser.Point) : boolean {
     var shouldBreak : boolean = false;
     this.turnDirector.newTurn(); {
-      if (!this.player.move(nextTilePosition, this.turnDirector))
+      if (this.player.move(nextTilePosition, this.turnDirector)) {
+        shouldBreak = this.calculateRestOfActions();
+      } else {
         shouldBreak = true;
-      if (this.calculateMobsActions())
-        shouldBreak = true;
+      }
     } this.turnDirector.finishTurn();
 
     return shouldBreak;
@@ -64,7 +65,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
 
     this.turnDirector.newTurn(); {
       this.player.attack(mob, this.env, this.turnDirector);
-      this.calculateMobsActions()
+      this.calculateRestOfActions();
     } this.turnDirector.finishTurn();
   }
 
@@ -94,13 +95,17 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   * runned in separate action after movement!
   * @return true if did perform action that should break building path
   */
-  private calculateMobsActions() : boolean {
+  private calculateRestOfActions() : boolean {
     var turnShouldStop : boolean = false;
     for (let j = 0; j < this.monsters.length; j++) {
       if (this.monsters.get(j).takeTurn(this.turnDirector)) {
         turnShouldStop = true;
       }
     }
+
+    //TODO calculate negative buffs here
+    //TODO calculate hp regeneration here
+
     return turnShouldStop;
   }
 

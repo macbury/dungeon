@@ -2,10 +2,12 @@ import GameObject from './game_object';
 import { PendingMoveAction } from './pending_actions/pending_move_action';
 import { TurnDirector } from './pending_actions/pending_turn_actions';
 import Env from '../env';
+import Health from '../rpg/health';
+import {StatsManager, Stats, StatsProvider} from '../rpg/stats';
 /**
 * Base class for {Player} or {Mob} characters. Character can move, has animated sprite, and can be killed.
 */
-export default class Character extends GameObject {
+export default class Character extends GameObject implements StatsProvider {
   /**
   * Sprite with character
   */
@@ -15,9 +17,32 @@ export default class Character extends GameObject {
   */
   public direction : Phaser.Point;
 
+  /**
+  * Base character stats without weapons and equipments
+  */
+  public baseStats : Stats;
+  /**
+  * All stats with weapons and equipments
+  */
+  public stats  : StatsManager;
+
+  public health : Health;
+
   constructor(env : Env, parent? : PIXI.DisplayObjectContainer) {
     super(env, parent);
     this.direction = new Phaser.Point();
+    this.baseStats = new Stats();
+    this.baseStats.health = 100;
+    this.stats    = new StatsManager();
+    this.stats.register(this);
+    this.health   = new Health(this.stats);
+  }
+
+  /**
+  * Add stats from equipments and weapons here
+  */
+  public provideStats(stats : Array<Stats>) : void {
+    stats.push(this.baseStats);
   }
 
   /**
