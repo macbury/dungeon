@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { DESKTOP_SCALE, MOBILE_SCALE, TILE_SIZE, LAYERS, NARRATOR_BOX_HEIGHT } from '../consts';
+import { TILE_SIZE, LAYERS, NARRATOR_BOX_HEIGHT } from '../consts';
 import FSM from '../fsm/fsm';
 import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
