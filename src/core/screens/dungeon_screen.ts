@@ -79,6 +79,10 @@ export default class DungeonScreen extends Phaser.State {
     this.sceneFSM.enter(TurnStates.PLAYER_CHOOSE_ACTION);
   }
 
+  public resize() : void {
+    super.resize();
+  }
+
   public update() : void {
     if (this.sceneFSM != null)
       this.sceneFSM.update(this.time.elapsedMS);

@@ -65,6 +65,7 @@ export default class Level extends Phaser.Tilemap {
     }
 
     this.groundLayer.resizeWorld();
+    this.wallLayer.resizeWorld();
   }
 
   /**
