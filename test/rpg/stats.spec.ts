@@ -5,8 +5,8 @@ class DummyBaseStats implements StatsProvider {
   provideStats(stats : Array<Stats>) : void {
     var dummyStat : Stats = new Stats();
     dummyStat.health = 10;
-    dummyStat.attack.set(60, 70);
-    dummyStat.defense.set(30, 40);
+    dummyStat.attack = 10;
+    dummyStat.defense = 5;
     dummyStat.accuracy = 8;
     stats.push(dummyStat);
   };
@@ -15,9 +15,9 @@ class DummyBaseStats implements StatsProvider {
 class DummyWeaponStats implements StatsProvider {
   provideStats(stats : Array<Stats>) : void {
     var dummyStat : Stats = new Stats();
-    dummyStat.attack.set(5, 10);
-    dummyStat.defense.set(5, 10);
+    dummyStat.attack = 10;
     dummyStat.accuracy = 8;
+    dummyStat.defense = 3;
     stats.push(dummyStat);
   };
 }
@@ -38,15 +38,11 @@ describe('StatsManager', () => {
   });
 
   it("should sum all attack power", () => {
-    chai.assert.strictEqual(dummyStatsManager.attack.base, 65);
-    chai.assert.strictEqual(dummyStatsManager.attack.min, dummyStatsManager.attack.base);
-    chai.assert.strictEqual(dummyStatsManager.attack.max, 80);
+    chai.assert.strictEqual(dummyStatsManager.attack, 20);
   });
 
   it("should sum all defense", () => {
-    chai.assert.strictEqual(dummyStatsManager.defense.base, 35);
-    chai.assert.strictEqual(dummyStatsManager.defense.max, 50);
-    chai.assert.strictEqual(dummyStatsManager.defense.min, dummyStatsManager.defense.base);
+    chai.assert.strictEqual(dummyStatsManager.defense, 8);
   });
 
   it("should sum all accuracy", () => {

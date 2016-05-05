@@ -22,7 +22,7 @@ export default class Fist extends Weapon {
   * Pefrorm attack and create {PendingTurnAction}
   */
   public performAttack(target : Player | Character | Mob, env : Env, turnDirector : TurnDirector) : void {
-    var damage : number = target.stats.rollDamage(target.stats);
+    var damage : number = this.owner.stats.rollDamage(target.stats);
     target.health.sub(damage);
     console.log(damage);
     turnDirector.addSingle(new PendingMeleeAttackAction(env, this.owner, target, damage));

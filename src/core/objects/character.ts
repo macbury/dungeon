@@ -33,12 +33,9 @@ export default class Character extends GameObject implements StatsProvider {
     super(env, parent);
     this.direction = new Phaser.Point();
     this.baseStats = new Stats();
-    this.baseStats.health = 100;
-    this.baseStats.attack.set(1, 5);
-    this.baseStats.defense.set(2, 4);
-    this.stats    = new StatsManager();
+    this.stats     = new StatsManager();
     this.stats.register(this);
-    this.health   = new Health(this.stats);
+    this.health    = new Health(this.stats);
   }
 
   /**

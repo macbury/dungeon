@@ -24,7 +24,6 @@ export default class Player extends Character {
   */
   public fistWeapon     : Fist;
 
-
   constructor(env : Env, parent? : PIXI.DisplayObjectContainer) {
     super(env, parent);
     this.sprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, PLAYER_SPRITE_NAME, null, this);
@@ -33,7 +32,8 @@ export default class Player extends Character {
     this.idleAnimation = this.sprite.animations.add('idle', [0, 1], GAME_OBJECT_FRAME_RATE, true);
     this.idleAnimation.play();
 
-    this.fistWeapon    = new Fist(env.game, this);
+    this.fistWeapon       = new Fist(env.game, this);
+    this.baseStats.health = 48;
   }
 
   /**

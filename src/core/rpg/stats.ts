@@ -68,19 +68,17 @@ export class StatsManager {
   /**
   * Attack power. Determines the power of physical attack
   */
-  public get attack() : MinMaxStat {
+  public get attack() : number {
     const ATTACK_KEY = 'attack';
-    this.computeStatsMinMaxValue(ATTACK_KEY, this._cacheAttack);
-    return this._cacheAttack;
+    return this.computeStatsNumberValue(ATTACK_KEY);
   }
 
   /**
   * Defense power. Determines the power of physical defense.
   */
-  public get defense() : MinMaxStat {
+  public get defense() : number {
     const DEFENSE_KEY = 'defense';
-    this.computeStatsMinMaxValue(DEFENSE_KEY, this._cacheDefense);
-    return this._cacheDefense;
+    return this.computeStatsNumberValue(DEFENSE_KEY);
   }
 
   /**
@@ -117,13 +115,14 @@ export class StatsManager {
   * @param targetStats used to compute damage
   * @return return damage done in points
   */
-  public rollDamage(targetStats : StatsManager) : number {
+  public rollDamage(targetStats : StatsManager, weaponStats? : any) : number {
     //(attacker’s ATK + rand(minAtk, maxAtk)) – (defender’s DEF + rand(minDef, maxDef))
-    var damage : number = (this.attack.value + (Math.random() * this.attack.max)) - (targetStats.defense.value + (Math.random() * targetStats.defense.max));
-    if (damage < 0) {
-      damage = 0;
-    }
-    return Math.round(damage);
+    //var damage : number = (this.attack.value + (Math.random() * this.attack.max)) - (targetStats.defense.value + (Math.random() * targetStats.defense.max));
+    //if (damage < 0) {
+    //  damage = 0;
+    //}
+    //return Math.round(damage);
+    return 0;
   }
 }
 
@@ -138,11 +137,11 @@ export class Stats {
   /**
   * Attack power. Determines the power of physical attack
   */
-  public attack : MinMaxStat;
+  public attack : number;
   /**
   * Defense power. Determines the power of physical defense.
   */
-  public defense : MinMaxStat;
+  public defense : number;
   /**
   * Accuracy. Determines the accuracy of attacks, whether it’s physical or magical.
   */
@@ -165,15 +164,13 @@ export class Stats {
   public luck : number;
 
   constructor() {
-    this.attack = new MinMaxStat();
-    this.defense = new MinMaxStat();
     this.reset();
   }
 
   public reset() {
-    this.attack.setZero();
+    this.attack = 0;
     this.health = 0;
-    this.defense.setZero();
+    this.defense = 0;
     this.accuracy = 0;
     this.evasion = 0;
     this.intelligence = 0;
