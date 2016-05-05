@@ -1,5 +1,5 @@
 import Env from './env';
-import { NARRATOR_TEXT_STYLE_INFO, NARRATOR_BOX_HEIGHT } from './consts';
+import { NARRATOR_TEXT_STYLE_INFO, NARRATOR_BOX_HEIGHT, NARRATOR_TEXT_COLOR_INFO, NARRATOR_TEXT_COLOR_DANGER } from './consts';
 
 const NUMBER_OF_LOGS_ON_SCREEN = 6;
 
@@ -32,6 +32,9 @@ export default class NarrationManager {
     return this.env.screen.narratorLayer;
   }
 
+  /**
+  * Calculate narration box position on screen
+  */
   private calculateLogView() {
     this.narrationRect.setTo(
       this.game.camera.x,
@@ -48,20 +51,28 @@ export default class NarrationManager {
     return this.env.game;
   }
 
-  public info(msg : string) : void {
-    console.log(msg);
+  /**
+  * Push log into narration box
+  */
+  private pushMsg(msg : string) : Phaser.Text {
     for (let i = 1; i < this.logsTextViews.length; i++) {
       var prevTextView : Phaser.Text = this.logsTextViews[i-1];
       var currTextView : Phaser.Text = this.logsTextViews[i];
-      prevTextView.colors = currTextView.colors;
+      prevTextView.fill   = currTextView.fill;
       prevTextView.text   = currTextView.text;
     }
 
-    this.logsTextViews[this.logsTextViews.length-1].text = msg;
+    var currTextView : Phaser.Text = this.logsTextViews[this.logsTextViews.length-1];
+    currTextView.text = msg;
+    return currTextView;
+  }
+
+  public info(msg : string) : void {
+    this.pushMsg(msg).fill = NARRATOR_TEXT_COLOR_INFO;
   }
 
   public danger(msg : string) : void {
-    this.info(msg);
+    this.pushMsg(msg).fill = NARRATOR_TEXT_COLOR_DANGER;
   }
 
   /**

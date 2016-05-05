@@ -3,6 +3,7 @@ import { PendingMoveAction } from './pending_actions/pending_move_action';
 import { TurnDirector } from './pending_actions/pending_turn_actions';
 import Env from '../env';
 import Health from '../rpg/health';
+import { TILE_SIZE, STATUS_TEXT_STYLE, TILE_CENTER } from '../consts';
 import {StatsManager, Stats, StatsProvider} from '../rpg/stats';
 /**
 * Base class for {Player} or {Mob} characters. Character can move, has animated sprite, and can be killed.
@@ -87,5 +88,30 @@ export default class Character extends GameObject implements StatsProvider {
     } else {
       this.sprite.scale.set(1, 1);
     }
+  }
+
+  /**
+  * Spawns nice text that moves from center of sprite to above it until it fades and is removed from scene
+  * @return Phaser.Tween that will be performed
+  */
+  public statusText(message : string, fillColor?: any) : Phaser.Tween {
+    var text : Phaser.Text = this.game.add.text(TILE_CENTER,TILE_CENTER, message, STATUS_TEXT_STYLE, this);
+    text.anchor.set(0.5);
+    var hideTextTween : Phaser.Tween = this.game.add.tween(text).to({
+      alpha: 0
+    }, 100);
+    hideTextTween.delay(100);
+
+    var moveTextTween : Phaser.Tween = this.game.add.tween(text).to({
+      y: 0
+    }, 250, Phaser.Easing.Cubic.Out);
+    moveTextTween.chain(hideTextTween);
+    hideTextTween.onComplete.addOnce(() => {
+      text.destroy();
+    }, this);
+    moveTextTween.start();
+    if (fillColor != null)
+      text.fill = fillColor;
+    return hideTextTween;
   }
 }

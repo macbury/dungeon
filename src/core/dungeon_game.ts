@@ -38,15 +38,15 @@ export default class DungeonGame extends Phaser.Game {
   * Resize game container to fill whole screen and properly scale it
   */
   onResize(scale : Phaser.ScaleManager, parent : Phaser.Rectangle) {
-    var width : number  = GAME_WIDTH;
-    var height : number = GAME_HEIGHT;
+    var width : number  = GAME_HEIGHT;
+    var height : number = GAME_WIDTH;
 
-    if (this.scale.isPortrait) {
-      width  = GAME_HEIGHT;
-      height = GAME_WIDTH;
+    if (this.scale.isLandscape) {
+      width  = GAME_WIDTH;
+      height = GAME_HEIGHT;
     }
 
-    var multiplier : number = Math.min((parent.height / height), (parent.width / width));
+    var multiplier : number = Math.min((window.innerHeight / height), (window.innerWidth / width));
     scale.setGameSize(width, height);
     scale.setUserScale(multiplier, multiplier, 0, 0);
   }

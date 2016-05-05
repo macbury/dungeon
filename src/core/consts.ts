@@ -3,9 +3,9 @@
 */
 export const TILE_SIZE       : number = 32;
 
-export const GAME_SIZE      : number  = 640;
+export const GAME_SIZE      : number  = 480;
 export const GAME_WIDTH     : number  = GAME_SIZE;
-export const GAME_HEIGHT    : number  = 360;
+export const GAME_HEIGHT    : number  = 320;
 
 
 /**
@@ -50,4 +50,8 @@ export const LAYERS = {
 }
 
 export const NARRATOR_BOX_HEIGHT      = 68;
+export const NARRATOR_TEXT_COLOR_INFO   = '#FFFFFF';
+export const NARRATOR_TEXT_COLOR_DANGER = '#FF5722';
 export const NARRATOR_TEXT_STYLE_INFO = { font: "10px MainFont", fill: '#fff', stroke: '#000', strokeThickness: 2 };
+
+export const STATUS_TEXT_STYLE = { font: "10px MainFont", fill: '#FF5722', stroke: '#000', strokeThickness: 2, align: "center" };

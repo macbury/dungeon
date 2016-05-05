@@ -14,6 +14,7 @@ export default class Slime extends Mob {
     super(env, 'slime');
 
     this.fistWeapon = new Fist(this.game, this);
+
   }
 
   public static preload(load : Phaser.Loader) {

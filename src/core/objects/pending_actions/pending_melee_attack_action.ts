@@ -30,8 +30,10 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     }, 150, Phaser.Easing.Power0, false, 0, 0, true);
     attackTween.onStart.addOnce(() => {
       this.env.sounds.hit.play();
+      this.target.statusText(`-${this.damage}`).onComplete.addOnce(() => {
+        this.onCompleteSignal.dispatch()
+      });
     });
-    attackTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() });
 
     /**
     * Animate attack movement
@@ -56,9 +58,9 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
 
   public turnDescription(narration : NarrationManager) : void {
     if (this.attacker instanceof Player) {
-      narration.danger("Player attacked monster with: " + this.damage);
+      narration.info("Player attacked monster with: " + this.damage);
     } else {
-      narration.danger("Monster attacked player with: " + this.damage);
+      narration.info("Monster attacked player with: " + this.damage);
     }
   }
 }
