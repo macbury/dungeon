@@ -19,6 +19,7 @@ export class StatsManager {
 
   private _cacheAttack : MinMaxStat;
   private _cacheDefense : MinMaxStat;
+
   constructor() {
     this.statsProviders = [];
     this._stats         = [];
@@ -112,17 +113,17 @@ export class StatsManager {
 
   /**
   * Calculates damage that would be done to passed target
-  * @param targetStats used to compute damage
+  * @param targetStats stats of target that is attacked
+  * @param weaponStats stats with min and max attack used to compute final attack
+  * @param random data generator
   * @return return damage done in points
   */
-  public rollDamage(targetStats : StatsManager, weaponStats? : any) : number {
+  public rollDamage(target : StatsManager, weapon : WeaponStats, rnd : Phaser.RandomDataGenerator) : number {
     //(attacker’s ATK + rand(minAtk, maxAtk)) – (defender’s DEF + rand(minDef, maxDef))
-    //var damage : number = (this.attack.value + (Math.random() * this.attack.max)) - (targetStats.defense.value + (Math.random() * targetStats.defense.max));
-    //if (damage < 0) {
-    //  damage = 0;
-    //}
-    //return Math.round(damage);
-    return 0;
+    var damagePoints : number = (
+      this.attack + rnd.between(weapon.minAttack, weapon.maxAttack) - target.defense
+    );
+    return Math.round(damagePoints);
   }
 }
 
@@ -178,6 +179,27 @@ export class Stats {
     this.luck = 0;
   }
 }
+
+/**
+* These stats will add to player’s stats to help them in battle
+*/
+export class WeaponStats extends Stats {
+  /**
+  * Weapon’s lowest attack
+  */
+  public minAttack: number;
+
+  /**
+  * Weapon’s highest attack
+  */
+  public maxAttack: number;
+
+  public reset() {
+    super.reset();
+    this.maxAttack = this.minAttack = 0;
+  }
+}
+
 
 /**
 * This class not only contains information about base stat, but also min and max value that helps calculation for ex. attack power

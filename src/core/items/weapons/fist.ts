@@ -7,9 +7,15 @@ import Env from '../../env';
 import Player from '../../objects/player';
 import PendingMeleeAttackAction from '../../objects/pending_actions/pending_melee_attack_action';
 /**
-* Simple attack using fists.
+* Simple attack using fists. Its power range from 2 to 8 HP
 */
 export default class Fist extends Weapon {
+
+  constructor(game : Phaser.Game, owner : Mob | Player) {
+    super(game, owner);
+    this.stats.minAttack = 2;
+    this.stats.minAttack = 8;
+  }
 
   /**
   * Return true if attacker can atack target using this weapon
@@ -22,9 +28,8 @@ export default class Fist extends Weapon {
   * Pefrorm attack and create {PendingTurnAction}
   */
   public performAttack(target : Player | Character | Mob, env : Env, turnDirector : TurnDirector) : void {
-    var damage : number = this.owner.stats.rollDamage(target.stats);
+    var damage : number = this.owner.stats.rollDamage(target.stats, this.stats, env.game.rnd);
     target.health.sub(damage);
-    console.log(damage);
     turnDirector.addSingle(new PendingMeleeAttackAction(env, this.owner, target, damage));
   }
 
