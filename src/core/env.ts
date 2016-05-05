@@ -50,7 +50,6 @@ export default class Env {
 
   constructor(screen : DungeonScreen) {
     this.screen         = screen;
-    this.narration      = new NarrationManager(this);
     this.sounds         = {
       step: this.game.add.audio(MOVE_SOUND),
       hit: this.game.add.audio(HIT_SOUND),
@@ -62,6 +61,7 @@ export default class Env {
     this.level.setupPathFinding(this.screen.pathFinding);
 
     this.monsters        = new MonstersManager(this);
+    this.narration       = new NarrationManager(this);
   }
 
   /**

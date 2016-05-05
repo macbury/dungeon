@@ -111,6 +111,20 @@ export class StatsManager {
       this.statsProviders.slice(index, 1);
     }
   }
+
+  /**
+  * Calculates damage that would be done to passed target
+  * @param targetStats used to compute damage
+  * @return return damage done in points
+  */
+  public rollDamage(targetStats : StatsManager) : number {
+    //(attacker’s ATK + rand(minAtk, maxAtk)) – (defender’s DEF + rand(minDef, maxDef))
+    var damage : number = (this.attack.value + (Math.random() * this.attack.max)) - (targetStats.defense.value + (Math.random() * targetStats.defense.max));
+    if (damage < 0) {
+      damage = 0;
+    }
+    return Math.round(damage);
+  }
 }
 
 /**
@@ -179,7 +193,17 @@ export class MinMaxStat {
     this.setZero();
   }
 
+  /**
+  * Reference to min
+  */
   public get base() : number {
+    return this.min;
+  }
+
+  /**
+  * Reference to min
+  */
+  public get value() : number {
     return this.min;
   }
 

@@ -19,6 +19,9 @@ import PerformTurnActionsState from '../states/perform_turn_actions_state';
 
 import Env from '../env';
 
+/**
+* In this state whole gameplay is performed
+*/
 export default class DungeonScreen extends Phaser.State {
   public cursor           : Cursor;
   public gameObjectsLayer : Phaser.Group;
@@ -45,7 +48,8 @@ export default class DungeonScreen extends Phaser.State {
     this.prepareStateMachine();
     this.input.mouse.capture = true;
     this.pathFinding         = this.game.plugins.add(PathFinderPlugin);
-
+    this.uiLayer             = this.add.group();
+    this.narratorLayer       = this.add.group(this.uiLayer);
     this.env                 = new Env(this);
 
     this.gameObjectsLayer    = this.add.group();
@@ -58,13 +62,11 @@ export default class DungeonScreen extends Phaser.State {
     this.env.spawnPlayer();
 
 
-    this.uiLayer  = this.add.group();
+
     this.cursor   = new Cursor(this.game);
     this.uiLayer.add(this.cursor);
 
-    this.narratorLayer               = this.add.group(this.uiLayer);
-
-    this.uiLayer.z          = LAYERS.UI;
+    this.world.bringToTop(this.uiLayer);
     this.gameObjectsLayer.z = LAYERS.GAME_OBJECTS;
 
     this.env.narration.info("Welcome in my custom dungeon!");

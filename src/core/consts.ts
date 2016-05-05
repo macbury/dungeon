@@ -3,10 +3,9 @@
 */
 export const TILE_SIZE       : number = 32;
 
-
-export const GAME_SIZE      : number  = 480
+export const GAME_SIZE      : number  = 640;
 export const GAME_WIDTH     : number  = GAME_SIZE;
-export const GAME_HEIGHT    : number  = 320;
+export const GAME_HEIGHT    : number  = 360;
 
 
 /**
@@ -50,5 +49,5 @@ export const LAYERS = {
   UI: 4
 }
 
-export const NARRATOR_BOX_HEIGHT      = 60;
+export const NARRATOR_BOX_HEIGHT      = 68;
 export const NARRATOR_TEXT_STYLE_INFO = { font: "10px MainFont", fill: '#fff', stroke: '#000', strokeThickness: 2 };
