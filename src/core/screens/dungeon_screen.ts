@@ -17,7 +17,7 @@ import Ant from '../objects/monsters/ant';
 
 import PlayerChooseActionState from '../states/player_choose_action_state';
 import PerformTurnActionsState from '../states/perform_turn_actions_state';
-
+import PlayerGameOverState  from '../states/player_game_over_state';
 import Env from '../env';
 
 /**
@@ -81,7 +81,7 @@ export default class DungeonScreen extends Phaser.State {
     this.sceneFSM = new FSM<DungeonScreen>(this);
     this.sceneFSM.register(TurnStates.PLAYER_CHOOSE_ACTION, new PlayerChooseActionState());
     this.sceneFSM.register(TurnStates.PERFORM_TURN_ACTIONS, new PerformTurnActionsState());
-
+    this.sceneFSM.register(TurnStates.GAME_OVER, new PlayerGameOverState());
     this.sceneFSM.enter(TurnStates.PLAYER_CHOOSE_ACTION);
   }
 

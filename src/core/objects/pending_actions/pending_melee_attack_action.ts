@@ -8,17 +8,9 @@ import PendingAttackAction from './pending_attack_action';
 * Plays simple attack effect
 */
 export default class PendingMeleeAttackAction extends PendingAttackAction {
-  protected target : Character;
-  protected direction : Phaser.Point;
-  protected currentOwnerPosition : Phaser.Point;
-  protected currentTargetPosition : Phaser.Point;
 
   constructor(env: Env, attacker : Character, target: Character, damage : number) {
-    super(env, attacker, damage);
-    this.target                = target;
-    this.currentOwnerPosition  = new Phaser.Point(attacker.tilePosition.x, attacker.tilePosition.y);
-    this.currentTargetPosition = new Phaser.Point(target.tilePosition.x, target.tilePosition.y);
-    this.direction             = new Phaser.Point(attacker.direction.x, attacker.direction.y);
+    super(env, attacker, target, damage);
   }
 
   protected performTurn() {
@@ -30,6 +22,7 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     }, 150, Phaser.Easing.Power0, false, 0, 0, true);
     attackTween.onStart.addOnce(() => {
       this.env.sounds.hit.play();
+      this.target.health.visual = this.targetHealth;
       this.target.statusText(`-${this.damage}`).onComplete.addOnce(() => {
         this.onCompleteSignal.dispatch()
       });

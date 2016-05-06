@@ -78,7 +78,7 @@ abstract class Character extends GameObject implements StatsProvider {
   * Run all negative effects or dead here
   */
   public afterTurn(turnDirector : TurnDirector) : boolean {
-    if (this.health.isZero()) {
+    if (this.health.isDead()) {
       turnDirector.addSingle(new PendingDieAction(this.env, this));
       return true;
     }

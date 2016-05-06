@@ -7,22 +7,50 @@ const REGENERATION_FACTOR = 0.05;
 */
 export default class Health {
   private stats : StatsManager;
+  /**
+  * Current health always up to date
+  */
   private _current : number;
+  /*
+  * value used for value displayed on screen
+  */
+  private _visual  : number;
+  public onUpdate : Phaser.Signal;
 
   constructor(statsManager : StatsManager) {
     this.stats    = statsManager;
     this._current = this.max;
+    this.onUpdate = new Phaser.Signal();
   }
 
   /**
-  * Current health
+  * Current health of player always up to date
   */
-  public get current() {
+  public get current()  : number {
     return this._current;
   }
 
-  public get percent() {
+  /**
+  * Health currently displayed in gui. After turn is finished it should equal current
+  */
+  public get visual() : number {
+    return this._visual;
+  }
+
+  /**
+  * Set current visual health without moving current health
+  */
+  public set visual(newHealth : number) {
+    this._visual = newHealth;
+    this.onUpdate.dispatch();
+  }
+
+  public get percent() : number {
     return this.current / this.stats.health;
+  }
+
+  public get visualPercent() : number {
+    return this._visual / this.stats.health;
   }
 
   /**
@@ -66,6 +94,7 @@ export default class Health {
   public sub(damage : number) : Health {
     this._current -= damage;
     this.clamp();
+    this.onUpdate.dispatch();
     return this;
   }
 
@@ -74,11 +103,13 @@ export default class Health {
   */
   public regenerate() {
     this._current += Math.round(REGENERATION_FACTOR * this.max);
+    this.onUpdate.dispatch();
     this.clamp();
   }
 
   public setToMax() : void {
     this._current = this.max;
+    this.onUpdate.dispatch();
   }
 
 }

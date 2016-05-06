@@ -55,6 +55,7 @@
     "./src/core/states/iplayer_action_type.ts",
     "./src/core/states/perform_turn_actions_state.ts",
     "./src/core/states/player_choose_action_state.ts",
+    "./src/core/states/player_game_over_state.ts",
     "./src/core/states/turn_states.ts",
     "./src/core/ui/cursor.ts",
     "./src/core/ui/health_bar.ts",

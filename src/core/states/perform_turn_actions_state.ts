@@ -69,12 +69,20 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     } this.turnDirector.finishTurn();
   }
 
+  private checkPlayerStatusAndGoToProperState() {
+    if (this.player.health.isDead()) {
+      this.fsm.enter(TurnStates.GAME_OVER);
+    } else {
+      this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+    }
+  }
+
   /**
   * Runs action for each visited tile in path of player
   */
   private calculateActionsByPath(path : Array<Phaser.Point>) {
     if (path == null) {// Cannot find path
-      this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+      this.checkPlayerStatusAndGoToProperState();
     } else {
       /**
       * Build pending actions for each calculated path
@@ -99,7 +107,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     var turnShouldStop : boolean = false;
 
     if (this.player.afterTurn(this.turnDirector)) {
-      return false;
+      turnShouldStop = true;
     }
 
     for (let j = 0; j < this.monsters.length; j++) {
@@ -124,7 +132,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     if (this.turnDirector.hasNext()) {
       this.turnDirector.runNext().addOnce(this.runTurnActions, this);
     } else {
-      this.fsm.enter(TurnStates.PLAYER_CHOOSE_ACTION);
+      this.checkPlayerStatusAndGoToProperState();
     }
   }
 

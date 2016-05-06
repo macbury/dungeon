@@ -152,6 +152,7 @@ export abstract class PendingTurnAction<T extends GameObject> {
   */
   protected onCompleteSignal : Phaser.Signal;
 
+
   constructor(env: Env, owner : T) {
     this.env             = env;
     this.owner            = owner;
