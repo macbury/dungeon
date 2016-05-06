@@ -7,7 +7,7 @@ import { PendingPlayerMoveAction, PendingPlayerMoveBlockedAction } from './pendi
 import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_actions';
 import Env from '../env';
 import Fist from '../items/weapons/fist';
-
+import { Stats } from '../rpg/stats';
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -32,8 +32,22 @@ export default class Player extends Character {
     this.idleAnimation = this.sprite.animations.add('idle', [0, 1], GAME_OBJECT_FRAME_RATE, true);
     this.idleAnimation.play();
 
-    this.fistWeapon       = new Fist(env.game, this);
-    this.baseStats.health = 48;
+    this.fistWeapon        = new Fist(env.game, this);
+    this.baseStats.health  = 48;
+    this.baseStats.defense = 1;
+    this.baseStats.attack  = 4;
+    this.health.setToMax();
+  }
+
+  /**
+  * Agregate stats from weapons and equippment
+  */
+  public provideStats(stats : Array<Stats>) : void {
+    super.provideStats(stats);
+    if (this.fistWeapon != null)
+      this.fistWeapon.provideStats(stats);
+    if (this.mainWeapon != null)
+      this.mainWeapon.provideStats(stats);
   }
 
   /**

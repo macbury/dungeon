@@ -123,6 +123,9 @@ export class StatsManager {
     var damagePoints : number = (
       this.attack + rnd.between(weapon.minAttack, weapon.maxAttack) - target.defense
     );
+
+    if (damagePoints < 0)
+      damagePoints = 0;
     return Math.round(damagePoints);
   }
 }

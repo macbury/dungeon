@@ -5,6 +5,7 @@ import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
 
 import Cursor from '../ui/cursor';
+import HealthBar from '../ui/health_bar';
 import Level from '../level';
 
 import MonstersManager from '../monsters_manager';
@@ -24,6 +25,7 @@ import Env from '../env';
 */
 export default class DungeonScreen extends Phaser.State {
   public cursor           : Cursor;
+  public healthBar        : HealthBar;
   public gameObjectsLayer : Phaser.Group;
   public uiLayer          : Phaser.Group;
   /**
@@ -40,6 +42,7 @@ export default class DungeonScreen extends Phaser.State {
     Slime.preload(this.load);
     Player.preload(this.load);
     Ant.preload(this.load);
+    HealthBar.preload(this.load);
     this.load.image('cursor',  require('cursor.png'));
     this.load.image('tileset', require('tileset.png'));
   }
@@ -61,10 +64,11 @@ export default class DungeonScreen extends Phaser.State {
 
     this.env.spawnPlayer();
 
-
+    this.healthBar = new HealthBar(this.game, this.env.player);
 
     this.cursor   = new Cursor(this.game);
     this.uiLayer.add(this.cursor);
+    this.uiLayer.add(this.healthBar);
 
     this.world.bringToTop(this.uiLayer);
     this.gameObjectsLayer.z = LAYERS.GAME_OBJECTS;

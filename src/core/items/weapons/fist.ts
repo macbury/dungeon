@@ -7,14 +7,14 @@ import Env from '../../env';
 import Player from '../../objects/player';
 import PendingMeleeAttackAction from '../../objects/pending_actions/pending_melee_attack_action';
 /**
-* Simple attack using fists. Its power range from 2 to 8 HP
+* Simple attack using fists. Its power is only based on character attack
 */
 export default class Fist extends Weapon {
 
   constructor(game : Phaser.Game, owner : Mob | Player) {
     super(game, owner);
-    this.stats.minAttack = 2;
-    this.stats.minAttack = 8;
+    this.stats.minAttack = 0;
+    this.stats.maxAttack = 0;
   }
 
   /**

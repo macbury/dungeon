@@ -15,6 +15,8 @@ export default class Slime extends Mob {
 
     this.fistWeapon = new Fist(this.game, this);
     this.baseStats.health = 8;
+    this.baseStats.attack  = 4;
+    this.baseStats.defense = 2;
   }
 
   public static preload(load : Phaser.Loader) {

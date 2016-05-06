@@ -21,6 +21,10 @@ export default class Health {
     return this._current;
   }
 
+  public get percent() {
+    return this.current / this.stats.health; 
+  }
+
   /**
   * Maximum health
   */
@@ -56,6 +60,10 @@ export default class Health {
   public regenerate() {
     this._current += Math.round(REGENERATION_FACTOR * this.max);
     this.clamp();
+  }
+
+  public setToMax() : void {
+    this._current = this.max;
   }
 
 }

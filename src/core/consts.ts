@@ -3,9 +3,9 @@
 */
 export const TILE_SIZE       : number = 32;
 
-export const GAME_SIZE      : number  = 480;
+export const GAME_SIZE      : number  = 19 * TILE_SIZE;
 export const GAME_WIDTH     : number  = GAME_SIZE;
-export const GAME_HEIGHT    : number  = 320;
+export const GAME_HEIGHT    : number  = 10 * TILE_SIZE;
 
 
 /**

@@ -13,7 +13,9 @@ export default class Ant extends Mob {
     super(env, ANT_SPRITE_NAME);
 
     this.fistWeapon = new Fist(this.game, this);
-    this.baseStats.health = 10;
+    this.baseStats.health  = 10;
+    this.baseStats.attack  = 3;
+    this.baseStats.defense = 1;
   }
 
   public static preload(load : Phaser.Loader) {

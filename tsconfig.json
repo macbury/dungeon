@@ -56,6 +56,7 @@
     "./src/core/states/player_choose_action_state.ts",
     "./src/core/states/turn_states.ts",
     "./src/core/ui/cursor.ts",
+    "./src/core/ui/health_bar.ts",
     "./src/defs/definitions.d.ts",
     "./src/lib/path_finder_plugin.ts",
     "./test/hello.spec.ts",
