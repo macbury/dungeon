@@ -52,6 +52,14 @@ export default class Health {
     return this.current <= 0;
   }
 
+  public isDead() : boolean {
+    return this.isZero();
+  }
+
+  public isAlive() : boolean {
+    return !this.isDead();
+  }
+
   /**
   * Substract health
   */

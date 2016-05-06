@@ -79,7 +79,6 @@ abstract class Character extends GameObject implements StatsProvider {
   */
   public afterTurn(turnDirector : TurnDirector) : boolean {
     if (this.health.isZero()) {
-      turnDirector.clearParellFor(this);
       turnDirector.addSingle(new PendingDieAction(this.env, this));
       return true;
     }

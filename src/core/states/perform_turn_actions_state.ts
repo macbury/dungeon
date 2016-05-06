@@ -105,8 +105,10 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     for (let j = 0; j < this.monsters.length; j++) {
       var mob : Mob = this.monsters.get(j);
 
-      if (mob.takeTurn(this.turnDirector)) {
-        turnShouldStop = true;
+      if (mob.health.isAlive()) {
+        if (mob.takeTurn(this.turnDirector)) {
+          turnShouldStop = true;
+        }
       }
 
       if (mob.afterTurn(this.turnDirector)) {
