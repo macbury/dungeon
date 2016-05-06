@@ -31,12 +31,13 @@ export default class Player extends Character {
 
     this.idleAnimation = this.sprite.animations.add('idle', [0, 1], GAME_OBJECT_FRAME_RATE, true);
     this.idleAnimation.play();
+  }
 
-    this.fistWeapon        = new Fist(env.game, this);
+  protected setupStatsAndEquipment() {
+    this.fistWeapon        = new Fist(this.game, this);
     this.baseStats.health  = 48;
     this.baseStats.defense = 1;
     this.baseStats.attack  = 4;
-    this.health.setToMax();
   }
 
   /**

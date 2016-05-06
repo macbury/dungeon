@@ -22,6 +22,14 @@ export default class MonstersManager {
     this.env.screen.gameObjectsLayer.add(mob);
     mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);
+    mob.onDestroy.addOnce(this.onMonsterDestroy, this);
+  }
+
+  private onMonsterDestroy(killedMob : Mob) {
+    var indexToRemove : number = this.monsters.indexOf(killedMob);
+    if (indexToRemove > 0) {
+      this.monsters.splice(indexToRemove, 1);
+    }
   }
 
   /**

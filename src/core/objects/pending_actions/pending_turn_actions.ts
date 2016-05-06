@@ -38,6 +38,22 @@ export class TurnDirector {
   }
 
   /**
+  * Remove all parell actions for passed game object
+  */
+  public clearParellFor(gameObject : GameObject) : void {
+    var tempAction : PendingTurnActions = new PendingTurnActions();
+    var idsToRemove = [];
+    for (let i = 0; i < this.parellActionsToPerform.length; i++) {
+      var pendingAction : PendingTurnAction<GameObject> = this.parellActionsToPerform[i]
+      if (pendingAction.owner !== gameObject) {
+        tempAction.push(pendingAction);
+      }
+    }
+
+    this.parellActionsToPerform = tempAction;
+  }
+
+  /**
   * Create new turn and pops old actions to to action queueu
   */
   public flush() : void {
@@ -130,7 +146,7 @@ export abstract class PendingTurnAction<T extends GameObject> {
   /**
   * Object that owns action
   */
-  protected owner : T;
+  public owner : T;
   /**
   * This signal should be triggered after all action in run is done
   */
@@ -140,6 +156,13 @@ export abstract class PendingTurnAction<T extends GameObject> {
     this.env             = env;
     this.owner            = owner;
     this.onCompleteSignal = new Phaser.Signal();
+  }
+
+  /**
+  * Reference to game Phaser.GameObjectFactory
+  */
+  protected get add() : Phaser.GameObjectFactory {
+    return this.env.game.add;
   }
 
   /**

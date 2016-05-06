@@ -97,14 +97,22 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   */
   private calculateRestOfActions() : boolean {
     var turnShouldStop : boolean = false;
+
+    if (this.player.afterTurn(this.turnDirector)) {
+      return false;
+    }
+
     for (let j = 0; j < this.monsters.length; j++) {
-      if (this.monsters.get(j).takeTurn(this.turnDirector)) {
+      var mob : Mob = this.monsters.get(j);
+
+      if (mob.takeTurn(this.turnDirector)) {
+        turnShouldStop = true;
+      }
+
+      if (mob.afterTurn(this.turnDirector)) {
         turnShouldStop = true;
       }
     }
-
-    //TODO calculate negative buffs here
-    //TODO calculate hp regeneration here
 
     return turnShouldStop;
   }

@@ -22,7 +22,7 @@ export default class Health {
   }
 
   public get percent() {
-    return this.current / this.stats.health; 
+    return this.current / this.stats.health;
   }
 
   /**
@@ -43,6 +43,13 @@ export default class Health {
     if (this._current < 0) {
       this._current = 0;
     }
+  }
+
+  /*
+  * @return true if health is zero
+  */
+  public isZero() : boolean {
+    return this.current <= 0;
   }
 
   /**

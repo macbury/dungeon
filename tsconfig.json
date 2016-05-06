@@ -42,6 +42,7 @@
     "./src/core/objects/monsters/ant.ts",
     "./src/core/objects/monsters/slime.ts",
     "./src/core/objects/pending_actions/pending_attack_action.ts",
+    "./src/core/objects/pending_actions/pending_die_action.ts",
     "./src/core/objects/pending_actions/pending_melee_attack_action.ts",
     "./src/core/objects/pending_actions/pending_move_action.ts",
     "./src/core/objects/pending_actions/pending_turn_actions.ts",

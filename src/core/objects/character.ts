@@ -1,6 +1,7 @@
 import GameObject from './game_object';
 import { PendingMoveAction } from './pending_actions/pending_move_action';
 import { TurnDirector } from './pending_actions/pending_turn_actions';
+import PendingDieAction from './pending_actions/pending_die_action';
 import Env from '../env';
 import Health from '../rpg/health';
 import { TILE_SIZE, STATUS_TEXT_STYLE, TILE_CENTER } from '../consts';
@@ -8,7 +9,7 @@ import {StatsManager, Stats, StatsProvider} from '../rpg/stats';
 /**
 * Base class for {Player} or {Mob} characters. Character can move, has animated sprite, and can be killed.
 */
-export default class Character extends GameObject implements StatsProvider {
+abstract class Character extends GameObject implements StatsProvider {
   /**
   * Sprite with character
   */
@@ -35,8 +36,14 @@ export default class Character extends GameObject implements StatsProvider {
     this.baseStats = new Stats();
     this.stats     = new StatsManager();
     this.stats.register(this);
+    this.setupStatsAndEquipment();
     this.health    = new Health(this.stats);
   }
+
+  /**
+  * Runned after character creation and setup all base stats with equipment
+  */
+  protected abstract setupStatsAndEquipment();
 
   /**
   * Add stats from equipments and weapons here
@@ -65,6 +72,18 @@ export default class Character extends GameObject implements StatsProvider {
     } else {
       return false;
     }
+  }
+
+  /**
+  * Run all negative effects or dead here
+  */
+  public afterTurn(turnDirector : TurnDirector) : boolean {
+    if (this.health.isZero()) {
+      turnDirector.clearParellFor(this);
+      turnDirector.addSingle(new PendingDieAction(this.env, this));
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -112,3 +131,5 @@ export default class Character extends GameObject implements StatsProvider {
     return hideTextTween;
   }
 }
+
+export default Character;

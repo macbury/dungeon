@@ -8,7 +8,7 @@ import Env from '../env';
 /**
 * Monster object
 */
-export default class Mob extends Character {
+abstract class Mob extends Character {
   private idleAnimation : Phaser.Animation;
 
   constructor(env : Env, spriteKey: string, parent? : PIXI.DisplayObjectContainer) {
@@ -25,9 +25,7 @@ export default class Mob extends Character {
   * Monster logic goes here.
   * @return true if did perform action that requires to stop building few turns at once
   */
-  public takeTurn(turnDirector : TurnDirector) : boolean {
-    return false;
-  }
+  public abstract takeTurn(turnDirector : TurnDirector) : boolean;
 
   /**
   * Creates move action for {GameObject}
@@ -53,3 +51,5 @@ export default class Mob extends Character {
     this.move(nextTilePos, turnDirector);
   }
 }
+
+export default Mob;

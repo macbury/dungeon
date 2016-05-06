@@ -10,11 +10,14 @@ import Fist from '../../items/weapons/fist';
 */
 export default class Slime extends Mob {
   protected fistWeapon : Fist;
+  
   constructor(env : Env) {
     super(env, 'slime');
+  }
 
-    this.fistWeapon = new Fist(this.game, this);
-    this.baseStats.health = 8;
+  protected setupStatsAndEquipment() {
+    this.fistWeapon        = new Fist(this.game, this);
+    this.baseStats.health  = 8;
     this.baseStats.attack  = 4;
     this.baseStats.defense = 2;
   }
