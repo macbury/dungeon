@@ -15,12 +15,22 @@ export default class Level extends Phaser.Tilemap {
   */
   public wallLayer    : Phaser.TilemapLayer;
 
+  public tilemapLayers : Array<Phaser.TilemapLayer>;
+  private dirtySize : boolean;
+
   constructor(screen : DungeonScreen, tilesetKey : string, columns : number, rows : number) {
     super(screen.game, null, TILE_SIZE, TILE_SIZE, columns, rows);
     this.setPreventRecalculate(true);
     this.addTilesetImage(tilesetKey);
+
+    /**
+    * Add each created layer to  tilemapLayers. This will ensure that they will be resized
+    */
+    this.tilemapLayers = [];
     this.groundLayer = this.create('ground', columns, rows, TILE_SIZE, TILE_SIZE);
     this.wallLayer   = this.create('walls', columns, rows, TILE_SIZE, TILE_SIZE);
+    this.tilemapLayers.push(this.groundLayer);
+    this.tilemapLayers.push(this.wallLayer);
   }
 
   /**
@@ -32,10 +42,20 @@ export default class Level extends Phaser.Tilemap {
     return targetPos;
   }
 
+  public resize() {
+    this.dirtySize = true;
+  }
+
   /**
   * Recalculate field of view
   */
-  public updateFov() : void {
+  public update() : void {
+    if (this.dirtySize) {
+      for (let i = 0; i < this.tilemapLayers.length; i++) {
+        this.tilemapLayers[i].resize(this.game.width, this.game.height);
+      }
+      this.dirtySize = false;
+    }
 
   }
 
@@ -65,7 +85,7 @@ export default class Level extends Phaser.Tilemap {
     }
 
     this.groundLayer.resizeWorld();
-    this.wallLayer.resizeWorld();
+    //this.wallLayer.resizeWorld();
   }
 
   /**

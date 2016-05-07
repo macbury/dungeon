@@ -2,16 +2,21 @@ import * as Phaser from 'phaser';
 import DungeonScreen from './screens/dungeon_screen';
 import BootScreen from './screens/boot_screen';
 import { GAME_SIZE, TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from './consts';
+import ResolutionUtils from './utils/resolution_utils';
+
 /**
 * Main game class that extends Phaser.Game
 */
 export default class DungeonGame extends Phaser.Game {
+  protected resolutionCalculator : ResolutionUtils;
+
   /**
   * Create game and insert it into container
   * @param container element to insert
   */
-  constructor(container : Element) {
-    super(GAME_SIZE, GAME_SIZE, Phaser.AUTO, container, { create: () => { this.onCreate() }}, false, false);
+  constructor(container : Element, resolution : ResolutionUtils) {
+    super(resolution.canvas.width, resolution.canvas.height, Phaser.AUTO, container, { create: () => { this.onCreate() }}, false, false);
+    this.resolutionCalculator = resolution;
   }
 
   /**
@@ -38,16 +43,26 @@ export default class DungeonGame extends Phaser.Game {
   * Resize game container to fill whole screen and properly scale it
   */
   onResize(scale : Phaser.ScaleManager, parent : Phaser.Rectangle) {
-    var width : number  = GAME_HEIGHT;
-    var height : number = GAME_WIDTH;
+    this.resolutionCalculator.recalculate();
+    let prevWidth   = this.width;
+    let prevHeight  = this.height;
+    let currWidth   = this.resolutionCalculator.canvas.width;
+    let currHeight  = this.resolutionCalculator.canvas.height;
 
-    if (this.scale.isLandscape) {
-      width  = GAME_WIDTH;
-      height = GAME_HEIGHT;
+    if (this.scale.isPortrait) {
+      currWidth   = this.resolutionCalculator.canvas.height;
+      currHeight  = this.resolutionCalculator.canvas.width;
     }
 
-    var multiplier : number = Math.min((window.innerHeight / height), (window.innerWidth / width));
-    scale.setGameSize(width, height);
-    scale.setUserScale(multiplier, multiplier, 0, 0);
+    scale.setGameSize(currWidth, currHeight);
+    scale.setUserScale(this.resolutionCalculator.scale, this.resolutionCalculator.scale, 0, 0);
+
+    if (prevWidth != currWidth || prevHeight != currHeight) {
+      this.state.resize(currWidth, currHeight);
+    }
+  }
+
+  public static boot(container : Element) : DungeonGame {
+    return new DungeonGame(container, new ResolutionUtils());
   }
 }

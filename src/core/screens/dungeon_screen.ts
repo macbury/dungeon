@@ -86,7 +86,7 @@ export default class DungeonScreen extends Phaser.State {
   }
 
   public resize() : void {
-    super.resize();
+    this.env.level.resize();
   }
 
   public update() : void {

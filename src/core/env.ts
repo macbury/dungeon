@@ -78,7 +78,7 @@ export default class Env {
   }
 
   public update() {
-
+    this.level.update();
   }
 
   public static preload(load : Phaser.Loader) {
