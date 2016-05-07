@@ -24,12 +24,6 @@ export default class ResolutionUtils {
     this.scale                                     = smallestSideScale;
     this.canvas.width                              = Math.round(this.realLargestSideSize / smallestSideScale);
     this.canvas.height                             = Math.round(this.smallestSideSize / this.scale);
-
-
-    //console.log("Canvas scale: ", smallestSideScale);
-  //  console.log(`Canvas size ${largestSideSize}x${MAX_SIZE_USING_TILE_SIZE}`);
-
-    //console.log(`Canvas size after scale ${largestSideSize * smallestSideScale }x${MAX_SIZE_USING_TILE_SIZE * smallestSideScale}`);
   }
 
   public get maxCanvasSize() : number {

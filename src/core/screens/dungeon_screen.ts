@@ -64,6 +64,7 @@ export default class DungeonScreen extends Phaser.State {
 
     this.env.spawnPlayer();
 
+
     this.healthBar = new HealthBar(this.game, this.env.player);
 
     this.cursor   = new Cursor(this.game);

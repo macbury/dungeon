@@ -60,6 +60,22 @@ abstract class Character extends GameObject implements StatsProvider {
   }
 
   /**
+  * Sets character virtual position. Addtionaly it updates character grid
+  */
+  public setVirtualPosition(x : number, y : number) {
+    this.env.characters.set(this.virtualPosition.x, this.virtualPosition.y, null);
+    this.virtualPosition.set(x, y);
+    this.env.characters.set(this.virtualPosition.x, this.virtualPosition.y, this);
+  }
+
+  public setTilePosition(x : number, y : number) {
+    this.env.characters.set(this.virtualPosition.x, this.virtualPosition.y, null);
+    super.setTilePosition(x,y);
+    this.env.characters.set(this.virtualPosition.x, this.virtualPosition.y, this);
+
+  }
+
+  /**
   * Updates player tilePosition to specified in parameter and updates sprite facing on {PendingMoveAction}
   * @param target - place to go on map in tile position
   * @return true if move had been performed
@@ -67,7 +83,7 @@ abstract class Character extends GameObject implements StatsProvider {
   public move(target : Phaser.Point, turnDirector : TurnDirector) : boolean {
     this.face(target);
     if (this.isPassable(target)) {
-      this.virtualPosition.set(target.x, target.y);
+      this.setVirtualPosition(target.x, target.y);
       return true;
     } else {
       return false;
@@ -128,6 +144,27 @@ abstract class Character extends GameObject implements StatsProvider {
     if (fillColor != null)
       text.fill = fillColor;
     return hideTextTween;
+  }
+
+  /**
+  * Checks if target is in line of sight
+  * @return
+  */
+  public inLineOfSight(target : GameObject) : boolean {
+    let lineOfSight : Phaser.Line = new Phaser.Line();
+    lineOfSight.start.setTo(this.virtualPosition.x * TILE_SIZE + TILE_CENTER, this.virtualPosition.y * TILE_SIZE + TILE_CENTER);
+    lineOfSight.end.setTo(target.virtualPosition.x * TILE_SIZE + TILE_CENTER, target.virtualPosition.y * TILE_SIZE + TILE_CENTER);
+    //TODO iterate over tiles and check if all tiles are passable and there is no characters 
+    console.log(this.level.groundLayer.getRayCastTiles(lineOfSight));
+    console.log(lineOfSight);
+    return false;
+  }
+
+  /**
+  * Distance to target in tile
+  */
+  public distance(target : GameObject) : number {
+    return this.tilePosition.distance(target.tilePosition, true);
   }
 }
 

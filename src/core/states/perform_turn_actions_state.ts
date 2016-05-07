@@ -64,8 +64,9 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     }
 
     this.turnDirector.newTurn(); {
-      this.player.attack(mob, this.env, this.turnDirector);
-      this.calculateRestOfActions();
+      if (this.player.attack(mob, this.env, this.turnDirector)) {
+        this.calculateRestOfActions();
+      }
     } this.turnDirector.finishTurn();
   }
 

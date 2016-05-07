@@ -6,22 +6,19 @@ import { PendingTurnAction, TurnDirector } from '../../objects/pending_actions/p
 import Env from '../../env';
 import Player from '../../objects/player';
 import PendingMeleeAttackAction from '../../objects/pending_actions/pending_melee_attack_action';
-/**
-* Simple attack using fists. Its power is only based on character attack
-*/
-export default class Fist extends Weapon {
 
+export default class Sword extends Weapon {
   constructor(game : Phaser.Game, owner : Mob | Player) {
     super(game, owner);
-    this.stats.minAttack = 0;
-    this.stats.maxAttack = 0;
+    this.stats.minAttack = 1;
+    this.stats.maxAttack = 5;
   }
 
   /**
   * Return true if attacker can atack target using this weapon
   */
   public canAttack(target : Player | Character | Mob | GameObject, env : Env) : boolean {
-    return this.owner.distance(target) == 1 && this.owner.inLineOfSight(target);
+    return this.owner.distance(target) == 2 && this.owner.inLineOfSight(target);
   }
 
   /**

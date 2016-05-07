@@ -1,6 +1,8 @@
 import Level from './level';
 import DungeonScreen from './screens/dungeon_screen';
 import MonstersManager from './monsters_manager';
+import CharactersGrid from './characters_grid';
+
 import Player from './objects/player';
 import NarrationManager from './narration_manager';
 
@@ -41,6 +43,12 @@ export default class Env {
   * Current Player
   */
   public player          : Player;
+
+  /**
+  * List of all monsters and npcs and player in level
+  */
+  public characters      : CharactersGrid;
+
   /**
   * Current game
   */
@@ -59,7 +67,7 @@ export default class Env {
     this.level           = new Level(this.screen, 'tileset', 100, 100);
     this.level.generate();
     this.level.setupPathFinding(this.screen.pathFinding);
-
+    this.characters      = new CharactersGrid(this.level);
     this.monsters        = new MonstersManager(this);
     this.narration       = new NarrationManager(this);
   }

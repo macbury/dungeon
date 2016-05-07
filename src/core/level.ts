@@ -2,7 +2,7 @@ import { TILE_SIZE } from './consts';
 import GameObject from './objects/game_object';
 import PathFinderPlugin from '../lib/path_finder_plugin';
 import DungeonScreen from './screens/dungeon_screen';
-
+import Character from './objects/character';
 const PASSABLE_TILES = [8];
 
 export default class Level extends Phaser.Tilemap {
@@ -16,6 +16,10 @@ export default class Level extends Phaser.Tilemap {
   public wallLayer    : Phaser.TilemapLayer;
 
   public tilemapLayers : Array<Phaser.TilemapLayer>;
+
+  /**
+  * If true we need to resize tilemap layers. Triggered by resize event
+  */
   private dirtySize : boolean;
 
   constructor(screen : DungeonScreen, tilesetKey : string, columns : number, rows : number) {
@@ -31,6 +35,7 @@ export default class Level extends Phaser.Tilemap {
     this.wallLayer   = this.create('walls', columns, rows, TILE_SIZE, TILE_SIZE);
     this.tilemapLayers.push(this.groundLayer);
     this.tilemapLayers.push(this.wallLayer);
+
   }
 
   /**

@@ -25,6 +25,7 @@
   "compileOnSave": false,
   "files": [
     "./src/boot.ts",
+    "./src/core/characters_grid.ts",
     "./src/core/consts.ts",
     "./src/core/dungeon_game.ts",
     "./src/core/env.ts",
@@ -32,6 +33,7 @@
     "./src/core/fsm/fsm.ts",
     "./src/core/items/item.ts",
     "./src/core/items/weapons/fist.ts",
+    "./src/core/items/weapons/sword.ts",
     "./src/core/items/weapons/weapon.ts",
     "./src/core/level.ts",
     "./src/core/monsters_manager.ts",

@@ -7,6 +7,7 @@ import { PendingPlayerMoveAction, PendingPlayerMoveBlockedAction } from './pendi
 import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_actions';
 import Env from '../env';
 import Fist from '../items/weapons/fist';
+import Sword from '../items/weapons/sword';
 import { Stats } from '../rpg/stats';
 const PLAYER_SPRITE_NAME = 'player_character';
 
@@ -35,7 +36,8 @@ export default class Player extends Character {
 
   protected setupStatsAndEquipment() {
     this.fistWeapon        = new Fist(this.game, this);
-    this.baseStats.health  = 24;
+    this.mainWeapon        = new Sword(this.game, this);
+    this.baseStats.health  = 48;
     this.baseStats.defense = 1;
     this.baseStats.attack  = 4;
   }
@@ -68,21 +70,23 @@ export default class Player extends Character {
 
   /**
   * Performs attack on target using main weapon. If mainWeapon is null then attack with fist. If Mob is out of range then returns null.
-  *
+  * @return true if performed attack
   */
-  public attack(target: Mob, env : Env, turnDirector : TurnDirector) : void {
+  public attack(target: Mob, env : Env, turnDirector : TurnDirector) : boolean {
     this.face(target.tilePosition);
     if (this.mainWeapon != null) {
       if (this.mainWeapon.canAttack(target, env)) {
         this.mainWeapon.performAttack(target, env, turnDirector);
+        return true;
       } else {
-        return null;
+        return false;
       }
     } else {
       if (this.fistWeapon.canAttack(target, env)) {
         this.fistWeapon.performAttack(target, env, turnDirector);
+        return true;
       } else {
-        return null;
+        return false;
       }
     }
   }
