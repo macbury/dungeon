@@ -26,12 +26,6 @@ export default class Level extends Phaser.Tilemap {
     super(screen.game, null, TILE_SIZE, TILE_SIZE, columns, rows);
     this.setPreventRecalculate(true);
     this.addTilesetImage(tilesetKey);
-
-    for (let i = 0; i < PASSABLE_TILES.length; i++) {
-      var gid : number = PASSABLE_TILES[i];
-      this.tiles[gid].collides = false;
-    }
-
     /**
     * Add each created layer to  tilemapLayers. This will ensure that they will be resized
     */
@@ -89,13 +83,13 @@ export default class Level extends Phaser.Tilemap {
         this.putTile(8, x, y, this.groundLayer);
 
         if (x == 0 || y == 0 || (x == 3 && y < 5)) {
-          this.putTile(4, x, y, this.groundLayer);
+          let wallTile : Phaser.Tile = this.putTile(4, x, y, this.groundLayer);
         }
       }
     }
 
     this.groundLayer.resizeWorld();
-    //this.wallLayer.resizeWorld();
+
   }
 
   /**
@@ -103,7 +97,7 @@ export default class Level extends Phaser.Tilemap {
   */
   public isPassable(tilePos : Phaser.Point) : boolean {
     var tile : Phaser.Tile = this.getTile(tilePos.x, tilePos.y);
-    return tile != null && !tile.collides;
+    return tile != null && PASSABLE_TILES.indexOf(tile.index) != -1;
   }
 
   /**

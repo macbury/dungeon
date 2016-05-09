@@ -165,27 +165,30 @@ abstract class Character extends GameObject implements StatsProvider {
     lineOfSight.start.setTo(target.virtualPosition.x * TILE_SIZE + TILE_CENTER, target.virtualPosition.y * TILE_SIZE + TILE_CENTER);
     //TODO iterate over tiles and check if all tiles are passable and there is no characters
     let rayTiles : Phaser.Tile[] = this.level.groundLayer.getRayCastTiles(lineOfSight)
-    console.log("Checking line of sight", [
+    console.debug("Checking line of sight", [
       lineOfSight.start,
       lineOfSight.end
     ]);
+    let cursor : Phaser.Point = new Phaser.Point();
     for (let i = 0; i < rayTiles.length; i++) {
       var tile : Phaser.Tile = rayTiles[i];
-      if (tile.collides) {
-        console.log("Tile not passable");
+      cursor.set(tile.x, tile.y);
+      //console.debug("Tile:", tile.collides);
+      if (!this.level.isPassable(cursor)) {
+        //console.debug("Tile not passable", tile.index);
         return false;
       }
-      console.log(tile);
+      //console.debug(tile);
       var character : Character = this.characters.get(tile.x, tile.y);
 
       if (character != null && (character !== this && character !== target)) {
-        console.log("Character shit", [this, character]);
+        //console.debug("Character shit", [this, character]);
         return false;
       } else if (character === target) {
         return true;
       }
     }
-    console.log("Done Checking line of sight");
+  //  console.debug("Done Checking line of sight");
     return false;
   }
 

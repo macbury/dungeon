@@ -4,13 +4,13 @@
     <meta name="viewport" content="initial-scale=1,user-scalable=no">
   </head>
   <body>
-    <div id="loader">Loading...</div>
-    <script type="text/javascript" src="bundle.min.js" charset="utf-8"></script>
     <script type="text/javascript">
-      document.body.onload = function() {
+      document.addEventListener('DOMContentLoaded', function(){
         document.getElementById('loader').remove();
         var game           = DungeonGame.boot(document.body);
-      }
+      });
     </script>
+    <div id="loader">Loading...</div>
+    <script type="text/javascript" src="bundle.min.js" charset="utf-8"></script>
   </body>
 </html>
