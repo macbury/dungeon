@@ -18,7 +18,7 @@ export default class Sword extends Weapon {
   * Return true if attacker can atack target using this weapon
   */
   public canAttack(target : Player | Character | Mob | GameObject, env : Env) : boolean {
-    return this.owner.distance(target) == 2 && this.owner.inLineOfSight(target);
+    return this.owner.distance(target) <= 2 && this.owner.inLineOfSight(target);
   }
 
   /**

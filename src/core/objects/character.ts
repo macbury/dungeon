@@ -56,7 +56,7 @@ abstract class Character extends GameObject implements StatsProvider {
   * Returns true if passed tile position is passable
   */
   public isPassable(otherTilePoint : Phaser.Point) : boolean {
-    return this.level.isPassable(otherTilePoint) && !this.monsters.isOnTile(otherTilePoint) && !this.player.tilePosition.equals(otherTilePoint);
+    return this.level.isPassable(otherTilePoint) && this.characters.get(otherTilePoint.x, otherTilePoint.y) == null;
   }
 
   /**
@@ -95,10 +95,19 @@ abstract class Character extends GameObject implements StatsProvider {
   */
   public afterTurn(turnDirector : TurnDirector) : boolean {
     if (this.health.isDead()) {
-      turnDirector.addSingle(new PendingDieAction(this.env, this));
+      this.die(turnDirector);
       return true;
     }
     return false;
+  }
+
+  /**
+  * Triggered after character health reached 0
+  */
+  public die(turnDirector : TurnDirector) {
+    this.health.setZero();
+    turnDirector.addSingle(new PendingDieAction(this.env, this));
+    this.env.characters.set(this.tilePosition.x, this.tilePosition.y, null);
   }
 
   /**
@@ -152,16 +161,36 @@ abstract class Character extends GameObject implements StatsProvider {
   */
   public inLineOfSight(target : GameObject) : boolean {
     let lineOfSight : Phaser.Line = new Phaser.Line();
-    lineOfSight.start.setTo(this.virtualPosition.x * TILE_SIZE + TILE_CENTER, this.virtualPosition.y * TILE_SIZE + TILE_CENTER);
-    lineOfSight.end.setTo(target.virtualPosition.x * TILE_SIZE + TILE_CENTER, target.virtualPosition.y * TILE_SIZE + TILE_CENTER);
-    //TODO iterate over tiles and check if all tiles are passable and there is no characters 
-    console.log(this.level.groundLayer.getRayCastTiles(lineOfSight));
-    console.log(lineOfSight);
+    lineOfSight.end.setTo(this.virtualPosition.x * TILE_SIZE + TILE_CENTER, this.virtualPosition.y * TILE_SIZE + TILE_CENTER);
+    lineOfSight.start.setTo(target.virtualPosition.x * TILE_SIZE + TILE_CENTER, target.virtualPosition.y * TILE_SIZE + TILE_CENTER);
+    //TODO iterate over tiles and check if all tiles are passable and there is no characters
+    let rayTiles : Phaser.Tile[] = this.level.groundLayer.getRayCastTiles(lineOfSight)
+    console.log("Checking line of sight", [
+      lineOfSight.start,
+      lineOfSight.end
+    ]);
+    for (let i = 0; i < rayTiles.length; i++) {
+      var tile : Phaser.Tile = rayTiles[i];
+      if (tile.collides) {
+        console.log("Tile not passable");
+        return false;
+      }
+      console.log(tile);
+      var character : Character = this.characters.get(tile.x, tile.y);
+
+      if (character != null && (character !== this && character !== target)) {
+        console.log("Character shit", [this, character]);
+        return false;
+      } else if (character === target) {
+        return true;
+      }
+    }
+    console.log("Done Checking line of sight");
     return false;
   }
 
   /**
-  * Distance to target in tile
+  * Distance to target in tiles
   */
   public distance(target : GameObject) : number {
     return this.tilePosition.distance(target.tilePosition, true);

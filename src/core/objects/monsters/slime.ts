@@ -10,7 +10,7 @@ import Fist from '../../items/weapons/fist';
 */
 export default class Slime extends Mob {
   protected fistWeapon : Fist;
-  
+
   constructor(env : Env) {
     super(env, 'slime');
   }

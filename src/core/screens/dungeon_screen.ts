@@ -62,6 +62,8 @@ export default class DungeonScreen extends Phaser.State {
       this.env.monsters.spawn(Ant, this.rnd.between(0, 20), this.rnd.between(0, 20));
     }
 
+    this.env.monsters.spawn(Slime, 2, 2);
+
     this.env.spawnPlayer();
 
 

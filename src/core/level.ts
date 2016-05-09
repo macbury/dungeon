@@ -27,6 +27,11 @@ export default class Level extends Phaser.Tilemap {
     this.setPreventRecalculate(true);
     this.addTilesetImage(tilesetKey);
 
+    for (let i = 0; i < PASSABLE_TILES.length; i++) {
+      var gid : number = PASSABLE_TILES[i];
+      this.tiles[gid].collides = false;
+    }
+
     /**
     * Add each created layer to  tilemapLayers. This will ensure that they will be resized
     */
@@ -98,13 +103,14 @@ export default class Level extends Phaser.Tilemap {
   */
   public isPassable(tilePos : Phaser.Point) : boolean {
     var tile : Phaser.Tile = this.getTile(tilePos.x, tilePos.y);
-    return tile != null && PASSABLE_TILES.indexOf(tile.index) != -1;
+    return tile != null && !tile.collides;
   }
 
   /**
   * Configure {PathFinderPlugin}  with data from level
   */
   public setupPathFinding(pathFinding : PathFinderPlugin) : void {
+    console.warn("Check which Phaser.Tile is not collides and pass its gids here");
     pathFinding.setGrid(
       this.layers[0].data,
       PASSABLE_TILES

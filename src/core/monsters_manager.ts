@@ -22,12 +22,16 @@ export default class MonstersManager {
     this.env.screen.gameObjectsLayer.add(mob);
     mob.setTilePosition(tileX, tileY);
     this.monsters.push(mob);
-    mob.onDestroy.addOnce(this.onMonsterDestroy, this);
   }
 
-  private onMonsterDestroy(killedMob : Mob) {
+  /**
+  * Remove passed monster
+  */
+  public remove(killedMob : Mob) {
+    console.debug("Going to remove", killedMob);
     var indexToRemove : number = this.monsters.indexOf(killedMob);
-    if (indexToRemove > 0) {
+    if (indexToRemove != -1) {
+      console.debug("Removed monster", indexToRemove);
       this.monsters.splice(indexToRemove, 1);
     }
   }

@@ -4,6 +4,7 @@ import Level from '../level';
 import Player from './player';
 import MonstersManager from '../monsters_manager';
 import Env from '../env';
+import CharactersGrid from '../characters_grid';
 /**
 * Base class for all game objects in the game
 */
@@ -34,6 +35,13 @@ export default class GameObject extends Phaser.Group {
   */
   protected get monsters() : MonstersManager {
     return this.env.monsters;
+  }
+
+  /**
+  * Reference to characters managers
+  */
+  protected get characters() : CharactersGrid {
+    return this.env.characters;
   }
 
   /**

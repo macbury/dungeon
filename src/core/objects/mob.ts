@@ -50,6 +50,11 @@ abstract class Mob extends Character {
     nextTilePos.add(dir.x, dir.y);
     this.move(nextTilePos, turnDirector);
   }
+
+  public die(turnDirector : TurnDirector) {
+    super.die(turnDirector);
+    this.monsters.remove(this);
+  }
 }
 
 export default Mob;

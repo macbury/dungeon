@@ -112,4 +112,9 @@ export default class Health {
     this.onUpdate.dispatch();
   }
 
+  public setZero() : void {
+    this._current = 0;
+    this.onUpdate.dispatch();
+  }
+
 }

@@ -22,8 +22,8 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
     var tapTile : Phaser.Point    = this.level.getTilePositionFor(pointer);
 
     this.cursor.position.set(tapTile.x * TILE_SIZE + TILE_CENTER, tapTile.y * TILE_SIZE + TILE_CENTER);
-    var tappedCharacter = this.env.characters.get(tapTile.x, tapTile.y);
-    console.log(tappedCharacter);
+    //var tappedCharacter = this.env.characters.get(tapTile.x, tapTile.y);
+    //console.log(tappedCharacter);
     if (this.monsters.isOnTile(tapTile)) {// is monster
       this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, IPlayerActionType.performMeleeAttack(tapTile));
     } else if (false) { // is item or other thing you can interact with
