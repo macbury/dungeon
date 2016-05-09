@@ -32,9 +32,24 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       this.playerAttackMonsterAction(action.attackTarget);
       this.cursor.show();
       this.runTurnActions();
+    } else if (IPlayerActionType.isPicking(action)) {
+      this.playerTryPickCollectable();
+      this.runTurnActions();
     } else {
       throw "This is should not happen";
     }
+  }
+
+  /**
+  * Player will try to pick collectable below him. If there is any item then perform monster actions
+  */
+  private playerTryPickCollectable() : boolean {
+    this.turnDirector.newTurn(); {
+      if (this.player.pickedObject(this.turnDirector)) {
+        this.calculateRestOfActions();
+      }
+    } this.turnDirector.finishTurn();
+    return false;
   }
 
   /**

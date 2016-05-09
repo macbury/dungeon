@@ -9,6 +9,8 @@ import NarrationManager from './narration_manager';
 import ObjectsGrid from './objects_grid';
 import {TurnDirector} from './objects/pending_actions/pending_turn_actions';
 import { CollectableItem, Item } from './items/items';
+import { AROUND } from './consts';
+import PendingDropAction from './objects/pending_actions/pending_drop_action';
 
 const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
@@ -92,10 +94,20 @@ export default class Env {
   * @return true if there was place to drop this item
   */
   public drop(origin : Phaser.Point, item : Item, turnDirector : TurnDirector) : boolean {
-    let collectableItem : CollectableItem = new CollectableItem(this, item);
-    collectableItem.setTilePosition(origin.x, origin.y);
-    //console.log(collectableItem);
-    this.screen.itemsLayer.add(collectableItem);
+    let cursor : Phaser.Point = new Phaser.Point();
+
+    for (let i = 0; i < AROUND.length; i++) {
+      cursor.set(AROUND[i].x, AROUND[i].y).add(origin.x, origin.y);
+
+      if (this.level.isPassable(cursor) && this.objects.isEmpty(cursor.x, cursor.y)) {
+        let collectableItem : CollectableItem = new CollectableItem(this, item);
+        collectableItem.setTilePosition(cursor.x, cursor.y);
+        this.screen.itemsLayer.add(collectableItem);
+        turnDirector.addParell(new PendingDropAction(this, collectableItem, origin));
+        return true;
+      }
+    }
+
     return false;
   }
 

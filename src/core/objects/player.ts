@@ -93,6 +93,18 @@ export default class Player extends Character {
   }
 
   /**
+  * Player will try to pick item beneath him. If there is item then it adds pending action, updates inventory and returns true
+  */
+  public pickedObject(turnDirector : TurnDirector) : boolean {
+    console.warn("Implement object picking");
+    if (this.objects.isCollectable(this.tilePosition.x, this.tilePosition.y)) {
+
+      return true;
+    }
+    return false;
+  }
+
+  /**
   * Enable follow camera
   */
   public follow(camera : Phaser.Camera) {

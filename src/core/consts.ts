@@ -36,8 +36,10 @@ export const UP : Phaser.Point    = new Phaser.Point(0, -1);
 export const DOWN : Phaser.Point  = new Phaser.Point(0, 1);
 export const LEFT : Phaser.Point  = new Phaser.Point(1, 0);
 export const RIGHT : Phaser.Point = new Phaser.Point(-1, 0);
+export const ZERO : Phaser.Point = new Phaser.Point(0, 0);
 
 export const MOVE_ARRAY : Array<Phaser.Point> = [UP, DOWN, LEFT, RIGHT];
+export const AROUND  : Array<Phaser.Point> = [ZERO, UP, DOWN, LEFT, RIGHT];
 
 /**
 * Z index values for each layer

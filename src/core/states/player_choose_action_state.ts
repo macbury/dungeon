@@ -19,17 +19,22 @@ export default class PlayerChooseActionState extends BaseDungeonScreenState {
   * In here we check where player did tap on map
   **/
   private onPlayerTap(pointer : Phaser.Pointer, doubleTap : boolean) : void {
-    var tapTile : Phaser.Point    = this.level.getTilePositionFor(pointer);
+    let tapTile : Phaser.Point    = this.level.getTilePositionFor(pointer);
 
     this.cursor.position.set(tapTile.x * TILE_SIZE + TILE_CENTER, tapTile.y * TILE_SIZE + TILE_CENTER);
-    //var tappedCharacter = this.env.characters.get(tapTile.x, tapTile.y);
-    //console.log(tappedCharacter);
-    if (this.monsters.isOnTile(tapTile)) {// is monster
-      this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, IPlayerActionType.performMeleeAttack(tapTile));
-    } else if (false) { // is item or other thing you can interact with
 
+    let playerAction : IPlayerActionType = null;
+
+    if (this.player.tilePosition.equals(tapTile)) {
+      playerAction = IPlayerActionType.pick();
+    } else if (this.monsters.isOnTile(tapTile)) {// is monster
+      playerAction = IPlayerActionType.performMeleeAttack(tapTile);
     } else if (this.level.isPassable(tapTile)) {
-      this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, IPlayerActionType.performMoveTo(tapTile));
+      playerAction = IPlayerActionType.performMoveTo(tapTile);
+    }
+
+    if (playerAction != null) {
+      this.fsm.enter(TurnStates.PERFORM_TURN_ACTIONS, playerAction);
     }
   }
 }

@@ -32,4 +32,11 @@ export default class CharactersGrid {
   public get(x : number, y : number) : Character {
     return this._grid[x][y];
   }
+
+  /**
+  * Return true if there is no object at positions
+  */
+  public isEmpty(x : number, y : number) : boolean {
+    return this.get(x,y) == null;
+  }
 }

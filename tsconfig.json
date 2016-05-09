@@ -52,6 +52,7 @@
     "./src/core/objects/object_item.ts",
     "./src/core/objects/pending_actions/pending_attack_action.ts",
     "./src/core/objects/pending_actions/pending_die_action.ts",
+    "./src/core/objects/pending_actions/pending_drop_action.ts",
     "./src/core/objects/pending_actions/pending_melee_attack_action.ts",
     "./src/core/objects/pending_actions/pending_move_action.ts",
     "./src/core/objects/pending_actions/pending_turn_actions.ts",
