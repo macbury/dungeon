@@ -57,12 +57,13 @@ export class TurnDirector {
   * Create new turn and pops old actions to to action queueu
   */
   public flush() : void {
+    if (this.parellActionsToPerform.length > 0)
+      this.actionsToPerform.push(this.parellActionsToPerform);
+
     for (let i = 0; i < this.singleActionsToPerform.length; i++) {
       this.actionsToPerform.push(this.singleActionsToPerform[i]);
     }
-    
-    if (this.parellActionsToPerform.length > 0)
-      this.actionsToPerform.push(this.parellActionsToPerform);
+
     this.clear();
   }
 
@@ -88,6 +89,7 @@ export class TurnDirector {
     var pendingTurnActions = new PendingTurnActions();
     pendingTurnActions.push(pendingAction);
     this.singleActionsToPerform.push(pendingTurnActions);
+    this.flush();
   }
 
   /**
