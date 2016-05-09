@@ -2,13 +2,16 @@ import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
 import Level from '../level';
 import Player from './player';
+import ObjectsGrid from '../objects_grid';
 import MonstersManager from '../monsters_manager';
 import Env from '../env';
 import CharactersGrid from '../characters_grid';
+import {TurnDirector} from './pending_actions/pending_turn_actions';
+import Item from '../items/item';
 /**
 * Base class for all game objects in the game
 */
-export default class GameObject extends Phaser.Group {
+abstract class GameObject extends Phaser.Group {
   /**
   * Position used for calculating attacks, movement and other stuff that dont require to update {GameObject#position}
   */
@@ -45,6 +48,13 @@ export default class GameObject extends Phaser.Group {
   }
 
   /**
+  * Reference to item objects managers
+  */
+  protected get objects() : ObjectsGrid {
+    return this.env.objects;
+  }
+
+  /**
   * Reference to current Player
   */
   protected get player() : Player {
@@ -71,4 +81,24 @@ export default class GameObject extends Phaser.Group {
   public get tilePosition() : Phaser.Point {
     return this.virtualPosition;
   }
+
+  /**
+  * Name of character displayed in ui
+  */
+  public get name() {
+    console.warn("Not implemented!");
+    return "Implement this!";
+  }
+
+  /**
+  * Description of character that will be displayed in ui
+  */
+  public get description() {
+    console.warn("Not implemented!");
+    return "Implement this!";
+  }
+
+
 }
+
+export default GameObject;

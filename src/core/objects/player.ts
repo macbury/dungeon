@@ -9,6 +9,7 @@ import Env from '../env';
 import Fist from '../items/weapons/fist';
 import Sword from '../items/weapons/sword';
 import { Stats } from '../rpg/stats';
+import Item from '../items/item';
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -101,5 +102,23 @@ export default class Player extends Character {
   public static preload(load : Phaser.Loader) : void {
     load.spritesheet(PLAYER_SPRITE_NAME, require('player.png'), TILE_SIZE, TILE_SIZE);
     Fist.preload(load);
+  }
+
+  public get name() {
+    //TODO: change this
+    return "Player";
+  }
+
+  /**
+  * Description of character that will be displayed in ui
+  */
+  public get description() {
+    //TODO Change this
+    return "Our main hero";
+  }
+
+  protected getItemsToDrop() : Item[] {
+    console.warn("Implement this");
+    return [];
   }
 }

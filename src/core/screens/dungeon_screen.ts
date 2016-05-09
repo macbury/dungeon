@@ -12,8 +12,7 @@ import MonstersManager from '../monsters_manager';
 
 import Player from '../objects/player';
 
-import Slime from '../objects/monsters/slime';
-import Ant from '../objects/monsters/ant';
+import { Slime, Ant } from '../objects/monsters';;
 
 import PlayerChooseActionState from '../states/player_choose_action_state';
 import PerformTurnActionsState from '../states/perform_turn_actions_state';
@@ -28,6 +27,7 @@ export default class DungeonScreen extends Phaser.State {
   public healthBar        : HealthBar;
   public gameObjectsLayer : Phaser.Group;
   public uiLayer          : Phaser.Group;
+  public itemsLayer       : Phaser.Group;
   /**
   * This layer is at bottom of the screen and its fixed to camera
   */
@@ -39,12 +39,7 @@ export default class DungeonScreen extends Phaser.State {
 
   public preload() : void {
     Env.preload(this.load);
-    Slime.preload(this.load);
-    Player.preload(this.load);
-    Ant.preload(this.load);
     HealthBar.preload(this.load);
-    this.load.image('cursor',  require('cursor.png'));
-    this.load.image('tileset', require('tileset.png'));
   }
 
   public create() : void {
@@ -55,6 +50,7 @@ export default class DungeonScreen extends Phaser.State {
     this.narratorLayer       = this.add.group(this.uiLayer);
     this.env                 = new Env(this);
 
+    this.itemsLayer          = this.add.group();
     this.gameObjectsLayer    = this.add.group();
 
     for (let i = 0; i < 20; i++) {
@@ -66,7 +62,6 @@ export default class DungeonScreen extends Phaser.State {
 
     this.env.spawnPlayer();
 
-
     this.healthBar = new HealthBar(this.game, this.env.player);
 
     this.cursor   = new Cursor(this.game);
@@ -74,7 +69,6 @@ export default class DungeonScreen extends Phaser.State {
     this.uiLayer.add(this.healthBar);
 
     this.world.bringToTop(this.uiLayer);
-    this.gameObjectsLayer.z = LAYERS.GAME_OBJECTS;
 
     this.env.narration.info("Welcome in my custom dungeon!");
     this.env.narration.info("You dare to fight! Then we shall fight");

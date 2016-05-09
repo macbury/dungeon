@@ -14,6 +14,6 @@ export default class BootScreen extends Phaser.State {
   }
 
   public update() {
-    this.game.state.start('Dungeon', true);
+    this.game.state.start('Loading', true);
   }
 }

@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import DungeonScreen from './screens/dungeon_screen';
 import BootScreen from './screens/boot_screen';
+import LoadingScreen from './screens/loading_screen';
 import { GAME_SIZE, TILE_SIZE, GAME_WIDTH, GAME_HEIGHT } from './consts';
 import ResolutionUtils from './utils/resolution_utils';
 
@@ -35,6 +36,7 @@ export default class DungeonGame extends Phaser.Game {
 
     this.state.add('Boot', BootScreen);
     this.state.add('Dungeon', DungeonScreen);
+    this.state.add('Loading', LoadingScreen);
     this.state.start('Boot');
     this.scale.setResizeCallback(this.onResize, this);
   }

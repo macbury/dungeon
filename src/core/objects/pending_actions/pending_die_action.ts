@@ -19,6 +19,6 @@ export default class PendingDieAction extends PendingTurnAction<Character> {
 
 
   public turnDescription(narration : NarrationManager) : void {
-    narration.info("Killed monster?");
+    narration.info(`${this.owner.name} has died`);
   }
 }

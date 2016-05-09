@@ -2,9 +2,13 @@ import Level from './level';
 import DungeonScreen from './screens/dungeon_screen';
 import MonstersManager from './monsters_manager';
 import CharactersGrid from './characters_grid';
-
+import Ant from './objects/monsters/ant';
+import Slime from './objects/monsters/slime';
 import Player from './objects/player';
 import NarrationManager from './narration_manager';
+import ObjectsGrid from './objects_grid';
+import {TurnDirector} from './objects/pending_actions/pending_turn_actions';
+import { CollectableItem, Item } from './items/items';
 
 const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
@@ -44,10 +48,17 @@ export default class Env {
   */
   public player          : Player;
 
+
+  /**
+  * List of all chests, dropped items etc in level
+  */
+  public objects      : ObjectsGrid;
+
   /**
   * List of all monsters and npcs and player in level
   */
   public characters      : CharactersGrid;
+
 
   /**
   * Current game
@@ -68,8 +79,24 @@ export default class Env {
     this.level.generate();
     this.level.setupPathFinding(this.screen.pathFinding);
     this.characters      = new CharactersGrid(this.level);
+    this.objects         = new ObjectsGrid(this.level);
     this.monsters        = new MonstersManager(this);
     this.narration       = new NarrationManager(this);
+  }
+
+  /**
+  * Drop item on floor around origin tile
+  * @param origin in tile position
+  * @param item that will be dropped
+  * @param turnDirector to insert turn action of drop
+  * @return true if there was place to drop this item
+  */
+  public drop(origin : Phaser.Point, item : Item, turnDirector : TurnDirector) : boolean {
+    let collectableItem : CollectableItem = new CollectableItem(this, item);
+    collectableItem.setTilePosition(origin.x, origin.y);
+    //console.log(collectableItem);
+    this.screen.itemsLayer.add(collectableItem);
+    return false;
   }
 
   /**

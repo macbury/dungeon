@@ -54,6 +54,7 @@ abstract class Mob extends Character {
   public die(turnDirector : TurnDirector) {
     super.die(turnDirector);
     this.monsters.remove(this);
+    //todo add drop stuff here
   }
 }
 

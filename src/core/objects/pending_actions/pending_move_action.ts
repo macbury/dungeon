@@ -98,7 +98,6 @@ export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject
   }
 
   public turnDescription(narration : NarrationManager) : void {
-    //TODO: make this more dynamic
-    narration.danger("Player ran into monster!");
+    narration.danger(`${this.owner.name} has been blocked!`);
   }
 }

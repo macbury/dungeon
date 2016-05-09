@@ -4,7 +4,9 @@ import Fist from '../../items/weapons/fist';
 import Env from '../../env';
 import {PendingTurnAction, TurnDirector} from '../pending_actions/pending_turn_actions';
 import GameObject from '../game_object';
-
+import MinorHealthPotion from '../../items/potions/minor_health_potion';
+import Item from '../../items/item';
+import Gold from '../../items/gold';
 const ANT_SPRITE_NAME = 'black_ant';
 
 export default class Ant extends Mob {
@@ -32,5 +34,20 @@ export default class Ant extends Mob {
       this.wander(turnDirector);
       return false;
     }
+  }
+
+  public get name() {
+    return "Giant ant";
+  }
+
+  public get description() {
+    return "A giant ant that lives underground";
+  }
+
+  protected getItemsToDrop() : Item[] {
+    return [
+      new MinorHealthPotion(this.game),
+      new Gold(this.game, this.game.rnd.between(10, 20))
+    ];
   }
 }

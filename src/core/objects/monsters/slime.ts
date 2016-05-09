@@ -5,6 +5,9 @@ import { PendingTurnAction, TurnDirector } from '../pending_actions/pending_turn
 import GameObject from '../game_object';
 import Env from '../../env';
 import Fist from '../../items/weapons/fist';
+import Item from '../../items/item';
+import Gold from '../../items/gold';
+
 /**
 * First simple monster. It ai is just wandering
 */
@@ -34,5 +37,19 @@ export default class Slime extends Mob {
       this.wander(turnDirector);
       return false;
     }
+  }
+
+  protected getItemsToDrop() : Item[] {
+    return [
+      new Gold(this.game, this.game.rnd.between(5, 8))
+    ];
+  }
+
+  public get name() {
+    return "Brown slime";
+  }
+
+  public get description() {
+    return "It stinks and its sticky...";
   }
 }

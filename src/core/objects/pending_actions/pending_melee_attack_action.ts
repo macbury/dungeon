@@ -50,10 +50,6 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
   }
 
   public turnDescription(narration : NarrationManager) : void {
-    if (this.attacker instanceof Player) {
-      narration.info("Player attacked monster with: " + this.damage);
-    } else {
-      narration.info("Monster attacked player with: " + this.damage);
-    }
+    narration.info(`${this.attacker.name} did ${this.damage} damage to ${this.target.name}`);
   }
 }

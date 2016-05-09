@@ -6,6 +6,8 @@ import Env from '../env';
 import Health from '../rpg/health';
 import { TILE_SIZE, STATUS_TEXT_STYLE, TILE_CENTER } from '../consts';
 import {StatsManager, Stats, StatsProvider} from '../rpg/stats';
+import Item from '../items/item';
+import CollectableItem from './collectable_item';
 /**
 * Base class for {Player} or {Mob} characters. Character can move, has animated sprite, and can be killed.
 */
@@ -102,11 +104,29 @@ abstract class Character extends GameObject implements StatsProvider {
   }
 
   /**
+  * @return an array of objects dropped by this character after it die
+  */
+  protected abstract getItemsToDrop() : Item[];
+
+  /**
   * Triggered after character health reached 0
   */
   public die(turnDirector : TurnDirector) {
     this.health.setZero();
-    turnDirector.addSingle(new PendingDieAction(this.env, this));
+    turnDirector.addSingle(new PendingDieAction(this.env, this)); // make die effect for character
+
+    /**
+    * Check if there are items to drop
+    */
+    let itemsToDrop : Item[] = this.getItemsToDrop();
+    if (itemsToDrop != null) {
+      for (let i = 0; i < itemsToDrop.length; i++) {
+        if (!this.env.drop(this.tilePosition, itemsToDrop[i], turnDirector)) {
+          break;
+        }
+      }
+    }
+
     this.env.characters.set(this.tilePosition.x, this.tilePosition.y, null);
   }
 
@@ -198,6 +218,8 @@ abstract class Character extends GameObject implements StatsProvider {
   public distance(target : GameObject) : number {
     return this.tilePosition.distance(target.tilePosition, true);
   }
+
+
 }
 
 export default Character;
