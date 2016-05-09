@@ -24,9 +24,7 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   */
   public onEnter(action : IPlayerActionType) {
     if (IPlayerActionType.isMovement(action)) {
-      var playerPositionTile : Phaser.Point = new Phaser.Point();
-      this.level.getTilePositionForGameObject(this.player, playerPositionTile);
-      this.pathFinding.findPath(playerPositionTile, action.destination).addOnce(this.calculateActionsByPath, this);
+      this.playerFindPathAndMoveTo(action.destination);
       this.cursor.show();
     } else if (IPlayerActionType.isAttack(action)) {
       this.playerAttackMonsterAction(action.attackTarget);
@@ -38,6 +36,13 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     } else {
       throw "This is should not happen";
     }
+  }
+
+  /**
+  * Find path and move to location
+  */
+  private playerFindPathAndMoveTo(destination : Phaser.Point) {
+    this.pathFinding.findPath(this.player.tilePosition, destination).addOnce(this.calculateActionsByPath, this);
   }
 
   /**
@@ -81,6 +86,8 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
     this.turnDirector.newTurn(); {
       if (this.player.attack(mob, this.env, this.turnDirector)) {
         this.calculateRestOfActions();
+      } else {
+        this.playerFindPathAndMoveTo(mob.tilePosition);
       }
     } this.turnDirector.finishTurn();
   }

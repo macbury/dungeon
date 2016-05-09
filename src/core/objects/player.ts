@@ -10,6 +10,7 @@ import Fist from '../items/weapons/fist';
 import Sword from '../items/weapons/sword';
 import { Stats } from '../rpg/stats';
 import Item from '../items/item';
+import CollectableItem from './collectable_item';
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -98,7 +99,8 @@ export default class Player extends Character {
   public pickedObject(turnDirector : TurnDirector) : boolean {
     console.warn("Implement object picking");
     if (this.objects.isCollectable(this.tilePosition.x, this.tilePosition.y)) {
-
+      let collectable : CollectableItem = <CollectableItem>this.objects.get(this.tilePosition.x, this.tilePosition.y);
+      console.log(collectable);
       return true;
     }
     return false;

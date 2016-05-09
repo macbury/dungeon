@@ -33,4 +33,8 @@ export default class Sword extends Weapon {
   public static preload(load : Phaser.Loader) : void {
 
   }
+
+  public getIconName() : string {
+    return null;
+  }
 }

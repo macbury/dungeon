@@ -7,7 +7,7 @@
     "bootstrap": "./node_modules/.bin/typings i",
     "dev": "./node_modules/.bin/webpack-dev-server --content-base src --inline --hot --progress --colors",
     "play": "./node_modules/.bin/electron ./main.js",
-    "dist": "NODE_ENV=production ./node_modules/.bin/webpack ",
+    "dist": "NODE_ENV=production ./node_modules/.bin/webpack && cd dist/ && zip -r ../dist.zip .",
     "test": "env NODE_ENV=test ./node_modules/.bin/karma start karma.conf.js",
     "ci": "env NODE_ENV=test ./node_modules/.bin/karma start karma.conf.js --single-run --browsers PhantomJS"
   },

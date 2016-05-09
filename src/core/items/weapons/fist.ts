@@ -36,4 +36,8 @@ export default class Fist extends Weapon {
   public static preload(load : Phaser.Loader) : void {
 
   }
+
+  public getIconName() : string {
+    return null;
+  }
 }
