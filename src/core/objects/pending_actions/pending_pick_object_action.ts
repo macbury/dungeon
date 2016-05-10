@@ -20,7 +20,7 @@ export default class PendingPickObjectAction extends PendingTurnAction<Collectab
       alpha: 1.0,
       y: [this.owner.y - TILE_CENTER, this.owner.y, this.owner.y - TILE_CENTER / 2, this.owner.y]
     }, 400);
-
+    this.env.sounds.pickItem.play();
     tween.onComplete.addOnce(() => {
       this.onCompleteSignal.dispatch();
       this.owner.destroy();

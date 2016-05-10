@@ -38,7 +38,7 @@ export default class Player extends Character {
   protected setupStatsAndEquipment() {
     this.fistWeapon        = new Fist(this.game, this);
     this.mainWeapon        = new Sword(this.game, this);
-    this.baseStats.health  = 4;
+    this.baseStats.health  = 48;
     this.baseStats.defense = 1;
     this.baseStats.attack  = 4;
     this.baseStats.evasion = 4;

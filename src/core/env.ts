@@ -18,7 +18,9 @@ const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
 const HIT_SOUND   = 'HIT_SOUND';
 const MISS_SOUND   = 'MISS_SOUND';
 const GOLD_SOUND   = 'GOLD_SOUND';
+const PICK_ITEM_SOUND   = 'PICK_ITEM_SOUND';
 const COIN_KEY = "COIN_KEY";
+
 /**
 * This class contains all objects with information about current level env like Level, Monsters, Player etc
 */
@@ -37,7 +39,8 @@ export default class Env {
     hit:       Phaser.Sound,
     stepBlock: Phaser.Sound,
     miss:     Phaser.Sound,
-    gold:     Phaser.Sound
+    gold:     Phaser.Sound,
+    pickItem  : Phaser.Sound
   }
   /**
   * Current map
@@ -87,7 +90,8 @@ export default class Env {
       hit: this.game.add.audio(HIT_SOUND),
       stepBlock: this.game.add.audio(MOVE_BLOCKED_SOUND),
       miss: this.game.add.audio(MISS_SOUND),
-      gold: this.game.add.audio(GOLD_SOUND)
+      gold: this.game.add.audio(GOLD_SOUND),
+      pickItem: this.game.add.audio(PICK_ITEM_SOUND)
     }
 
     this.level           = new Level(this.screen, 'tileset', 100, 100);
@@ -165,5 +169,6 @@ export default class Env {
     load.audio(MISS_SOUND, require('audio/snd_miss.mp3'));
     load.audio(MOVE_BLOCKED_SOUND, require('audio/snd_step_block.mp3'));
     load.audio(GOLD_SOUND, require('audio/snd_gold.mp3'));
+    load.audio(PICK_ITEM_SOUND, require('audio/snd_item.mp3'));
   }
 }
