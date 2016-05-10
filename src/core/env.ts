@@ -11,7 +11,7 @@ import {TurnDirector} from './objects/pending_actions/pending_turn_actions';
 import { CollectableItem, Item } from './items/items';
 import { AROUND, TILE_SIZE, TILE_CENTER } from './consts';
 import PendingDropAction from './objects/pending_actions/pending_drop_action';
-import InventoryManager from './inventory_manager';
+import { InventoryManager } from './inventory_manager';
 
 const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
