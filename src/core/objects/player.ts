@@ -42,6 +42,8 @@ export default class Player extends Character {
     this.baseStats.health  = 48;
     this.baseStats.defense = 1;
     this.baseStats.attack  = 4;
+    this.baseStats.evasion = 4;
+    this.baseStats.accuracy = 4;
   }
 
   /**
@@ -74,7 +76,7 @@ export default class Player extends Character {
   * Performs attack on target using main weapon. If mainWeapon is null then attack with fist. If Mob is out of range then returns null.
   * @return true if performed attack
   */
-  public attack(target: Mob, env : Env, turnDirector : TurnDirector) : boolean {
+  public attack(target: Character, env : Env, turnDirector : TurnDirector) : boolean {
     this.face(target.tilePosition);
     if (this.mainWeapon != null) {
       if (this.mainWeapon.canAttack(target, env)) {

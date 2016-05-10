@@ -27,10 +27,13 @@ abstract class PendingAttackAction extends PendingTurnAction<Character> {
   protected currentOwnerPosition : Phaser.Point;
   protected currentTargetPosition : Phaser.Point;
 
-  constructor(env: Env, attacker : Character, target: Character, damage : number) {
+  protected missed : boolean;
+
+  constructor(env: Env, attacker : Character, target: Character, damage : number, missed? : boolean) {
     super(env, attacker);
     this.target = target;
     this.damage = damage;
+    this.missed = missed;
     this.targetHealth = target.health.current;
     this.currentOwnerPosition  = new Phaser.Point(attacker.tilePosition.x, attacker.tilePosition.y);
     this.currentTargetPosition = new Phaser.Point(target.tilePosition.x, target.tilePosition.y);

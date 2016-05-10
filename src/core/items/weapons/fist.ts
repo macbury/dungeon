@@ -28,9 +28,13 @@ export default class Fist extends Weapon {
   * Pefrorm attack and create {PendingTurnAction}
   */
   public performAttack(target : Player | Character | Mob, env : Env, turnDirector : TurnDirector) : void {
-    var damage : number = this.owner.stats.rollDamage(target.stats, this.stats, env.game.rnd);
-    target.health.sub(damage);
-    turnDirector.addSingle(new PendingMeleeAttackAction(env, this.owner, target, damage));
+    if (this.owner.stats.rollLuck(target.stats, env.game.rnd) >= 0) {
+      var damage : number = this.owner.stats.rollDamage(target.stats, this.stats, env.game.rnd);
+      target.health.sub(damage);
+      turnDirector.addSingle(new PendingMeleeAttackAction(env, this.owner, target, damage));
+    } else {
+      turnDirector.addSingle(new PendingMeleeAttackAction(env, this.owner, target, damage, true));
+    }
   }
 
   public static preload(load : Phaser.Loader) : void {

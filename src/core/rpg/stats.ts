@@ -91,6 +91,14 @@ export class StatsManager {
   }
 
   /**
+  * Accuracy. Determines the accuracy of attacks, whether it’s physical or magical.
+  */
+  public get evasion() : number {
+    const EVASION_KEY = 'evasion';
+    return this.computeStatsNumberValue(EVASION_KEY);
+  }
+
+  /**
   * Registers stats provider
   */
   public register(provider : StatsProvider) : void {
@@ -127,6 +135,15 @@ export class StatsManager {
     if (damagePoints < 0)
       damagePoints = 0;
     return Math.round(damagePoints);
+  }
+
+  /**
+  * Calculate hit probability
+  * @return if the result is more than or equal to zero,  it means it hits, other than that the attack misses
+  */
+  public rollLuck(target: StatsManager, rnd : Phaser.RandomDataGenerator) : number {
+    let hitProbability : number = this.accuracy * rnd.between(0,6) - target.evasion * rnd.between(0,6);
+    return hitProbability;
   }
 }
 

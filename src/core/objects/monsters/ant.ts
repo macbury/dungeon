@@ -20,6 +20,8 @@ export default class Ant extends Mob {
     this.baseStats.health  = 10;
     this.baseStats.attack  = 3;
     this.baseStats.defense = 1;
+    this.baseStats.accuracy = 4;
+    this.baseStats.evasion  = 3;
   }
 
   public static preload(load : Phaser.Loader) {

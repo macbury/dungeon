@@ -15,6 +15,7 @@ import PendingDropAction from './objects/pending_actions/pending_drop_action';
 const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
 const HIT_SOUND   = 'HIT_SOUND';
+const MISS_SOUND   = 'MISS_SOUND';
 /**
 * This class contains all objects with information about current level env like Level, Monsters, Player etc
 */
@@ -31,7 +32,8 @@ export default class Env {
   public sounds       : {
     step :     Phaser.Sound,
     hit:       Phaser.Sound,
-    stepBlock: Phaser.Sound
+    stepBlock: Phaser.Sound,
+    miss:     Phaser.Sound
   }
   /**
   * Current map
@@ -74,7 +76,8 @@ export default class Env {
     this.sounds         = {
       step: this.game.add.audio(MOVE_SOUND),
       hit: this.game.add.audio(HIT_SOUND),
-      stepBlock: this.game.add.audio(MOVE_BLOCKED_SOUND)
+      stepBlock: this.game.add.audio(MOVE_BLOCKED_SOUND),
+      miss: this.game.add.audio(MISS_SOUND)
     }
 
     this.level           = new Level(this.screen, 'tileset', 100, 100);
@@ -131,6 +134,7 @@ export default class Env {
   public static preload(load : Phaser.Loader) {
     load.audio(HIT_SOUND,  require('audio/snd_hit.mp3'));
     load.audio(MOVE_SOUND, require('audio/snd_step.mp3'));
+    load.audio(MISS_SOUND, require('audio/snd_miss.mp3'));
     load.audio(MOVE_BLOCKED_SOUND, require('audio/snd_step_block.mp3'));
   }
 }

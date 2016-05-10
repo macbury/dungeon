@@ -212,6 +212,7 @@ abstract class Character extends GameObject implements StatsProvider {
     return false;
   }
 
+
   /**
   * Distance to target in tiles
   */

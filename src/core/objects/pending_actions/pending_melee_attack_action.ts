@@ -9,14 +9,14 @@ import PendingAttackAction from './pending_attack_action';
 */
 export default class PendingMeleeAttackAction extends PendingAttackAction {
 
-  constructor(env: Env, attacker : Character, target: Character, damage : number) {
-    super(env, attacker, target, damage);
+  constructor(env: Env, attacker : Character, target: Character, damage : number, missed? : boolean) {
+    super(env, attacker, target, damage, missed);
   }
 
-  protected performTurn() {
-    /**
-    * Animate hurt effect
-    */
+  /**
+  * Animate character that is hurted and display damage text
+  */
+  protected buildAttackSuccessTween() : Phaser.Tween {
     var attackTween : Phaser.Tween = this.env.game.add.tween(this.target.sprite).to({
       tint: 0xFF0000
     }, 150, Phaser.Easing.Power0, false, 0, 0, true);
@@ -28,6 +28,10 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
       });
     });
 
+    return attackTween;
+  }
+
+  protected performTurn() {
     /**
     * Animate attack movement
     */
@@ -44,12 +48,25 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     moveTween.easing(Phaser.Easing.Exponential.Out);
     moveTween.onStart.addOnce(() => {
       this.owner.updateSpriteFacingByDirection(this.direction);
-      attackTween.start();
+      if (this.missed) {
+        this.env.sounds.miss.play();
+        this.target.statusText("Miss").onComplete.addOnce(() => {
+          this.onCompleteSignal.dispatch()
+        });
+      } else {
+        this.buildAttackSuccessTween().start();
+      }
+
     });
     moveTween.start();
   }
 
   public turnDescription(narration : NarrationManager) : void {
-    narration.info(`${this.attacker.name} did ${this.damage} damage to ${this.target.name}`);
+    if (this.missed) {
+      narration.info(`${this.attacker.name} missed ${this.target.name}`);
+    } else {
+      narration.info(`${this.attacker.name} did ${this.damage} damage to ${this.target.name}`);
+    }
+
   }
 }
