@@ -217,6 +217,16 @@ abstract class Character extends GameObject implements StatsProvider {
     return this.tilePosition.distance(target.tilePosition, true);
   }
 
+  /**
+  * Return true if character is facing target
+  */
+  public isFacing(target : GameObject) : boolean {
+    return target.tilePosition.x == this.tilePosition.x || this.tilePosition.y == target.tilePosition.y;
+  }
+
+  /**
+  * Remove character
+  */
   public destroy(destroyChildren?: boolean, soft?: boolean) {
     super.destroy(destroyChildren, soft);
     this.env.characters.set(this.tilePosition.x, this.tilePosition.y, null);

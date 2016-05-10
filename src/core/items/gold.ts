@@ -32,7 +32,7 @@ export default class Gold extends Item {
   }
 
   public use(env : Env, turnDirector : TurnDirector) : void {
+    env.inventory.addGold(this.amount);
     turnDirector.addSingle(new PendingUseCoinsAction(env, env.player, this.amount));
-    console.warn("This should add gold to player inventory");
   }
 }

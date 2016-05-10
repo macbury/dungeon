@@ -20,7 +20,7 @@ export default class Corpse extends Item {
   }
 
   public get description() {
-    return "Undefined corpses. Maybe you should leave it";
+    return "Undefined corpses. The stench makes you realy sick";
   }
 
   public use(env : Env, turnDirector : TurnDirector) : void {

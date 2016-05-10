@@ -1,5 +1,8 @@
 import {Item, MinorHealthPotion} from './items/items';
 
+/**
+* Describes stacks of items in inventory
+*/
 export class InventorySlot extends Array<Item> {
   /**
   * A item type(class constructor for checking item type)
@@ -12,10 +15,24 @@ export class InventorySlot extends Array<Item> {
 */
 export class InventoryManager {
   private slots : Array<InventorySlot>;
-
+  private _gold : number;
   constructor() {
     this.slots = [];
+    this._gold = 0;
+  }
 
+  /**
+  * Increase number of gold
+  */
+  public addGold(amount : number) {
+    this._gold += amount;
+  }
+
+  /**
+  * Current gold obtained by player
+  */
+  public get gold() : number {
+    return this._gold;
   }
 
   /**
@@ -28,9 +45,29 @@ export class InventoryManager {
 
   /**
   * Remove item from inventory. If inventory slot for this item is empty, then removes it
+  * @return true on success
   */
-  public remove(item : Item) {
+  public remove(itemType : any) : Item {
+    let inventorySlot : InventorySlot = this.findSlotForItemType(itemType);
+    if (inventorySlot == null) {
+      return null;
+    } else {
+      let item : Item = inventorySlot.pop();
+      this.removeSlotIfEmpty(inventorySlot);
+      return item;
+    }
+  }
 
+  /**
+  * Removes slot if its empty
+  */
+  private removeSlotIfEmpty(inventorySlot : InventorySlot) {
+    if (inventorySlot.length == 0) {
+      let indexToRemove : number = this.slots.indexOf(inventorySlot);
+      if (indexToRemove != -1) {
+        this.slots.splice(indexToRemove, 1);
+      }
+    }
   }
 
   /**

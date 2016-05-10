@@ -46,4 +46,20 @@ describe('InventoryManager', () => {
   it("should return 0 if there is no Corpse in inventory", () => {
     chai.assert.strictEqual(inventory.countItem(Corpse), 0);
   });
+
+  it("should remove item from slot", () => {
+    inventory.add(new Corpse(game));
+    inventory.add(new Corpse(game));
+    chai.assert.strictEqual(inventory.countItem(Corpse), 2);
+    inventory.remove(Corpse);
+    chai.assert.strictEqual(inventory.countItem(Corpse), 1);
+  });
+
+  it("should remove slot if all items are removed", () => {
+    inventory.add(new Corpse(game));
+    chai.assert.strictEqual(inventory.countItem(Corpse), 1);
+    inventory.remove(Corpse);
+    chai.assert.strictEqual(inventory.countItem(Corpse), 0);
+    chai.assert.strictEqual(inventory.usedSlots(), 0);
+  });
 });
