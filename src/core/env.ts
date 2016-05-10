@@ -9,7 +9,7 @@ import NarrationManager from './narration_manager';
 import ObjectsGrid from './objects_grid';
 import {TurnDirector} from './objects/pending_actions/pending_turn_actions';
 import { CollectableItem, Item } from './items/items';
-import { AROUND } from './consts';
+import { AROUND, TILE_SIZE, TILE_CENTER } from './consts';
 import PendingDropAction from './objects/pending_actions/pending_drop_action';
 import InventoryManager from './inventory_manager';
 
@@ -17,6 +17,8 @@ const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
 const HIT_SOUND   = 'HIT_SOUND';
 const MISS_SOUND   = 'MISS_SOUND';
+const GOLD_SOUND   = 'GOLD_SOUND';
+const COIN_KEY = "COIN_KEY";
 /**
 * This class contains all objects with information about current level env like Level, Monsters, Player etc
 */
@@ -34,7 +36,8 @@ export default class Env {
     step :     Phaser.Sound,
     hit:       Phaser.Sound,
     stepBlock: Phaser.Sound,
-    miss:     Phaser.Sound
+    miss:     Phaser.Sound,
+    gold:     Phaser.Sound
   }
   /**
   * Current map
@@ -68,6 +71,7 @@ export default class Env {
   */
   public characters      : CharactersGrid;
 
+  private coinEmitter     : Phaser.Particles.Arcade.Emitter;
 
   /**
   * Current game
@@ -82,7 +86,8 @@ export default class Env {
       step: this.game.add.audio(MOVE_SOUND),
       hit: this.game.add.audio(HIT_SOUND),
       stepBlock: this.game.add.audio(MOVE_BLOCKED_SOUND),
-      miss: this.game.add.audio(MISS_SOUND)
+      miss: this.game.add.audio(MISS_SOUND),
+      gold: this.game.add.audio(GOLD_SOUND)
     }
 
     this.level           = new Level(this.screen, 'tileset', 100, 100);
@@ -93,6 +98,10 @@ export default class Env {
     this.monsters        = new MonstersManager(this);
     this.narration       = new NarrationManager(this);
     this.inventory       = new InventoryManager();
+
+    this.coinEmitter     = this.game.add.emitter(0,0, 100);
+    this.coinEmitter.makeParticles(COIN_KEY);
+    this.coinEmitter.gravity = 200;
   }
 
   /**
@@ -121,6 +130,18 @@ export default class Env {
   }
 
   /**
+  * Spray coins at location
+  * @param number of coins to spray
+  * @param tile position
+  */
+  public sprayCoins(coins : number, x : number, y : number) : void {
+    this.coinEmitter.x = x * TILE_SIZE + TILE_CENTER;
+    this.coinEmitter.y = y * TILE_SIZE + TILE_CENTER;
+    this.coinEmitter.start(true, 500, null, Math.floor(coins / 2 + 2));
+    this.game.world.bringToTop(this.coinEmitter);
+  }
+
+  /**
   * Spawns new player
   */
   public spawnPlayer() {
@@ -138,9 +159,11 @@ export default class Env {
   }
 
   public static preload(load : Phaser.Loader) {
+    load.image(COIN_KEY, require('ui/coin.png'));
     load.audio(HIT_SOUND,  require('audio/snd_hit.mp3'));
     load.audio(MOVE_SOUND, require('audio/snd_step.mp3'));
     load.audio(MISS_SOUND, require('audio/snd_miss.mp3'));
     load.audio(MOVE_BLOCKED_SOUND, require('audio/snd_step_block.mp3'));
+    load.audio(GOLD_SOUND, require('audio/snd_gold.mp3'));
   }
 }

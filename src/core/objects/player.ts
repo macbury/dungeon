@@ -44,7 +44,7 @@ export default class Player extends Character {
     this.baseStats.defense = 1;
     this.baseStats.attack  = 4;
     this.baseStats.evasion = 4;
-    this.baseStats.accuracy = 4;
+    this.baseStats.accuracy = 5;
   }
 
   /**
@@ -102,8 +102,12 @@ export default class Player extends Character {
   public pickedObject(turnDirector : TurnDirector) : boolean {
     if (this.objects.isCollectable(this.tilePosition.x, this.tilePosition.y)) {
       let collectable : CollectableItem = <CollectableItem>this.objects.get(this.tilePosition.x, this.tilePosition.y);
-      this.env.inventory.add(collectable.item);
       turnDirector.addSingle(new PendingPickObjectAction(this.env, collectable));
+      if (collectable.item.consumeOnPick) {
+        collectable.item.use(this.env, turnDirector);
+      } else {
+        this.env.inventory.add(collectable.item);
+      }
       return true;
     }
     return false;

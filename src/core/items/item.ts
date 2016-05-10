@@ -1,13 +1,23 @@
-
+import { TurnDirector } from '../objects/pending_actions/pending_turn_actions';
+import Env from '../env';
 /**
 * Base class for all items in game
 */
 abstract class Item {
   protected game : Phaser.Game;
+  /**
+  * If true this item will be used after its is picked
+  */
+  public consumeOnPick : boolean;
 
   constructor(game : Phaser.Game) {
     this.game = game;
   }
+
+  /**
+  * Use item
+  */
+  public abstract use(env : Env, turnDirector : TurnDirector) : void;
 
   /**
   * Returns item icon name for texture

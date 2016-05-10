@@ -39,6 +39,13 @@ abstract class Weapon extends Item implements StatsProvider {
   * Pefrorm attack, calculate damage and create {PendingTurnAction}
   */
   abstract performAttack(target : Player | Character | Mob, env : Env, turnDirector : TurnDirector) : void;
+
+  /**
+  * Equip current weapon
+  */
+  public use(env : Env, turnDirector : TurnDirector) : void {
+    console.warn("Implement equiping weapons");
+  }
 }
 
 export default Weapon;

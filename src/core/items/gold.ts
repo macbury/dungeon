@@ -1,7 +1,9 @@
 import Item from './item';
-
-const GOLD_ICON_FILE = require('ui/gold.png');
+import { TurnDirector } from '../objects/pending_actions/pending_turn_actions';
+import Env from '../env';
+import PendingUseCoinsAction from '../objects/pending_actions/pending_use_coins_action';
 const GOLD_KEY = "GOLD_KEY";
+
 /**
 * Main currency in game
 */
@@ -10,6 +12,7 @@ export default class Gold extends Item {
   constructor(game : Phaser.Game, amount : number) {
     super(game);
     this.amount = amount;
+    this.consumeOnPick = true;
   }
 
   public getIconName() : string {
@@ -17,7 +20,7 @@ export default class Gold extends Item {
   }
 
   public static preload(load : Phaser.Loader) : void {
-    load.image(GOLD_KEY, GOLD_ICON_FILE);
+    load.image(GOLD_KEY, require('ui/gold.png'));
   }
 
   public get name() {
@@ -25,6 +28,11 @@ export default class Gold extends Item {
   }
 
   public get description() {
-    return "Shiny gold coins";
+    return "A pile of gold coins. Collect them to spend them later in a shop.";
+  }
+
+  public use(env : Env, turnDirector : TurnDirector) : void {
+    turnDirector.addSingle(new PendingUseCoinsAction(env, env.player, this.amount));
+    console.warn("This should add gold to player inventory");
   }
 }
