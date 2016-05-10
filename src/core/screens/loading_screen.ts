@@ -4,11 +4,12 @@ import HealthBar from '../ui/health_bar';
 import { preloadItems } from '../items/items';
 import { preloadMonsters } from '../objects/monsters';
 import Player from '../objects/player';
+import { NARRATOR_TEXT_STYLE_INFO } from '../consts';
 /**
 * This screen shows loading screen...
 **/
 export default class LoadingScreen extends Phaser.State {
-
+  private loadingText : Phaser.Text;
   public preload() {
     this.game.load.onFileComplete.add(this.updateLabelProgress, this);
 
@@ -19,10 +20,12 @@ export default class LoadingScreen extends Phaser.State {
     preloadItems(this.load);
     preloadMonsters(this.load);
     Player.preload(this.load);
+
+    this.loadingText = this.add.text(10,10, "Loading... ", NARRATOR_TEXT_STYLE_INFO)
   }
 
   private updateLabelProgress(progress, cacheKey, success, totalLoaded, totalFiles) {
-    console.debug(`Loading: ${progress}%`);
+    this.loadingText.text = `Loading: ${progress}%`;
   }
 
   public create() {

@@ -44,6 +44,7 @@
     "style-loader": "^0.13.1",
     "typescript": "^1.8.9",
     "typings": "^0.8.1",
+    "url-loader": "^0.5.7",
     "webpack": "^1.13.0",
     "webpack-cordova-plugin": "^0.1.6",
     "webpack-dev-server": "^1.14.1",
