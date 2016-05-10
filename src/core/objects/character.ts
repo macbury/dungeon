@@ -74,7 +74,6 @@ abstract class Character extends GameObject implements StatsProvider {
     this.env.characters.set(this.virtualPosition.x, this.virtualPosition.y, null);
     super.setTilePosition(x,y);
     this.env.characters.set(this.virtualPosition.x, this.virtualPosition.y, this);
-
   }
 
   /**
@@ -126,8 +125,6 @@ abstract class Character extends GameObject implements StatsProvider {
         }
       }
     }
-
-    this.env.characters.set(this.tilePosition.x, this.tilePosition.y, null);
   }
 
   /**
@@ -220,7 +217,10 @@ abstract class Character extends GameObject implements StatsProvider {
     return this.tilePosition.distance(target.tilePosition, true);
   }
 
-
+  public destroy(destroyChildren?: boolean, soft?: boolean) {
+    super.destroy(destroyChildren, soft);
+    this.env.characters.set(this.tilePosition.x, this.tilePosition.y, null);
+  }
 }
 
 export default Character;

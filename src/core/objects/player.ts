@@ -1,17 +1,15 @@
 import Character from './character';
 import Mob from './mob';
-import Weapon from '../items/weapons/weapon';
 import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
 import { PendingPlayerMoveAction, PendingPlayerMoveBlockedAction } from './pending_actions/pending_move_action';
 import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_actions';
 import Env from '../env';
-import Fist from '../items/weapons/fist';
-import Sword from '../items/weapons/sword';
+import { Fist, Sword, Corpse, Item, Weapon } from '../items/items';
 import { Stats } from '../rpg/stats';
-import Item from '../items/item';
 import CollectableItem from './collectable_item';
 import PendingPickObjectAction from './pending_actions/pending_pick_object_action';
+import PendingPlayerDieAction from './pending_actions/pending_player_die_action';
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -40,7 +38,7 @@ export default class Player extends Character {
   protected setupStatsAndEquipment() {
     this.fistWeapon        = new Fist(this.game, this);
     this.mainWeapon        = new Sword(this.game, this);
-    this.baseStats.health  = 48;
+    this.baseStats.health  = 4;
     this.baseStats.defense = 1;
     this.baseStats.attack  = 4;
     this.baseStats.evasion = 4;
@@ -139,7 +137,6 @@ export default class Player extends Character {
   }
 
   protected getItemsToDrop() : Item[] {
-    console.warn("Implement this");
-    return [];
+    return [new Corpse(this.game)];
   }
 }

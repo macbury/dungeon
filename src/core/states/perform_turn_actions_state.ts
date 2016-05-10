@@ -129,10 +129,6 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
   private calculateRestOfActions() : boolean {
     var turnShouldStop : boolean = false;
 
-    if (this.player.afterTurn(this.turnDirector)) {
-      turnShouldStop = true;
-    }
-
     for (let j = 0; j < this.monsters.length; j++) {
       var mob : Mob = this.monsters.get(j);
 
@@ -145,6 +141,10 @@ export default class PerformTurnActionsState extends BaseDungeonScreenState {
       if (mob.afterTurn(this.turnDirector)) {
         turnShouldStop = true;
       }
+    }
+
+    if (this.player.afterTurn(this.turnDirector)) {
+      turnShouldStop = true;
     }
 
     return turnShouldStop;
