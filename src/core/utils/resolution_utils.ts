@@ -16,14 +16,21 @@ export default class ResolutionUtils {
   * Recalculate game size and etc
   */
   public recalculate() : void {
-    const MAX_TILE_COUNT_FOR_SMALLES_SIDE : number = 12;
-    const MAX_SIZE_USING_TILE_SIZE : number        = MAX_TILE_COUNT_FOR_SMALLES_SIDE * TILE_SIZE;
-
+    const MAX_SIZE_USING_TILE_SIZE : number        = this.tileCountForSmallSide * TILE_SIZE;
 
     let smallestSideScale : number                 = this.smallestSideSize / MAX_SIZE_USING_TILE_SIZE;
     this.scale                                     = smallestSideScale;
     this.canvas.width                              = Math.round(this.realLargestSideSize / smallestSideScale);
     this.canvas.height                             = Math.round(this.smallestSideSize / this.scale);
+  }
+
+  public get tileCountForSmallSide() {
+    switch(Math.round(window.devicePixelRatio)) {
+      case 1:
+        return 10;
+      default:
+        return 8;
+    }
   }
 
   public get maxCanvasSize() : number {
