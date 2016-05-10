@@ -11,6 +11,7 @@ import {TurnDirector} from './objects/pending_actions/pending_turn_actions';
 import { CollectableItem, Item } from './items/items';
 import { AROUND } from './consts';
 import PendingDropAction from './objects/pending_actions/pending_drop_action';
+import InventoryManager from './inventory_manager';
 
 const MOVE_SOUND  = 'MOVE_SOUND';
 const MOVE_BLOCKED_SOUND  = 'MOVE_BLOCKED_SOUND';
@@ -52,6 +53,10 @@ export default class Env {
   */
   public player          : Player;
 
+  /**
+  * List of items that player have
+  */
+  public inventory       : InventoryManager;
 
   /**
   * List of all chests, dropped items etc in level
@@ -87,6 +92,7 @@ export default class Env {
     this.objects         = new ObjectsGrid(this.level);
     this.monsters        = new MonstersManager(this);
     this.narration       = new NarrationManager(this);
+    this.inventory       = new InventoryManager();
   }
 
   /**

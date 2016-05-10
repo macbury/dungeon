@@ -15,6 +15,22 @@ abstract class Item {
   public abstract getIconName() : string;
 
   /**
+  * Name of character displayed in ui
+  */
+  public get name() {
+    console.warn("Implement name getter for this item");
+    return "This item dont have name";
+  }
+
+  /**
+  * Description of character that will be displayed in ui
+  */
+  public get description() {
+    console.warn("Implement description getter for this item");
+    return "This item dont have description";
+  }
+
+  /**
   * Returns texture assigned with item
   */
   public getIconImage() : PIXI.BaseTexture {

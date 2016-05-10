@@ -19,4 +19,12 @@ export default class Gold extends Item {
   public static preload(load : Phaser.Loader) : void {
     load.image(GOLD_KEY, GOLD_ICON_FILE);
   }
+
+  public get name() {
+    return `${this.amount} gold`;
+  }
+
+  public get description() {
+    return "Shiny gold coins";
+  }
 }

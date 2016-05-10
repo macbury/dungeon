@@ -11,6 +11,7 @@ import Sword from '../items/weapons/sword';
 import { Stats } from '../rpg/stats';
 import Item from '../items/item';
 import CollectableItem from './collectable_item';
+import PendingPickObjectAction from './pending_actions/pending_pick_object_action';
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -99,10 +100,10 @@ export default class Player extends Character {
   * Player will try to pick item beneath him. If there is item then it adds pending action, updates inventory and returns true
   */
   public pickedObject(turnDirector : TurnDirector) : boolean {
-    console.warn("Implement object picking");
     if (this.objects.isCollectable(this.tilePosition.x, this.tilePosition.y)) {
       let collectable : CollectableItem = <CollectableItem>this.objects.get(this.tilePosition.x, this.tilePosition.y);
-      console.log(collectable);
+      this.env.inventory.add(collectable.item);
+      turnDirector.addSingle(new PendingPickObjectAction(this.env, collectable));
       return true;
     }
     return false;

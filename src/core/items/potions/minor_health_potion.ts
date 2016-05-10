@@ -11,4 +11,12 @@ export default class MinorHealthPotion extends Item {
   public getIconName() : string {
     return KEY;
   }
+
+  public get name() {
+    return "Minor Health potion";
+  }
+
+  public get description() {
+    return "Regenerates 30% of health";
+  }
 }
