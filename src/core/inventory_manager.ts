@@ -1,5 +1,6 @@
 import {Item, MinorHealthPotion} from './items/items';
-
+import { TurnDirector } from './objects/pending_actions/pending_turn_actions';
+import Env from './env';
 /**
 * Describes stacks of items in inventory
 */
@@ -41,6 +42,19 @@ export class InventoryManager {
   public add(item : Item) {
     let itemSlot : InventorySlot = this.findOrCreateSlot(item);
     itemSlot.push(item);
+  }
+
+  /**
+  * Use item. If there is no item of this type in inventory return false.
+  */
+  public use(itemType : any, env: Env, turnDirector : TurnDirector) : boolean {
+    let item : Item = this.remove(itemType);
+    if (item != null) {
+      item.use(env, turnDirector);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /**
