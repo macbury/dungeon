@@ -13,7 +13,7 @@ export default class PendingDieAction extends PendingTurnAction<Character> {
       this.owner.destroy();
       this.onCompleteSignal.dispatch();
     });
-
+    this.env.sounds.death.play();
     tween.start();
   }
 

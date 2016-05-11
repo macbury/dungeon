@@ -80,6 +80,7 @@
     "./src/lib/path_finder_plugin.ts",
     "./test/hello.spec.ts",
     "./test/inventory.spec.ts",
+    "./test/objects/character.spec.ts",
     "./test/rpg/health.spec.ts",
     "./test/rpg/stats.spec.ts"
   ],

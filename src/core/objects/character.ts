@@ -225,6 +225,13 @@ abstract class Character extends GameObject implements StatsProvider {
   }
 
   /**
+  * Return true if character is facing target and is in its line of sight
+  */
+  public canSee(target : GameObject) : boolean {
+    return this.isFacing(target) && this.inLineOfSight(target);
+  }
+
+  /**
   * Remove character
   */
   public destroy(destroyChildren?: boolean, soft?: boolean) {

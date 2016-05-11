@@ -21,7 +21,7 @@ export default class Fist extends Weapon {
   * Return true if attacker can atack target using this weapon
   */
   public canAttack(target : Player | Character | Mob | GameObject, env : Env) : boolean {
-    return this.owner.distance(target) == 1 && this.owner.isFacing(target) && this.owner.inLineOfSight(target);
+    return this.owner.distance(target) == 1 && this.owner.canSee(target);
   }
 
   /**
