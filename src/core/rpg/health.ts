@@ -20,6 +20,7 @@ export default class Health {
   constructor(statsManager : StatsManager) {
     this.stats    = statsManager;
     this._current = this.max;
+    this._visual  = this._current;
     this.onUpdate = new Phaser.Signal();
   }
 
@@ -71,6 +72,8 @@ export default class Health {
     if (this._current < 0) {
       this._current = 0;
     }
+
+    this.onUpdate.dispatch();
   }
 
   /*
@@ -103,8 +106,8 @@ export default class Health {
   */
   public regenerate() {
     this._current += Math.round(REGENERATION_FACTOR * this.max);
-    this.onUpdate.dispatch();
     this.clamp();
+    this.onUpdate.dispatch();
   }
 
   public setToMax() : void {

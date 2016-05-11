@@ -19,17 +19,21 @@ export default class ResolutionUtils {
     const MAX_SIZE_USING_TILE_SIZE : number        = this.tileCountForSmallSide * TILE_SIZE;
 
     let smallestSideScale : number                 = this.smallestSideSize / MAX_SIZE_USING_TILE_SIZE;
+
     this.scale                                     = smallestSideScale;
     this.canvas.width                              = Math.round(this.realLargestSideSize / smallestSideScale);
     this.canvas.height                             = Math.round(this.smallestSideSize / this.scale);
   }
 
   public get tileCountForSmallSide() {
+    let currentTileCount : number = Math.round(this.smallestSideSize / TILE_SIZE);
     switch(Math.round(window.devicePixelRatio)) {
       case 1:
         return 10;
+      case 2:
+        return 10;
       default:
-        return 8;
+        return Math.max(currentTileCount, 8);
     }
   }
 
