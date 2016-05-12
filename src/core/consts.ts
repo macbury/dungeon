@@ -31,6 +31,7 @@ export const CURSOR_ANIMATION_SPEED : number = 150;
 * Speed of player and monster objects
 */
 export const GAME_OBJECT_FRAME_RATE : number = 4;
+export const DEATH_FRAME_RATE : number = 8;
 
 export const UP : Phaser.Point    = new Phaser.Point(0, -1);
 export const DOWN : Phaser.Point  = new Phaser.Point(0, 1);
