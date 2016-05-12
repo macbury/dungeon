@@ -15,6 +15,13 @@ export default class Level {
   }
 
   /**
+  * Current experience
+  */
+  public get experience() : number {
+    return this._exp;
+  }
+
+  /**
   * @return true if reached next level
   */
   public gain(experience : number) : boolean {

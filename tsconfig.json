@@ -85,6 +85,7 @@
     "./test/inventory.spec.ts",
     "./test/objects/character.spec.ts",
     "./test/rpg/health.spec.ts",
+    "./test/rpg/level.spec.ts",
     "./test/rpg/stats.spec.ts"
   ],
   "atom": {
