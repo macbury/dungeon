@@ -5,7 +5,7 @@ import PathFinderPlugin from '../../lib/path_finder_plugin';
 import TurnStates from '../states/turn_states';
 
 import Cursor from '../ui/cursor';
-import HealthBar from '../ui/health_bar';
+import PlayerHealthBar from '../ui/player_health_bar';
 import Level from '../level';
 
 import MonstersManager from '../monsters_manager';
@@ -24,7 +24,7 @@ import Env from '../env';
 */
 export default class DungeonScreen extends Phaser.State {
   public cursor           : Cursor;
-  public healthBar        : HealthBar;
+  public healthBar        : PlayerHealthBar;
   public gameObjectsLayer : Phaser.Group;
   public uiLayer          : Phaser.Group;
   public itemsLayer       : Phaser.Group;
@@ -39,7 +39,7 @@ export default class DungeonScreen extends Phaser.State {
 
   public preload() : void {
     Env.preload(this.load);
-    HealthBar.preload(this.load);
+    PlayerHealthBar.preload(this.load);
   }
 
   public create() : void {
@@ -62,7 +62,7 @@ export default class DungeonScreen extends Phaser.State {
 
     this.env.spawnPlayer();
 
-    this.healthBar = new HealthBar(this.game, this.env.player);
+    this.healthBar = new PlayerHealthBar(this.game, this.env.player);
     this.healthBar.position.x = this.healthBar.position.y = 2;
 
     this.cursor   = new Cursor(this.game);
@@ -85,6 +85,7 @@ export default class DungeonScreen extends Phaser.State {
 
   public resize() : void {
     this.env.level.resize();
+    this.healthBar.resize();
   }
 
   public update() : void {

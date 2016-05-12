@@ -1,6 +1,5 @@
 import * as Phaser from 'phaser';
 import Env from '../env';
-import HealthBar from '../ui/health_bar';
 import { preloadItems } from '../items/items';
 import { preloadMonsters } from '../objects/monsters';
 import Player from '../objects/player';
@@ -16,7 +15,6 @@ export default class LoadingScreen extends Phaser.State {
     this.load.image('cursor',  require('cursor.png'));
     this.load.image('tileset', require('tileset.png'));
     Env.preload(this.load);
-    HealthBar.preload(this.load);
     preloadItems(this.load);
     preloadMonsters(this.load);
     Player.preload(this.load);

@@ -30,8 +30,6 @@ export default class ResolutionUtils {
     switch(Math.round(window.devicePixelRatio)) {
       case 1:
         return 10;
-      case 2:
-        return 10;
       default:
         return Math.max(currentTileCount, 8);
     }

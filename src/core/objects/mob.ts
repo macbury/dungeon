@@ -5,11 +5,16 @@ import DungeonScreen from '../screens/dungeon_screen';
 import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_actions';
 import { PendingMoveAction } from './pending_actions/pending_move_action';
 import Env from '../env';
+import MobHealthBar from '../ui/mob_health_bar';
+
+const HEALTH_BAR_OFFSET : number = -4;
+const MAX_DISTANCE_TO_SEE_MONSTER_HP : number = 3;
 /**
 * Monster object
 */
 abstract class Mob extends Character {
   private idleAnimation : Phaser.Animation;
+  private healthBar     : MobHealthBar;
 
   constructor(env : Env, spriteKey: string, parent? : PIXI.DisplayObjectContainer) {
     super(env, parent);
@@ -19,6 +24,9 @@ abstract class Mob extends Character {
 
     this.idleAnimation = this.sprite.animations.add('idle', [0, 1], GAME_OBJECT_FRAME_RATE, true);
     this.idleAnimation.play();
+    this.healthBar     = new MobHealthBar(this.game, this.health);
+    this.healthBar.y   = HEALTH_BAR_OFFSET;
+    this.add(this.healthBar);
   }
 
   /**
@@ -37,6 +45,14 @@ abstract class Mob extends Character {
       return true;
     } else {
       return false;
+    }
+  }
+
+  public update() {
+    super.update();
+
+    if (this.visible) {
+      this.healthBar.visible = (this.distance(this.env.player) <= MAX_DISTANCE_TO_SEE_MONSTER_HP || this.health.isNotMax());
     }
   }
 

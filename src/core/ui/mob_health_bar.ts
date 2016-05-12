@@ -1,14 +1,14 @@
-import Character from '../objects/character';
+import { TILE_SIZE } from '../consts';
+import Health from '../rpg/health';
 
-const HEALTH_BAR_WIDTH : number  = 120;
-const HEALTH_BAR_HEIGHT : number = 5;
-
+const HEALTH_BAR_WIDTH  : number = TILE_SIZE;
+const HEALTH_BAR_HEIGHT : number = 2;
 var cachedHealthBarBackground : Phaser.BitmapData;
 var cachedHealthBarForeground : Phaser.BitmapData;
 
 function healthForegroundBitmapData(game : Phaser.Game) : Phaser.BitmapData {
   if (cachedHealthBarForeground == null){
-    cachedHealthBarForeground = game.add.bitmapData(HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
+    cachedHealthBarForeground = game.add.bitmapData(TILE_SIZE, 2);
     cachedHealthBarForeground.ctx.fillStyle = "#6daa2c";
     cachedHealthBarForeground.ctx.beginPath();
     cachedHealthBarForeground.ctx.rect(0, 0, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT);
@@ -29,16 +29,18 @@ function healthBarBitmapData(game : Phaser.Game) : Phaser.BitmapData {
 }
 
 /**
-* This ui component display character health. The healthbar is only updated by pending actions
+* Display health bar above monster
 */
-export default class HealthBar extends Phaser.Group {
-  private character : Character;
+export default class MobHealthBar extends Phaser.Group {
   private barSprite : Phaser.Sprite;
   private bgSprite  : Phaser.Sprite;
-  constructor(game: Phaser.Game, character : Character) {
+  private health    : Health;
+
+  constructor(game: Phaser.Game, health : Health) {
     super(game);
-    this.character     = character;
-    character.health.onUpdate.add(this.updateHealthFrame, this);
+    this.health = health;
+    health.onUpdate.add(this.updateHealth, this);
+
     this.drawBar();
   }
 
@@ -47,17 +49,12 @@ export default class HealthBar extends Phaser.Group {
     this.bgSprite = this.game.add.sprite(0,0, healthBarBitmapData(this.game));
     this.add(this.bgSprite);
     this.add(this.barSprite);
-    this.barSprite.fixedToCamera = this.bgSprite.fixedToCamera = true;
+    this.updateHealth();
   }
 
-  /**
-  * Update frame of healthbar to match current healthPercent
-  */
-  private updateHealthFrame() {
+  private updateHealth() : void {
     this.game.add.tween(this.barSprite).to({
-      width: Math.round(this.character.health.visualPercent * HEALTH_BAR_WIDTH)
-    }, 100, Phaser.Easing.Linear.None, true);
+      width: Math.round(this.health.visualPercent * HEALTH_BAR_WIDTH)
+    }, 300, Phaser.Easing.Linear.None, true);
   }
-
-  public static preload(load : Phaser.Loader) : void {}
 }

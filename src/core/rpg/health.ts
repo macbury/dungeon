@@ -38,6 +38,10 @@ export default class Health {
     return this._visual;
   }
 
+  public isNotMax() : boolean {
+    return this._current != this.max;
+  }
+
   /**
   * Set current visual health without moving current health
   */
