@@ -153,7 +153,6 @@ export class PendingTurnActions extends Array<PendingTurnAction<GameObject>> {
   * Dispose references
   */
   public dispose() {
-    this.onComplete = null;
     for (let action of this) {
       action.dispose();
     }
