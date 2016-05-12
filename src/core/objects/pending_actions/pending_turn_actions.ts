@@ -222,7 +222,6 @@ export abstract class PendingTurnAction<T extends GameObject> {
   */
   public dispose() {
     this.env = null;
-    this.onCompleteSignal = null;
     this.owner = null;
   }
 }
