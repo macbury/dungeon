@@ -23,9 +23,7 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     attackTween.onStart.addOnce(() => {
       this.env.sounds.hit.play();
       this.target.health.visual = this.targetHealth;
-      this.target.statusText(`-${this.damage}`).onComplete.addOnce(() => {
-        this.onCompleteSignal.dispatch()
-      });
+      this.target.statusText(`-${this.damage}`).onComplete.addOnce(this.completeAction, this);
     });
 
     return attackTween;
@@ -50,9 +48,7 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
       this.owner.updateSpriteFacingByDirection(this.direction);
       if (this.missed) {
         this.env.sounds.miss.play();
-        this.target.statusText("Miss").onComplete.addOnce(() => {
-          this.onCompleteSignal.dispatch()
-        });
+        this.target.statusText("Miss").onComplete.addOnce(this.completeAction, this);
       } else {
         this.buildAttackSuccessTween().start();
       }

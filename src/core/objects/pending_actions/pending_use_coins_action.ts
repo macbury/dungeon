@@ -18,9 +18,7 @@ export default class PendingUseCoinsAction extends PendingTurnAction<GameObject>
 
   protected performTurn() : void {
     this.env.sprayCoins(this.coins, this.owner.tilePosition.x, this.owner.tilePosition.y);
-    this.env.sounds.gold.onStop.addOnce(() => {
-      this.onCompleteSignal.dispatch();
-    });
+    this.env.sounds.gold.onStop.addOnce(this.completeAction, this);
     this.env.sounds.gold.play();
   }
 

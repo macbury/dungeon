@@ -10,14 +10,30 @@ import {Stats} from '../rpg/stats';
 const HEALTH_BAR_OFFSET : number = -4;
 const MAX_DISTANCE_TO_SEE_MONSTER_HP : number = 3;
 const DEATH_SPRITESHEET : string = 'DEATH_SPRITESHEET';
+
 /**
-* Monster object
+* Monster character
 */
 abstract class Mob extends Character {
-  public idleAnimation : Phaser.Animation;
+
   public deathAnimation : Phaser.Animation;
+  /**
+  * Monster healthbar displayed above
+  */
   private healthBar     : MobHealthBar;
+  /**
+  * How much experience player will gain after killing this mob
+  */
+  protected experience    : number;
+
+  /**
+  * Sprite used for showing puff effect on mob death
+  */
   public deathSprite : Phaser.Sprite;
+  /**
+  * Animation of poof from deathSprite
+  */
+  public idleAnimation : Phaser.Animation;
 
   constructor(env : Env, spriteKey: string, parent? : PIXI.DisplayObjectContainer) {
     super(env, parent);
@@ -28,7 +44,6 @@ abstract class Mob extends Character {
     this.deathSprite = this.game.add.sprite(TILE_CENTER, TILE_CENTER, DEATH_SPRITESHEET, null, this);
     this.deathSprite.anchor.set(0.5,0.5);
     this.deathSprite.visible  = false;
-
 
     this.deathAnimation = this.deathSprite.animations.add('idle', [0, 1, 2, 3, 4], DEATH_FRAME_RATE, true);
     this.idleAnimation  = this.sprite.animations.add('idle', [0, 1], GAME_OBJECT_FRAME_RATE, true);
@@ -81,7 +96,10 @@ abstract class Mob extends Character {
   public die(turnDirector : TurnDirector) {
     super.die(turnDirector);
     this.monsters.remove(this);
-    //todo add drop stuff here
+
+    if (this.experience > 0) {
+      this.player.gainExp(this.experience, turnDirector);
+    }
   }
 
   public static preload(load : Phaser.Loader) {

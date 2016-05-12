@@ -9,10 +9,7 @@ export default class PendingPlayerDieAction extends PendingTurnAction<Player> {
       alpha: 0.0
     }, 100);
     console.log(this.owner);
-    tween.onComplete.addOnce(() => {
-      //this.owner.destroy();
-      this.onCompleteSignal.dispatch();
-    });
+    tween.onComplete.addOnce(this.completeAction, this);
 
     tween.start();
   }

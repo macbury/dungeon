@@ -2,6 +2,7 @@ import { PendingTurnAction } from './pending_turn_actions';
 import Character from '../character';
 import NarrationManager from '../../narration_manager';
 import Mob from '../mob';
+
 export default class PendingDieAction extends PendingTurnAction<Character> {
 
   protected performTurn() : void {
@@ -18,7 +19,7 @@ export default class PendingDieAction extends PendingTurnAction<Character> {
 
     tween.onComplete.addOnce(() => {
       this.owner.destroy();
-      this.onCompleteSignal.dispatch();
+      this.completeAction();
     });
     this.env.sounds.death.play();
     tween.start();

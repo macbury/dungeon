@@ -26,9 +26,7 @@ export default class PendingDropAction extends PendingTurnAction<CollectableItem
       y: [this.owner.y - TILE_CENTER, this.owner.y, this.owner.y - TILE_CENTER / 2, this.owner.y]
     }, 200);
 
-    tween.onComplete.addOnce(() => {
-      this.onCompleteSignal.dispatch();
-    });
+    tween.onComplete.addOnce(this.completeAction, this);
 
     tween.start();
   }

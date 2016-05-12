@@ -31,7 +31,7 @@ export class PendingMoveAction extends PendingTurnAction<Character> {
 
   protected performTurn() {
     var moveTween : Phaser.Tween = this.buildMoveTween();
-    moveTween.onComplete.addOnce(() => { this.onCompleteSignal.dispatch() }, this);
+    moveTween.onComplete.addOnce(this.completeAction, this);
     moveTween.onStart.addOnce(() => {
       this.owner.updateSpriteFacingByDirection(this.direction);
     });
@@ -90,9 +90,7 @@ export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject
     moveTween.onStart.addOnce(() => {
       this.env.sounds.stepBlock.play();
     });
-    moveTween.onComplete.addOnce(() => {
-      this.onCompleteSignal.dispatch();
-    });
+    moveTween.onComplete.addOnce(this.completeAction, this);
 
     moveTween.start();
   }

@@ -16,6 +16,7 @@ export default class Ant extends Mob {
   }
 
   protected setupStatsAndEquipment() {
+    this.experience        = 2;
     this.fistWeapon        = new Fist(this.game, this);
     this.baseStats.health  = 10;
     this.baseStats.attack  = 3;

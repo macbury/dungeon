@@ -9,7 +9,7 @@ export class TurnDirector {
   private actionsToPerform : Array<PendingTurnActions>;
   private singleActionsToPerform : Array<PendingTurnActions>;
   private parellActionsToPerform : PendingTurnActions;
-
+  private currentRunAction : PendingTurnActions;
   constructor() {
     this.clear();
     this.actionsToPerform = [];
@@ -21,6 +21,7 @@ export class TurnDirector {
   public clear() {
     this.singleActionsToPerform = [];
     this.parellActionsToPerform = new PendingTurnActions();
+    this.cleanupOld();
   }
 
   /**
@@ -78,8 +79,19 @@ export class TurnDirector {
   * Pops next turn action and returns on complete callback
   */
   public runNext() : Phaser.Signal {
-    var nextTurnAction : PendingTurnActions = this.actionsToPerform.splice(0,1)[0];
-    return nextTurnAction.run();
+    this.cleanupOld();
+    this.currentRunAction = this.actionsToPerform.splice(0,1)[0];
+    return this.currentRunAction.run();
+  }
+
+  /**
+  * Cleanup references for current running action
+  */
+  private cleanupOld() {
+    if (this.currentRunAction != null) {
+      this.currentRunAction.dispose();
+      this.currentRunAction = null;
+    }
   }
 
   /**
@@ -136,6 +148,16 @@ export class PendingTurnActions extends Array<PendingTurnAction<GameObject>> {
 
     return this.onComplete;
   }
+
+  /**
+  * Dispose references
+  */
+  public dispose() {
+    this.onComplete = null;
+    for (let action of this) {
+      action.dispose();
+    }
+  }
 }
 
 /**
@@ -153,7 +175,7 @@ export abstract class PendingTurnAction<T extends GameObject> {
   /**
   * This signal should be triggered after all action in run is done
   */
-  protected onCompleteSignal : Phaser.Signal;
+  private onCompleteSignal : Phaser.Signal;
 
 
   constructor(env: Env, owner : T) {
@@ -167,6 +189,13 @@ export abstract class PendingTurnAction<T extends GameObject> {
   */
   protected get add() : Phaser.GameObjectFactory {
     return this.env.game.add;
+  }
+
+  /**
+  * Finish current action
+  */
+  protected completeAction() {
+    this.onCompleteSignal.dispatch();
   }
 
   /**
@@ -186,5 +215,14 @@ export abstract class PendingTurnAction<T extends GameObject> {
     this.turnDescription(this.env.narration);
     this.performTurn();
     return this.onCompleteSignal;
+  }
+
+  /**
+  * Dispose associations to world here for better GC working
+  */
+  public dispose() {
+    this.env = null;
+    this.onCompleteSignal = null;
+    this.owner = null;
   }
 }

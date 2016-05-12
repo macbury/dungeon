@@ -19,10 +19,11 @@ export default class Slime extends Mob {
   }
 
   protected setupStatsAndEquipment() {
-    this.fistWeapon        = new Fist(this.game, this);
-    this.baseStats.health  = 8;
-    this.baseStats.attack  = 4;
-    this.baseStats.defense = 2;
+    this.experience         = 1;
+    this.fistWeapon         = new Fist(this.game, this);
+    this.baseStats.health   = 8;
+    this.baseStats.attack   = 4;
+    this.baseStats.defense  = 2;
     this.baseStats.accuracy = 4;
     this.baseStats.evasion  = 3;
   }

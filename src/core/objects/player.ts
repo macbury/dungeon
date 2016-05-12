@@ -4,12 +4,14 @@ import { TILE_CENTER, TILE_SIZE, GAME_OBJECT_FRAME_RATE, PLAYER_MOVE_SPEED } fro
 import DungeonScreen from '../screens/dungeon_screen';
 import { PendingPlayerMoveAction, PendingPlayerMoveBlockedAction } from './pending_actions/pending_move_action';
 import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_actions';
+import PendingPlayerExperienceGainAction from './pending_actions/pending_player_experience_gain_action';
 import Env from '../env';
 import { Fist, Sword, Corpse, Item, Weapon } from '../items/items';
 import { Stats } from '../rpg/stats';
 import CollectableItem from './collectable_item';
 import PendingPickObjectAction from './pending_actions/pending_pick_object_action';
 import PendingPlayerDieAction from './pending_actions/pending_player_die_action';
+import Level from '../rpg/level';
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -25,6 +27,10 @@ export default class Player extends Character {
   * This weapon is used if there is no mainWeapon setted
   */
   public fistWeapon     : Fist;
+  /**
+  * Current player level
+  */
+  public level          : Level;
 
   constructor(env : Env, parent? : PIXI.DisplayObjectContainer) {
     super(env, parent);
@@ -36,6 +42,7 @@ export default class Player extends Character {
   }
 
   protected setupStatsAndEquipment() {
+    this.level             = new Level();
     this.fistWeapon        = new Fist(this.game, this);
     this.mainWeapon        = new Sword(this.game, this);
     this.baseStats.health  = 48;
@@ -134,6 +141,14 @@ export default class Player extends Character {
   public get description() {
     //TODO Change this
     return "Our main hero";
+  }
+
+  /**
+  * Adds experience points to player and create pending action with effect for leveling
+  */
+  public gainExp(experience : number, turnDirector : TurnDirector) {
+    let gainLevel : boolean = this.level.gain(experience);
+    turnDirector.addSingle(new PendingPlayerExperienceGainAction(this.env, this, experience, gainLevel));
   }
 
   protected getItemsToDrop() : Item[] {
