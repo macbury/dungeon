@@ -17,14 +17,9 @@ export class StatsManager {
   private statsProviders : Array<StatsProvider>;
   private _stats : Array<Stats>;
 
-  private _cacheAttack : MinMaxStat;
-  private _cacheDefense : MinMaxStat;
-
   constructor() {
     this.statsProviders = [];
     this._stats         = [];
-    this._cacheAttack   = new MinMaxStat();
-    this._cacheDefense   = new MinMaxStat();
   }
 
   /**
@@ -179,10 +174,7 @@ export class Stats {
   * Resistance. Determines magical defense power.
   */
   public resistance : number;
-  /**
-  * Luck. Determines various things, from critical attack to item drop rate , or something elsa.
-  */
-  public luck : number;
+
 
   constructor() {
     this.reset();
@@ -196,7 +188,6 @@ export class Stats {
     this.evasion = 0;
     this.intelligence = 0;
     this.resistance = 0;
-    this.luck = 0;
   }
 }
 

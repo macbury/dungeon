@@ -1,6 +1,6 @@
 import { TILE_SIZE, PLAYER_MOVE_SPEED } from '../consts';
 import DungeonScreen from '../screens/dungeon_screen';
-import Level from '../level';
+import Map from '../map';
 import Player from './player';
 import ObjectsGrid from '../objects_grid';
 import MonstersManager from '../monsters_manager';
@@ -29,8 +29,8 @@ abstract class GameObject extends Phaser.Group {
   /**
   * Reference to current level
   */
-  protected get level() : Level {
-    return this.env.level;
+  protected get map() : Map {
+    return this.env.map;
   }
 
   /**

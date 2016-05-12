@@ -13,6 +13,10 @@ import CollectableItem from './collectable_item';
 */
 abstract class Character extends GameObject implements StatsProvider {
   /**
+  * Signal triggered after player die
+  */
+  public onDie : Phaser.Signal;
+  /**
   * Sprite with character
   */
   public sprite : Phaser.Sprite;
@@ -34,6 +38,7 @@ abstract class Character extends GameObject implements StatsProvider {
 
   constructor(env : Env, parent? : PIXI.DisplayObjectContainer) {
     super(env, parent);
+    this.onDie     = new Phaser.Signal();
     this.direction = new Phaser.Point();
     this.baseStats = new Stats();
     this.stats     = new StatsManager();
@@ -58,7 +63,7 @@ abstract class Character extends GameObject implements StatsProvider {
   * Returns true if passed tile position is passable
   */
   public isPassable(otherTilePoint : Phaser.Point) : boolean {
-    return this.level.isPassable(otherTilePoint) && this.characters.get(otherTilePoint.x, otherTilePoint.y) == null;
+    return this.map.isPassable(otherTilePoint) && this.characters.get(otherTilePoint.x, otherTilePoint.y) == null;
   }
 
   /**
@@ -125,6 +130,8 @@ abstract class Character extends GameObject implements StatsProvider {
         }
       }
     }
+
+    this.onDie.dispatch(this);
   }
 
   /**
@@ -160,7 +167,8 @@ abstract class Character extends GameObject implements StatsProvider {
     hideTextTween.delay(100);
 
     var moveTextTween : Phaser.Tween = this.game.add.tween(text).to({
-      y: 0
+      y: 0,
+      x: this.game.rnd.between(0, TILE_SIZE)
     }, 250, Phaser.Easing.Cubic.Out);
     moveTextTween.chain(hideTextTween);
     hideTextTween.onComplete.addOnce(() => {
@@ -181,7 +189,7 @@ abstract class Character extends GameObject implements StatsProvider {
     lineOfSight.end.setTo(this.virtualPosition.x * TILE_SIZE + TILE_CENTER, this.virtualPosition.y * TILE_SIZE + TILE_CENTER);
     lineOfSight.start.setTo(target.virtualPosition.x * TILE_SIZE + TILE_CENTER, target.virtualPosition.y * TILE_SIZE + TILE_CENTER);
     //TODO iterate over tiles and check if all tiles are passable and there is no characters
-    let rayTiles : Phaser.Tile[] = this.level.groundLayer.getRayCastTiles(lineOfSight)
+    let rayTiles : Phaser.Tile[] = this.map.groundLayer.getRayCastTiles(lineOfSight)
     console.debug("Checking line of sight", [
       lineOfSight.start,
       lineOfSight.end
@@ -191,7 +199,7 @@ abstract class Character extends GameObject implements StatsProvider {
       var tile : Phaser.Tile = rayTiles[i];
       cursor.set(tile.x, tile.y);
       //console.debug("Tile:", tile.collides);
-      if (!this.level.isPassable(cursor)) {
+      if (!this.map.isPassable(cursor)) {
         //console.debug("Tile not passable", tile.index);
         return false;
       }

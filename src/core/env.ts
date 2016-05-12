@@ -1,4 +1,4 @@
-import Level from './level';
+import Map from './map';
 import DungeonScreen from './screens/dungeon_screen';
 import MonstersManager from './monsters_manager';
 import CharactersGrid from './characters_grid';
@@ -47,7 +47,7 @@ export default class Env {
   /**
   * Current map
   */
-  public level        : Level;
+  public map          : Map;
   /**
   * Game screen
   */
@@ -76,6 +76,11 @@ export default class Env {
   */
   public characters      : CharactersGrid;
 
+  /**
+  * Current floor that player occupies. Higher floor makes monster more powerfull
+  */
+  public floor : number;
+
   private coinEmitter     : Phaser.Particles.Arcade.Emitter;
 
   /**
@@ -86,6 +91,7 @@ export default class Env {
   }
 
   constructor(screen : DungeonScreen) {
+    this.floor          = 1;
     this.screen         = screen;
     this.sounds         = {
       step: this.game.add.audio(MOVE_SOUND),
@@ -97,11 +103,11 @@ export default class Env {
       death: this.game.add.audio(DEATH_SOUND)
     }
 
-    this.level           = new Level(this.screen, 'tileset', 100, 100);
-    this.level.generate();
-    this.level.setupPathFinding(this.screen.pathFinding);
-    this.characters      = new CharactersGrid(this.level);
-    this.objects         = new ObjectsGrid(this.level);
+    this.map           = new Map(this.screen, 'tileset', 100, 100);
+    this.map.generate();
+    this.map.setupPathFinding(this.screen.pathFinding);
+    this.characters      = new CharactersGrid(this.map);
+    this.objects         = new ObjectsGrid(this.map);
     this.monsters        = new MonstersManager(this);
     this.narration       = new NarrationManager(this);
     this.inventory       = new InventoryManager();
@@ -124,7 +130,7 @@ export default class Env {
     for (let i = 0; i < AROUND.length; i++) {
       cursor.set(AROUND[i].x, AROUND[i].y).add(origin.x, origin.y);
 
-      if (this.level.isPassable(cursor) && this.objects.isEmpty(cursor.x, cursor.y)) {
+      if (this.map.isPassable(cursor) && this.objects.isEmpty(cursor.x, cursor.y)) {
         let collectableItem : CollectableItem = new CollectableItem(this, item);
         collectableItem.setTilePosition(cursor.x, cursor.y);
         this.screen.itemsLayer.add(collectableItem);
@@ -162,7 +168,7 @@ export default class Env {
   }
 
   public update() {
-    this.level.update();
+    this.map.update();
   }
 
   public static preload(load : Phaser.Loader) {

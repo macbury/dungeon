@@ -1,5 +1,5 @@
 import ObjectItem from './objects/object_item';
-import Level from './level';
+import Map from './map';
 import CollectableItem from './objects/collectable_item';
 /**
 * Contains grid of all game objects like chest, plants or dropped item in level
@@ -9,9 +9,9 @@ export default class CharactersGrid {
   private columns : number;
   private rows    : number;
 
-  constructor(level : Level) {
-    this.columns = level.width;
-    this.rows    = level.height;
+  constructor(map : Map) {
+    this.columns = map.width;
+    this.rows    = map.height;
 
     this._grid   = [];
 

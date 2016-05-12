@@ -18,7 +18,7 @@ export default class MonstersManager {
   * Spawn new monster at specified position
   */
   public spawn(MobKlass: new (env: Env) => Mob, tileX : number, tileY : number) : boolean {
-    if (this.env.characters.isEmpty(tileX, tileY) && this.env.level.isPassable(new Phaser.Point(tileX, tileY))) {
+    if (this.env.characters.isEmpty(tileX, tileY) && this.env.map.isPassable(new Phaser.Point(tileX, tileY))) {
       var mob : Mob = new MobKlass(this.env);
       this.env.screen.gameObjectsLayer.add(mob);
       mob.setTilePosition(tileX, tileY);

@@ -6,7 +6,7 @@ import { PendingTurnAction, TurnDirector } from './pending_actions/pending_turn_
 import { PendingMoveAction } from './pending_actions/pending_move_action';
 import Env from '../env';
 import MobHealthBar from '../ui/mob_health_bar';
-
+import {Stats} from '../rpg/stats';
 const HEALTH_BAR_OFFSET : number = -4;
 const MAX_DISTANCE_TO_SEE_MONSTER_HP : number = 3;
 const DEATH_SPRITESHEET : string = 'DEATH_SPRITESHEET';
@@ -61,6 +61,7 @@ abstract class Mob extends Character {
   public update() {
     super.update();
 
+    // If monster is visible and is near player or it was hit show its health bar
     if (this.visible) {
       this.healthBar.visible = (this.distance(this.env.player) <= MAX_DISTANCE_TO_SEE_MONSTER_HP || this.health.isNotMax());
     }

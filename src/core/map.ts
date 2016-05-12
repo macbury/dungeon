@@ -5,7 +5,7 @@ import DungeonScreen from './screens/dungeon_screen';
 import Character from './objects/character';
 const PASSABLE_TILES = [8];
 
-export default class Level extends Phaser.Tilemap {
+export default class Map extends Phaser.Tilemap {
   /**
   * Elements on ground
   */

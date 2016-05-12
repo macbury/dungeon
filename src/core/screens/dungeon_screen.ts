@@ -6,7 +6,7 @@ import TurnStates from '../states/turn_states';
 
 import Cursor from '../ui/cursor';
 import PlayerHealthBar from '../ui/player_health_bar';
-import Level from '../level';
+import Map from '../map';
 
 import MonstersManager from '../monsters_manager';
 
@@ -84,7 +84,7 @@ export default class DungeonScreen extends Phaser.State {
   }
 
   public resize() : void {
-    this.env.level.resize();
+    this.env.map.resize();
     this.healthBar.resize();
   }
 

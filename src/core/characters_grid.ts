@@ -1,5 +1,5 @@
 import Character from './objects/character';
-import Level from './level';
+import Map from './map';
 /**
 * Contains grid of all characters in level
 */
@@ -8,9 +8,9 @@ export default class CharactersGrid {
   private columns : number;
   private rows    : number;
 
-  constructor(level : Level) {
-    this.columns = level.width;
-    this.rows    = level.height;
+  constructor(map : Map) {
+    this.columns = map.width;
+    this.rows    = map.height;
 
     this._grid   = [];
 
