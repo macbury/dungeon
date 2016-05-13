@@ -52,6 +52,8 @@ export default class Level implements StatsProvider {
       let diffExp = this.experience - this.maxRequiredExperience;
       if (diffExp > 0) {
         this._exp = diffExp;
+      } else {
+        this._exp = 0;
       }
       this._current += 1;
       return true;
