@@ -58,7 +58,7 @@ class WarriorLevelTable extends LevelTable {
   }
 
   public getMaxExp(currentLevel : number) : number {
-    const START_EXP : number = 10;
+    const START_EXP : number = 8;
     const EXP_GROW_FACTOR : number = 0.5;
     return START_EXP + (START_EXP * (currentLevel * EXP_GROW_FACTOR)) ;
   }

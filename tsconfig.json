@@ -77,6 +77,7 @@
     "./src/core/states/player_game_over_state.ts",
     "./src/core/states/turn_states.ts",
     "./src/core/ui/cursor.ts",
+    "./src/core/ui/exp_bar.ts",
     "./src/core/ui/mob_health_bar.ts",
     "./src/core/ui/player_health_bar.ts",
     "./src/core/utils/resolution_utils.ts",

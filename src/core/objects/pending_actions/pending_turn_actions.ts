@@ -156,20 +156,20 @@ export abstract class PendingTurnAction<T extends GameObject> {
   */
   private onCompleteSignal : Phaser.Signal;
 
-
   constructor(env: Env, owner : T) {
-    this.env             = env;
+    this.env              = env;
     this.owner            = owner;
     this.onCompleteSignal = new Phaser.Signal();
-
 
     this.onCompleteSignal.addOnce(this.disposeInNextFrame, this);
   }
 
   private disposeInNextFrame() : void {
-    let timer = this.env.game.time.create(true);
-    timer.add(2, this.dispose, this);
-    timer.start();
+    if (this.env != null) {
+      let timer = this.env.game.time.create(true);
+      timer.add(2, this.dispose, this);
+      timer.start();
+    }
   }
 
   /**

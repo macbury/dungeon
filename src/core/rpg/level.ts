@@ -10,6 +10,7 @@ export default class Level implements StatsProvider {
   private _exp : number;
   private _nextLevel : number;
   private _levelTable : LevelTable;
+
   constructor(levelTable : LevelTable) {
     this._exp = 0;
     this._current = 1;

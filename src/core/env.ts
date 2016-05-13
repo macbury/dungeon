@@ -44,6 +44,15 @@ export default class Env {
     pickItem  : Phaser.Sound,
     death: Phaser.Sound
   }
+
+  /**
+  * Broadcast events through this pipline to update ui. This events are triggered by pending actions
+  */
+  public events : {
+    onExperienceChange : Phaser.Signal,
+    onLevelUp : Phaser.Signal
+  };
+
   /**
   * Current map
   */
@@ -115,6 +124,12 @@ export default class Env {
     this.coinEmitter     = this.game.add.emitter(0,0, 100);
     this.coinEmitter.makeParticles(COIN_KEY);
     this.coinEmitter.gravity = 200;
+
+    this.events = {
+      onExperienceChange: new Phaser.Signal(),
+      onLevelUp: new Phaser.Signal()
+    };
+
   }
 
   /**
