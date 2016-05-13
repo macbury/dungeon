@@ -11,7 +11,7 @@ describe('Level', () => {
   it("should return proper max exp", () => {
     chai.assert.strictEqual(level.current, 1);
     chai.assert.strictEqual(level.experience, 0);
-    chai.assert.strictEqual(level.maxRequiredExperience, 15);
+    chai.assert.strictEqual(level.maxRequiredExperience, 12);
   });
 
   it("should add exp points but not level up", () => {
@@ -22,6 +22,6 @@ describe('Level', () => {
   it("should level up because of adding exp", () => {
     chai.assert.isTrue(level.gain(30));
     chai.assert.strictEqual(level.current, 2);
-    chai.assert.strictEqual(level.experience, 15);
+    chai.assert.strictEqual(level.experience, 18);
   });
 });
