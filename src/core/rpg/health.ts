@@ -38,6 +38,13 @@ export default class Health {
     return this._visual;
   }
 
+  /**
+  * Send update event
+  */
+  public refresh() {
+    this.onUpdate.dispatch();
+  }
+
   public isNotMax() : boolean {
     return this._current != this.max;
   }

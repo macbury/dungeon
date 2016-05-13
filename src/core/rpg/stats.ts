@@ -180,6 +180,17 @@ export class Stats {
     this.reset();
   }
 
+  public set(otherStats : Stats) : Stats {
+    this.attack = otherStats.attack;
+    this.health = otherStats.health;
+    this.defense = otherStats.defense;
+    this.accuracy = otherStats.accuracy;
+    this.evasion = otherStats.evasion;
+    this.intelligence = otherStats.intelligence;
+    this.resistance = otherStats.resistance;
+    return this;
+  }
+
   public reset() {
     this.attack = 0;
     this.health = 0;

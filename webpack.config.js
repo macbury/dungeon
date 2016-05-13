@@ -23,7 +23,7 @@ var config = {
   },
 
   resolve: {
-    extensions: ['', '.js', '.ts', '.tsx', '.png', '.gif', '.jpeg', '.jpg'],
+    extensions: ['', '.js', '.ts', '.tsx', '.png', '.gif', '.jpeg', '.jpg', '.json'],
     alias: {
       'phaser': phaser,
       'pixi.js': pixi,
@@ -31,6 +31,7 @@ var config = {
     },
     root: [
       path.resolve('./src/'),
+      path.resolve('./data/'),
       path.resolve('./assets/'),
       path.resolve('./assets/fonts'),
     ]
@@ -48,6 +49,7 @@ var config = {
 			{ test: /\.(mp3|ac3|ogg|m4a)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
 			{ test: /\.(ttf|woff|eot)$/i, loader: "file?name=[path][name].[ext]?[hash]" },
       { test: /index\.html$/,       loader: "file-loader?name=[path][name].[ext]" },
+      { test: /\.json$/,       loader: "json" },
       {
         test: /\.scss|css$/,
         loaders: ["style", "css", "sass"]

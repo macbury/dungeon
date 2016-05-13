@@ -12,6 +12,8 @@ import CollectableItem from './collectable_item';
 import PendingPickObjectAction from './pending_actions/pending_pick_object_action';
 import PendingPlayerDieAction from './pending_actions/pending_player_die_action';
 import Level from '../rpg/level';
+import { WarriorLevelTable } from '../rpg/level_table';
+
 const PLAYER_SPRITE_NAME = 'player_character';
 
 /**
@@ -42,21 +44,16 @@ export default class Player extends Character {
   }
 
   protected setupStatsAndEquipment() {
-    this.level             = new Level();
+    this.level             = new Level(new WarriorLevelTable());
     this.fistWeapon        = new Fist(this.game, this);
     this.mainWeapon        = new Sword(this.game, this);
-    this.baseStats.health  = 48;
-    this.baseStats.defense = 1;
-    this.baseStats.attack  = 4;
-    this.baseStats.evasion = 4;
-    this.baseStats.accuracy = 5;
   }
 
   /**
   * Agregate stats from weapons and equippment
   */
   public provideStats(stats : Array<Stats>) : void {
-    super.provideStats(stats);
+    this.level.provideStats(stats);
     if (this.fistWeapon != null)
       this.fistWeapon.provideStats(stats);
     if (this.mainWeapon != null)
@@ -148,6 +145,9 @@ export default class Player extends Character {
   */
   public gainExp(experience : number, turnDirector : TurnDirector) {
     let gainLevel : boolean = this.level.gain(experience);
+    if (gainLevel) {
+      this.health.setToMax();
+    }
     turnDirector.addSingle(new PendingPlayerExperienceGainAction(this.env, this, experience, gainLevel));
   }
 

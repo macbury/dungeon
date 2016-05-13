@@ -64,6 +64,7 @@
     "./src/core/objects/pending_actions/pending_use_coins_action.ts",
     "./src/core/objects/player.ts",
     "./src/core/rpg/health.ts",
+    "./src/core/rpg/level_table.ts",
     "./src/core/rpg/level.ts",
     "./src/core/rpg/stats.ts",
     "./src/core/screens/boot_screen.ts",
