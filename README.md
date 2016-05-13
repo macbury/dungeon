@@ -9,8 +9,6 @@ npm run dev
 
 visit http://localhost:8080
 
-enjoy
-
-##TODO
-
-* Turn movement
+# Assets
+http://opengameart.org/content/16x16-dawnhack-roguelike-tileset
+http://opengameart.org/
