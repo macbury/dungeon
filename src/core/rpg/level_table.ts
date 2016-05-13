@@ -54,7 +54,7 @@ class WarriorLevelTable extends LevelTable {
     stats.defense = 1;
     stats.attack  = 4;
     stats.evasion = 2;
-    stats.accuracy = 5;
+    stats.accuracy = 9;
   }
 
   public getMaxExp(currentLevel : number) : number {

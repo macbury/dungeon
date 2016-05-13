@@ -44,16 +44,13 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     }, QUICK_ATTACK_SPEED);
     moveTween.yoyo(true);
     moveTween.easing(Phaser.Easing.Exponential.Out);
-    moveTween.onStart.addOnce(() => {
-      this.owner.updateSpriteFacingByDirection(this.direction);
-      if (this.missed) {
-        this.env.sounds.miss.play();
-        this.target.statusText("Miss").onComplete.addOnce(this.completeAction, this);
-      } else {
-        this.buildAttackSuccessTween().start();
-      }
-
-    });
+    this.owner.updateSpriteFacingByDirection(this.direction);
+    if (this.missed) {
+      this.env.sounds.miss.play();
+      this.target.statusText("Miss").onComplete.addOnce(this.completeAction, this);
+    } else {
+      this.buildAttackSuccessTween().start();
+    }
     moveTween.start();
   }
 

@@ -21,7 +21,6 @@ export class TurnDirector {
   public clear() {
     this.singleActionsToPerform = [];
     this.parellActionsToPerform = new PendingTurnActions();
-    this.cleanupOld();
   }
 
   /**
@@ -79,19 +78,8 @@ export class TurnDirector {
   * Pops next turn action and returns on complete callback
   */
   public runNext() : Phaser.Signal {
-    this.cleanupOld();
     this.currentRunAction = this.actionsToPerform.splice(0,1)[0];
     return this.currentRunAction.run();
-  }
-
-  /**
-  * Cleanup references for current running action
-  */
-  private cleanupOld() {
-    if (this.currentRunAction != null) {
-      this.currentRunAction.dispose();
-      this.currentRunAction = null;
-    }
   }
 
   /**
@@ -149,14 +137,6 @@ export class PendingTurnActions extends Array<PendingTurnAction<GameObject>> {
     return this.onComplete;
   }
 
-  /**
-  * Dispose references
-  */
-  public dispose() {
-    for (let action of this) {
-      action.dispose();
-    }
-  }
 }
 
 /**
@@ -181,6 +161,15 @@ export abstract class PendingTurnAction<T extends GameObject> {
     this.env             = env;
     this.owner            = owner;
     this.onCompleteSignal = new Phaser.Signal();
+
+
+    this.onCompleteSignal.addOnce(this.disposeInNextFrame, this);
+  }
+
+  private disposeInNextFrame() : void {
+    let timer = this.env.game.time.create(true);
+    timer.add(2, this.dispose, this);
+    timer.start();
   }
 
   /**
