@@ -6,7 +6,7 @@ import Mob from '../mob';
 export default class PendingDieAction extends PendingTurnAction<Character> {
 
   protected performTurn() : void {
-    var tween : Phaser.Tween = this.add.tween(this.owner).to({
+    var tween : Phaser.Tween = this.tween(this.owner).to({
       alpha: 0.0
     }, 500);
 
@@ -19,7 +19,6 @@ export default class PendingDieAction extends PendingTurnAction<Character> {
 
     tween.onComplete.addOnce(() => {
       this.owner.destroy();
-      this.completeAction();
     });
     this.env.sounds.death.play();
     tween.start();

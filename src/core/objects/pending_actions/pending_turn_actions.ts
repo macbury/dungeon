@@ -156,11 +156,13 @@ export abstract class PendingTurnAction<T extends GameObject> {
   */
   private onCompleteSignal : Phaser.Signal;
 
+  private runningTweens : Array<Phaser.Tween>;
+
   constructor(env: Env, owner : T) {
     this.env              = env;
     this.owner            = owner;
     this.onCompleteSignal = new Phaser.Signal();
-
+    this.runningTweens    = new Array<Phaser.Tween>();
     this.onCompleteSignal.addOnce(this.disposeInNextFrame, this);
   }
 
@@ -180,10 +182,34 @@ export abstract class PendingTurnAction<T extends GameObject> {
   }
 
   /**
-  * Finish current action
+  * Creates and start tween that is added to queue of running tweens in this action. After queueu is empty it will dispatch completeSignal automaticaly
+  */
+  protected tween(obj : any) : Phaser.Tween {
+    let pendingTween : Phaser.Tween = this.add.tween(obj);
+    this.runningTweens.push(pendingTween);
+    pendingTween.onComplete.addOnce(this.onTweenComplete, this, -100, pendingTween);
+    return pendingTween;
+  }
+
+  /**
+  * Triggered after tween has been completed, removeing tween from queueu and if it is empty then dispatch completeSignal
+  */
+  private onTweenComplete(owner : T, completedTween : Phaser.Tween) {
+    let indexOfTween : number = this.runningTweens.indexOf(completedTween);
+    if (indexOfTween != -1) {
+      this.runningTweens.splice(indexOfTween);
+      if (this.runningTweens.length == 0) {
+        this.completeAction();
+      }
+    }
+  }
+
+  /**
+  * Complete current action and dispose pending turn action in next frame
   */
   protected completeAction() {
     this.onCompleteSignal.dispatch();
+    this.env.game.time.create(true).add(1, this.dispose, this);
   }
 
   /**

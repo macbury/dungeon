@@ -16,14 +16,13 @@ export default class PendingPickObjectAction extends PendingTurnAction<Collectab
     this.owner.visible = true;
     this.owner.alpha   = 0.0;
     this.env.screen.world.add(this.owner);
-    var tween : Phaser.Tween = this.add.tween(this.owner).to({
+    var tween : Phaser.Tween = this.tween(this.owner).to({
       alpha: 1.0,
       y: [this.owner.y - TILE_CENTER, this.owner.y, this.owner.y - TILE_CENTER / 2, this.owner.y]
     }, 400);
     this.env.sounds.pickItem.play();
     tween.onComplete.addOnce(() => {
       this.owner.destroy();
-      this.completeAction();
     });
 
     tween.start();

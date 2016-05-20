@@ -21,7 +21,7 @@ export default class PendingDropAction extends PendingTurnAction<CollectableItem
   protected performTurn() : void {
     this.owner.visible = true;
     this.owner.alpha   = 0.0;
-    var tween : Phaser.Tween = this.add.tween(this.owner).to({
+    var tween : Phaser.Tween = this.tween(this.owner).to({
       alpha: 1.0,
       y: [this.owner.y - TILE_CENTER, this.owner.y, this.owner.y - TILE_CENTER / 2, this.owner.y]
     }, 200);

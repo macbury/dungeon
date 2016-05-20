@@ -21,7 +21,7 @@ export class PendingMoveAction extends PendingTurnAction<Character> {
   }
 
   protected buildMoveTween() : Phaser.Tween {
-    var moveTween : Phaser.Tween = this.env.game.make.tween(this.owner);
+    var moveTween : Phaser.Tween = this.tween(this.owner);
     moveTween.to({
       x: this.targetTile.x * TILE_SIZE,
       y: this.targetTile.y * TILE_SIZE
@@ -31,7 +31,6 @@ export class PendingMoveAction extends PendingTurnAction<Character> {
 
   protected performTurn() {
     var moveTween : Phaser.Tween = this.buildMoveTween();
-    moveTween.onComplete.addOnce(this.completeAction, this);
     moveTween.onStart.addOnce(() => {
       this.owner.updateSpriteFacingByDirection(this.direction);
     });
@@ -81,7 +80,7 @@ export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject
                   .multiply(TILE_CENTER, TILE_CENTER);
 
     //console.log(this.tempPoint);
-    var moveTween : Phaser.Tween = this.env.game.make.tween(this.owner);
+    var moveTween : Phaser.Tween = this.tween(this.owner);
     moveTween.to({
       x: this.owner.position.x + this.tempPoint.x,
       y: this.owner.position.y + this.tempPoint.y
@@ -90,7 +89,6 @@ export class PendingPlayerMoveBlockedAction extends PendingTurnAction<GameObject
     moveTween.onStart.addOnce(() => {
       this.env.sounds.stepBlock.play();
     });
-    moveTween.onComplete.addOnce(this.completeAction, this);
 
     moveTween.start();
   }

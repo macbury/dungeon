@@ -5,13 +5,9 @@ import NarrationManager from '../../narration_manager';
 export default class PendingPlayerDieAction extends PendingTurnAction<Player> {
 
   protected performTurn() : void {
-    var tween : Phaser.Tween = this.add.tween(this.owner).to({
+    this.tween(this.owner).to({
       alpha: 0.0
-    }, 100);
-    console.log(this.owner);
-    tween.onComplete.addOnce(this.completeAction, this);
-
-    tween.start();
+    }, 100).start();
   }
 
   public turnDescription(narration : NarrationManager) : void {

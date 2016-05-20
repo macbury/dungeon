@@ -17,13 +17,13 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
   * Animate character that is hurted and display damage text
   */
   protected buildAttackSuccessTween() : Phaser.Tween {
-    var attackTween : Phaser.Tween = this.env.game.add.tween(this.target.sprite).to({
+    var attackTween : Phaser.Tween = this.tween(this.target.sprite).to({
       tint: 0xFF0000
     }, 150, Phaser.Easing.Power0, false, 0, 0, true);
     attackTween.onStart.addOnce(() => {
       this.env.sounds.hit.play();
       this.target.health.visual = this.targetHealth;
-      this.target.statusText(`-${this.damage}`).onComplete.addOnce(this.completeAction, this);
+      this.target.statusText(`-${this.damage}`);
     });
 
     return attackTween;
@@ -37,7 +37,7 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     tempDir.subtract(this.currentOwnerPosition.x, this.currentOwnerPosition.y)
            .normalize()
            .multiply(TILE_CENTER, TILE_CENTER);
-    var moveTween : Phaser.Tween = this.env.game.make.tween(this.owner);
+    var moveTween : Phaser.Tween = this.tween(this.owner);
     moveTween.to({
      x: this.owner.position.x + tempDir.x,
      y: this.owner.position.y + tempDir.y
@@ -45,9 +45,10 @@ export default class PendingMeleeAttackAction extends PendingAttackAction {
     moveTween.yoyo(true);
     moveTween.easing(Phaser.Easing.Exponential.Out);
     this.owner.updateSpriteFacingByDirection(this.direction);
+
     if (this.missed) {
       this.env.sounds.miss.play();
-      this.target.statusText("Miss").onComplete.addOnce(this.completeAction, this);
+      this.target.statusText("Miss");
     } else {
       this.buildAttackSuccessTween().start();
     }
