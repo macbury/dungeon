@@ -16,6 +16,7 @@
   "dependencies": {
     "compression-webpack-plugin": "^0.3.1",
     "easystarjs": "^0.2.3",
+    "nine-patch-phaser-plugin": "github:netcell/nine-patch-phaser-plugin",
     "p2": "^0.7.1",
     "phaser": "2.4.6",
     "pixi.js": "^3.0.11"
